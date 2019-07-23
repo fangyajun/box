@@ -1,0 +1,184 @@
+server:
+    port: 10301
+    max-http-header-size: 1024000
+spring:
+    application:
+        name: box-wx-api
+    profiles:
+        active: dev
+    datasource:
+        # 使用druid数据源
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        filters: stat
+        maxActive: 20
+        initialSize: 1
+        maxWait: 60000
+        minIdle: 1
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 20
+## 该配置节点为独立的节点，如果将这个配置放在spring的节点下，导致配置无法被识别
+mybatis-plus:
+#   如果是放在src/main/java目录下 classpath:/com/ifec/api/shop/mapper/*Mapper.xml
+#   如果是放在resource目录 classpath:/mapper/*Mapper.xml
+#    mapper-locations: classpath:/mapper/*Mapper.xml
+    mapper-locations: classpath*:/com/kuose/box/wx/**/mapper/*Mapper.xml
+    typeAliasesPackage: com.kuose.box.wx.*.entity
+    global-config:
+        #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+        id-type: 0
+        #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+        field-strategy: 2
+         #驼峰下划线转换
+        db-column-underline: true
+        #刷新mapper 调试神器
+        refresh-mapper: true
+    configuration:
+        #配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
+        map-underscore-to-camel-case: true
+        cache-enabled: false
+        call-setters-on-nulls: true
+logging:
+    config: classpath:conf/logback.xml
+
+
+
+
+litemall:
+  # 开发者应该设置成自己的wx相关信息
+  wx:
+    app-id: wx82794a3bb64be941
+    app-secret: e634ecdb5c1edcd51c800ff24471aa4f
+    mch-id: 111111
+    mch-key: xxxxxx
+    notify-url: http://www.example.com/wx/order/pay-notify
+    # 商户证书文件路径
+    # 请参考“商户证书”一节 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_3
+    key-path: xxxxx
+
+  #通知相关配置
+  notify:
+    # 短消息模版通知配置
+    # 短信息用于通知客户，例如发货短信通知，注意配置格式；template-name，template-templateId 请参考 NotifyType 枚举值
+    sms:
+      enable: true
+      appid: 1400231207
+      appkey: 4377279bfad6a4c8c8daaa7ad97b1065
+      template:
+      - name: paySucceed
+        templateId: 372171
+      - name: captcha
+        templateId: 372171
+
+    # 微信模版通知配置
+    # 微信模版用于通知客户或者运营者，注意配置格式；template-name，template-templateId 请参考 NotifyType 枚举值
+    wx:
+      enable: false
+      template:
+      - name: paySucceed
+        templateId: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      - name: captcha
+        templateId: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      - name: ship
+        templateId: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      - name: refund
+        templateId: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+  # 快鸟物流查询配置
+  express:
+    enable: false
+    appId: "XXXXXXXXX"
+    appKey: "XXXXXXXXXXXXXXXXXXXXXXXXX"
+    vendors:
+    - code: "ZTO"
+      name: "中通快递"
+    - code: "YTO"
+      name: "圆通速递"
+    - code: "YD"
+      name: "韵达速递"
+    - code: "YZPY"
+      name: "邮政快递包裹"
+    - code: "EMS"
+      name: "EMS"
+    - code: "DBL"
+      name: "德邦快递"
+    - code: "FAST"
+      name: "快捷快递"
+    - code: "ZJS"
+      name: "宅急送"
+    - code: "TNT"
+      name: "TNT快递"
+    - code: "UPS"
+      name: "UPS"
+    - code: "DHL"
+      name: "DHL"
+    - code: "FEDEX"
+      name: "FEDEX联邦(国内件)"
+    - code: "FEDEX_GJ"
+      name: "FEDEX联邦(国际件)"
+
+  # 对象存储配置
+  storage:
+    # 当前工作的对象存储模式，分别是local、aliyun、tencent、qiniu
+    active: local
+    # 本地对象存储配置信息
+    local:
+      storagePath: storage
+      # 这个地方应该是wx模块的WxStorageController的fetch方法对应的地址
+      address: http://localhost:8080/wx/storage/fetch/
+    # 阿里云对象存储配置信息
+    aliyun:
+      endpoint: oss-cn-shenzhen.aliyuncs.com
+      accessKeyId: 111111
+      accessKeySecret: xxxxxx
+      bucketName: litemall
+    # 腾讯对象存储配置信息
+    # 请参考 https://cloud.tencent.com/document/product/436/6249
+    tencent:
+      secretId: 111111
+      secretKey: xxxxxx
+      region: xxxxxx
+      bucketName: litemall
+    # 七牛云对象存储配置信息
+    qiniu:
+      endpoint: http://pd5cb6ulu.bkt.clouddn.com
+      accessKey: 111111
+      secretKey: xxxxxx
+      bucketName: litemall
+
+
+
+---
+spring:
+    profiles: dev
+    datasource:
+        url: jdbc:mysql://192.168.5.176:3306/box?useUnicode=true&characterEncoding=utf8&useSSL=false
+        username: root
+        password: 123456
+---
+spring:
+    profiles: test
+    datasource:
+        url: jdbc:mysql://192.168.5.176:3306/box?useUnicode=true&characterEncoding=utf8&useSSL=false
+        username: root
+        password: 123456
+---
+spring:
+    profiles: pre-product
+    datasource:
+        url: jdbc:mysql://localhost:3306/box?useUnicode=true&characterEncoding=utf8&useSSL=false
+        username: root
+        password: 123456
+---
+spring:
+    profiles: product
+    datasource:
+        url: jdbc:mysql://localhost:3306/box?useUnicode=true&characterEncoding=utf8&useSSL=false
+        username: root
+        password: 123456
