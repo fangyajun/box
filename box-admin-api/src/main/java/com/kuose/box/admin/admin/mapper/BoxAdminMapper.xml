@@ -21,4 +21,49 @@
         id, username, password, last_login_ip, last_login_time, avatar, add_time, update_time, deleted, role_ids
     </sql>
 
+    <select id="listAdmins" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from box_admin
+        <where>
+            <if test="_parameter != null" >
+                and username = #{_parameter}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateAdminById" parameterType="com.kuose.box.admin.admin.entity.BoxAdmin">
+        update box_admin
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                `password` = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="lastLoginIp != null">
+                last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="lastLoginTime != null">
+                last_login_time = #{lastLoginTime},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="addTime != null">
+                add_time = #{addTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="roleIds != null">
+                role_ids = #{roleIds,jdbcType=VARCHAR,typeHandler=com.kuose.box.admin.mybatis.JsonIntegerArrayTypeHandler},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
 </mapper>

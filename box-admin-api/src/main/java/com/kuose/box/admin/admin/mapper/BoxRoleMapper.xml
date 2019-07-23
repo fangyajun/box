@@ -5,8 +5,8 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.kuose.box.admin.admin.entity.BoxRole">
         <id column="id" property="id" />
-        <result column="name" property="name" />
-        <result column="desc" property="desc" />
+        <result column="role_name" property="roleName" />
+        <result column="role_desc" property="roleDesc" />
         <result column="enabled" property="enabled" />
         <result column="add_time" property="addTime" />
         <result column="update_time" property="updateTime" />
@@ -15,7 +15,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, desc, enabled, add_time, update_time, deleted
+        id, role_name, role_desc, enabled, add_time, update_time, deleted
     </sql>
 
 </mapper>

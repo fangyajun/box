@@ -23,12 +23,12 @@ private static final long serialVersionUID=1L;
     /**
      * 角色名称
      */
-    private String name;
+    private String roleName;
 
     /**
      * 角色描述
      */
-    private String desc;
+    private String roleDesc;
 
     /**
      * 是否启用
@@ -59,28 +59,28 @@ private static final long serialVersionUID=1L;
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
     public Boolean getEnabled() {
         return enabled;
     }
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getRoleDesc() {
+        return roleDesc;
+    }
+
+    public void setRoleDesc(String roleDesc) {
+        this.roleDesc = roleDesc;
     }
 
     public Long getAddTime() {
@@ -116,8 +116,6 @@ private static final long serialVersionUID=1L;
     public String toString() {
         return "BoxRole{" +
         "id=" + id +
-        ", name=" + name +
-        ", desc=" + desc +
         ", enabled=" + enabled +
         ", addTime=" + addTime +
         ", updateTime=" + updateTime +

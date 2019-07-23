@@ -18,4 +18,8 @@ import java.util.List;
 public interface BoxAdminService extends IService<BoxAdmin> {
 
     IPage<BoxAdmin> listAdminsPage(Page<BoxAdmin> adminPage, String username);
+
+    List<BoxAdmin> listAdmins(String username);
+
+    void updateAdminById(BoxAdmin admin);
 }

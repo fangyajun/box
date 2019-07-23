@@ -30,11 +30,12 @@ public class BoxRoleServiceImpl extends ServiceImpl<BoxRoleMapper, BoxRole> impl
         if(roleIds.length == 0){
             return roles;
         }
+        List<Integer> integers = Arrays.asList(roleIds);
 
-        List<BoxRole> boxRoles = boxRoleMapper.selectBatchIds(Arrays.asList(roleIds));
+        List<BoxRole> boxRoles = boxRoleMapper.selectBatchIds(integers);
 
         for(BoxRole role : boxRoles){
-            roles.add(role.getName());
+            roles.add(role.getRoleName());
         }
 
         return roles;

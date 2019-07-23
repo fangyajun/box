@@ -1,7 +1,6 @@
 package com.kuose.box.admin.shiro;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuose.box.admin.admin.entity.BoxAdmin;
 import com.kuose.box.admin.admin.service.BoxAdminService;
 import com.kuose.box.admin.admin.service.BoxPermissionService;
@@ -59,7 +58,8 @@ public class AdminAuthorizingRealm extends AuthorizingRealm {
             throw new AccountException("密码不能为空");
         }
 
-        List<BoxAdmin> adminList = adminService.list(new QueryWrapper<BoxAdmin>().eq("username", username));
+//        List<BoxAdmin> adminList = adminService.list(new QueryWrapper<BoxAdmin>().eq("username", username));
+        List<BoxAdmin> adminList = adminService.listAdmins(username);
         Assert.state(adminList.size() < 2, "同一个用户名存在两个账户");
         if (adminList.size() == 0) {
             throw new UnknownAccountException("找不到用户（" + username + "）的帐号信息");

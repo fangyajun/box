@@ -1,9 +1,9 @@
 package com.kuose.box.admin.admin.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+
 import java.io.Serializable;
 
 /**
@@ -36,10 +36,18 @@ private static final long serialVersionUID=1L;
      */
     private String lastLoginIp;
 
+    public Long getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Long lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
     /**
      * 最近一次登录时间
      */
-    private LocalDateTime lastLoginTime;
+    private Long lastLoginTime;
 
     /**
      * 头像图片
@@ -105,14 +113,6 @@ private static final long serialVersionUID=1L;
 
     public void setLastLoginIp(String lastLoginIp) {
         this.lastLoginIp = lastLoginIp;
-    }
-
-    public LocalDateTime getLastLoginTime() {
-        return lastLoginTime;
-    }
-
-    public void setLastLoginTime(LocalDateTime lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
     }
 
     public String getAvatar() {

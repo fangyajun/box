@@ -26,7 +26,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.kuose.box.wx.login.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.kuose.box.admin.admin.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

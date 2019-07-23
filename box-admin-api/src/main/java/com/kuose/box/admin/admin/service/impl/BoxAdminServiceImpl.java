@@ -32,4 +32,14 @@ public class BoxAdminServiceImpl extends ServiceImpl<BoxAdminMapper, BoxAdmin> i
         IPage<BoxAdmin> boxAdminIPage = boxAdminMapper.selectPage(adminPage, new QueryWrapper<BoxAdmin>().like("username", username));
         return boxAdminIPage;
     }
+
+    @Override
+    public List<BoxAdmin> listAdmins(String username) {
+        return boxAdminMapper.listAdmins(username);
+    }
+
+    @Override
+    public void updateAdminById(BoxAdmin admin) {
+        boxAdminMapper.updateAdminById(admin);
+    }
 }
