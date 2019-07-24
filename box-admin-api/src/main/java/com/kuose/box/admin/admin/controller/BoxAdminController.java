@@ -16,14 +16,12 @@ import com.kuose.box.common.utils.bcrypt.BCryptPasswordEncoder;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
-import org.apache.tomcat.util.http.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
 
-import javax.swing.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
