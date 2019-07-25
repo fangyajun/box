@@ -1,5 +1,8 @@
 package com.kuose.box.admin.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kuose.box.admin.admin.entity.BoxRole;
 import com.kuose.box.admin.admin.dao.BoxRoleMapper;
 import com.kuose.box.admin.admin.service.BoxRoleService;
@@ -40,5 +43,12 @@ public class BoxRoleServiceImpl extends ServiceImpl<BoxRoleMapper, BoxRole> impl
 
         return roles;
 
+    }
+
+    @Override
+    public IPage<BoxRole> listRolePage(Page<BoxRole> rolePage) {
+
+        IPage<BoxRole> boxRoleIPage = boxRoleMapper.selectPage(rolePage, new QueryWrapper<BoxRole>().ne("deleted", 1));
+        return boxRoleIPage;
     }
 }

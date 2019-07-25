@@ -8,19 +8,19 @@ import com.kuose.box.admin.admin.entity.BoxAdmin;
 import com.kuose.box.admin.admin.service.BoxAdminService;
 import com.kuose.box.admin.annotation.RequiresPermissionsDesc;
 import com.kuose.box.admin.log.service.impl.LogHelper;
-import com.kuose.box.admin.validator.Order;
-import com.kuose.box.admin.validator.Sort;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.RegexUtil;
 import com.kuose.box.common.utils.bcrypt.BCryptPasswordEncoder;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.stereotype.Controller;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -33,7 +33,8 @@ import java.util.List;
  * @author fangyajun
  * @since 2019-07-22
  */
-@Controller
+@Api(tags = {"系统管理，管理员管理"})
+@RestController
 @RequestMapping("/boxAdmin")
 public class BoxAdminController {
 
@@ -43,15 +44,16 @@ public class BoxAdminController {
     @Autowired
     private LogHelper logHelper;
 
+    @ApiOperation(value="查询管理员列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名", required = false, dataType = "String", paramType = "path", example = "admin123"),
+            @ApiImplicitParam(name = "page", value = "起始页", required = true, dataType = "Integer", paramType = "path", example = "1"),
+            @ApiImplicitParam(name = "limit", value = "每页条数", required = true, dataType = "Integer", paramType = "path", example = "10")
+    })
     @RequiresPermissions("admin:admin:list")
     @RequiresPermissionsDesc(menu = {"系统管理", "管理员管理"}, button = "查询")
     @GetMapping("/list")
-    public Object list(String username,
-                       @RequestParam(defaultValue = "1") Integer page,
-                       @RequestParam(defaultValue = "10") Integer limit,
-                       @Sort @RequestParam(defaultValue = "add_time") String sort,
-                       @Order @RequestParam(defaultValue = "desc") String order) {
-
+    public Result list(String username, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         Page<BoxAdmin> adminPage = new Page<>();
         adminPage.setSize(limit);
         adminPage.setCurrent(page);
@@ -77,10 +79,11 @@ public class BoxAdminController {
         return null;
     }
 
-    @RequiresPermissions("admin:admin:create")
+    @ApiOperation(value="添加管理员")
+    @RequiresPermissions("admin:admin:add")
     @RequiresPermissionsDesc(menu = {"系统管理", "管理员管理"}, button = "添加")
-    @PostMapping("/create")
-    public Result create(@RequestBody BoxAdmin admin) {
+    @PostMapping("/add")
+    public Result add(@RequestBody BoxAdmin admin) {
         Result error = validate(admin);
         if (error != null) {
             return error;
@@ -96,11 +99,15 @@ public class BoxAdminController {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(rawPassword);
         admin.setPassword(encodedPassword);
+        admin.setAddTime(System.currentTimeMillis());
+        admin.setUpdateTime(System.currentTimeMillis());
         adminService.save(admin);
         logHelper.logAuthSucceed("添加管理员", username);
         return Result.success().setData("admin", admin);
     }
 
+    @ApiOperation(value="获取管理员详情")
+    @ApiImplicitParam(name = "id", value = "管理员id", required = true, dataType = "Integer", paramType = "path", example = "1")
     @RequiresPermissions("admin:admin:read")
     @RequiresPermissionsDesc(menu = {"系统管理", "管理员管理"}, button = "详情")
     @GetMapping("/read")
@@ -109,6 +116,7 @@ public class BoxAdminController {
         return Result.success().setData("boxAdmin", boxAdmin);
     }
 
+    @ApiOperation(value="修改管理员信息")
     @RequiresPermissions("admin:admin:update")
     @RequiresPermissionsDesc(menu = {"系统管理", "管理员管理"}, button = "编辑")
     @PostMapping("/update")
@@ -134,10 +142,11 @@ public class BoxAdminController {
         return Result.success().setData("admin", admin);
     }
 
+    @ApiOperation(value="删除管理员信息")
     @RequiresPermissions("admin:admin:delete")
     @RequiresPermissionsDesc(menu = {"系统管理", "管理员管理"}, button = "删除")
     @PostMapping("/delete")
-    public Object delete(@RequestBody BoxAdmin admin) {
+    public Result delete(@RequestBody BoxAdmin admin) {
         Integer anotherAdminId = admin.getId();
         if (anotherAdminId == null) {
             return Result.failure("缺少必须参数");
@@ -150,7 +159,10 @@ public class BoxAdminController {
             return Result.failure("管理员不能删除自己账号");
         }
 
-        adminService.removeById(anotherAdminId);
+        // 逻辑删除
+        admin.setDeleted(true);
+        adminService.updateAdminById(admin);
+
         logHelper.logAuthSucceed("删除管理员", admin.getUsername());
         return Result.success();
     }

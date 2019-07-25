@@ -1,8 +1,10 @@
 package com.kuose.box.admin.admin.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 /**
@@ -23,16 +25,19 @@ private static final long serialVersionUID=1L;
     /**
      * 角色名称
      */
+    @ApiModelProperty(value="角色名称")
     private String roleName;
 
     /**
      * 角色描述
      */
+    @ApiModelProperty(value="角色描述")
     private String roleDesc;
 
     /**
      * 是否启用
      */
+    @ApiModelProperty(value="是否启用")
     private Boolean enabled;
 
     /**
@@ -49,6 +54,7 @@ private static final long serialVersionUID=1L;
      * 逻辑删除
      */
     private Boolean deleted;
+
 
 
     public Integer getId() {

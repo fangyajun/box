@@ -1,7 +1,10 @@
 package com.kuose.box.admin.admin.dao;
 
-import com.kuose.box.admin.admin.entity.BoxAdmin;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.kuose.box.admin.admin.entity.BoxAdmin;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,4 +21,6 @@ public interface BoxAdminMapper extends BaseMapper<BoxAdmin> {
     List<BoxAdmin> listAdmins(String username);
 
     void updateAdminById(BoxAdmin admin);
+
+    IPage<BoxAdmin> listAdminsPage(Page<BoxAdmin> adminPage, @Param("username") String username);
 }

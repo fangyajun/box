@@ -16,4 +16,8 @@ import java.util.Set;
 public interface BoxPermissionService extends IService<BoxPermission> {
 
     Set<String> queryByRoleIds(Integer[] roleIds);
+
+    boolean checkSuperPermission(Integer roleId);
+
+    Set<String> queryByRoleId(Integer roleId);
 }

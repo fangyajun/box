@@ -9,10 +9,7 @@ import com.kuose.box.admin.util.Permission;
 import com.kuose.box.admin.util.PermissionUtil;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.IpUtil;
-import com.kuose.box.common.utils.JacksonUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -52,19 +49,15 @@ public class AdminAuthController {
 
     /**
      * 登录
-     * @param body
+     * @param
      * @param request
      * @return
      */
     @ApiOperation(value="用户登录")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "username", value = "登录名", required = true, dataType = "String", paramType = "form", example = "admin123"),
-            @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "form", example = "admin123")
-    })
     @PostMapping("/login")
-    public Object login(@RequestBody @ApiIgnore() String body, HttpServletRequest request) {
-        String username = JacksonUtil.parseString(body, "username");
-        String password = JacksonUtil.parseString(body, "password");
+    public Object login(@RequestBody BoxAdmin boxAdmin, HttpServletRequest request) {
+        String username = boxAdmin.getUsername();
+        String password = boxAdmin.getPassword();
 
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
             return Result.failure("用户名或密码为空");

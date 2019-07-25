@@ -1,5 +1,7 @@
 package com.kuose.box.admin.admin.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kuose.box.admin.admin.entity.BoxRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,4 +18,6 @@ import java.util.Set;
 public interface BoxRoleService extends IService<BoxRole> {
 
     Set<String> queryByIds(Integer[] roleIds);
+
+    IPage<BoxRole> listRolePage(Page<BoxRole> rolePage);
 }

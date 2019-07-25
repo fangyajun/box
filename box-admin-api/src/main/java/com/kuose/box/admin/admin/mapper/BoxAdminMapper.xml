@@ -26,11 +26,26 @@
         <include refid="Base_Column_List" />
         from box_admin
         <where>
+            deleted != 1
             <if test="_parameter != null" >
                 and username = #{_parameter}
             </if>
         </where>
+        order by add_time desc
     </select>
+
+    <select id="listAdminsPage" resultMap="BaseResultMap">
+      SELECT
+          id,username,last_login_ip,last_login_time,avatar,role_ids
+      FROM box_admin
+        <where>
+            deleted != 1
+            <if test="username != null" >
+                and username like CONCAT('%',#{username},'%')
+            </if>
+        </where>
+        order by add_time desc
+   </select>
 
     <update id="updateAdminById" parameterType="com.kuose.box.admin.admin.entity.BoxAdmin">
         update box_admin
@@ -63,7 +78,7 @@
                 role_ids = #{roleIds,jdbcType=VARCHAR,typeHandler=com.kuose.box.admin.mybatis.JsonIntegerArrayTypeHandler},
             </if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where deleted != 1 and id = #{id,jdbcType=INTEGER}
     </update>
 
 </mapper>

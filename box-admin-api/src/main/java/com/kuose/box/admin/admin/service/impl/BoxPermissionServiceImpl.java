@@ -5,6 +5,7 @@ import com.kuose.box.admin.admin.entity.BoxPermission;
 import com.kuose.box.admin.admin.dao.BoxPermissionMapper;
 import com.kuose.box.admin.admin.service.BoxPermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import javafx.scene.shape.Box;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,30 @@ public class BoxPermissionServiceImpl extends ServiceImpl<BoxPermissionMapper, B
 
         List<BoxPermission> boxPermissions = boxPermissionMapper.selectList(new QueryWrapper<BoxPermission>().in("role_id", Arrays.asList(roleIds)));
 
+        for(BoxPermission permission : boxPermissions){
+            permissions.add(permission.getPermission());
+        }
+
+        return permissions;
+    }
+
+    @Override
+    public boolean checkSuperPermission(Integer roleId) {
+        if(roleId == null){
+            return false;
+        }
+        Integer selectCount = boxPermissionMapper.selectCount(new QueryWrapper<BoxPermission>().eq("role_id", roleId).eq("permission", "*").eq("deleted", 0));
+        return selectCount != 0;
+    }
+
+    @Override
+    public Set<String> queryByRoleId(Integer roleId) {
+        Set<String> permissions = new HashSet<String>();
+        if(roleId == null){
+            return permissions;
+        }
+
+        List<BoxPermission> boxPermissions = boxPermissionMapper.selectList(new QueryWrapper<BoxPermission>().eq("role_id", roleId).eq("deleted", 0));
         for(BoxPermission permission : boxPermissions){
             permissions.add(permission.getPermission());
         }

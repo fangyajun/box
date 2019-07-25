@@ -7,6 +7,7 @@ import com.kuose.box.admin.admin.entity.BoxAdmin;
 import com.kuose.box.admin.admin.dao.BoxAdminMapper;
 import com.kuose.box.admin.admin.service.BoxAdminService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.kuose.box.common.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class BoxAdminServiceImpl extends ServiceImpl<BoxAdminMapper, BoxAdmin> i
 
     @Override
     public IPage<BoxAdmin> listAdminsPage(Page<BoxAdmin> adminPage, String username) {
-        IPage<BoxAdmin> boxAdminIPage = boxAdminMapper.selectPage(adminPage, new QueryWrapper<BoxAdmin>().like("username", username));
+        IPage<BoxAdmin> boxAdminIPage = boxAdminMapper.listAdminsPage(adminPage, username);
         return boxAdminIPage;
     }
 
