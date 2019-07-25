@@ -11,10 +11,7 @@ import com.kuose.box.admin.log.service.impl.LogHelper;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.RegexUtil;
 import com.kuose.box.common.utils.bcrypt.BCryptPasswordEncoder;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
@@ -22,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -107,11 +103,10 @@ public class BoxAdminController {
     }
 
     @ApiOperation(value="获取管理员详情")
-    @ApiImplicitParam(name = "id", value = "管理员id", required = true, dataType = "Integer", paramType = "path", example = "1")
     @RequiresPermissions("admin:admin:read")
     @RequiresPermissionsDesc(menu = {"系统管理", "管理员管理"}, button = "详情")
     @GetMapping("/read")
-    public Object read(@NotNull Integer id) {
+    public Result read(Integer id) {
         BoxAdmin boxAdmin = adminService.getById(id);
         return Result.success().setData("boxAdmin", boxAdmin);
     }

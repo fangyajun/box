@@ -14,6 +14,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author fangyajun
+ *
  * @since 2019-07-22
  */
 @ApiModel(value="管理员用户信息")

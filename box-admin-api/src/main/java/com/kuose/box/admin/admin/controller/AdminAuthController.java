@@ -31,7 +31,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 
-@Api(tags = {"后台登录，接口文档"})
+/**
+ * @author 魔舞清华
+ */
+@Api(tags = {"后台登录"})
 @RestController
 @RequestMapping("/admin/auth")
 @Validated
