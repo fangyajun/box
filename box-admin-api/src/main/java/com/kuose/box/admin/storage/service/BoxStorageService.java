@@ -1,7 +1,9 @@
 package com.kuose.box.admin.storage.service;
 
-import com.kuose.box.admin.storage.entity.BoxStorage;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kuose.box.admin.storage.entity.BoxStorage;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BoxStorageService extends IService<BoxStorage> {
 
+    IPage<BoxStorage> listBoxStoragePage(Page<BoxStorage> boxStoragePage, String key, String name);
 }

@@ -1,17 +1,18 @@
 package com.kuose.box.admin.storage.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kuose.box.admin.annotation.RequiresPermissionsDesc;
 import com.kuose.box.admin.storage.entity.BoxStorage;
 import com.kuose.box.admin.storage.service.BoxStorageService;
 import com.kuose.box.admin.storage.service.StorageService;
-import com.kuose.box.admin.validator.Order;
-import com.kuose.box.admin.validator.Sort;
 import com.kuose.box.common.config.Result;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.tomcat.util.http.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
+/**
+ * @author 魔舞清华
+ */
+@Api(tags = {"对象存储，图片上传"})
 @RestController
 @RequestMapping("/admin/storage")
 @Validated
@@ -32,18 +37,21 @@ public class AdminStorageController {
     @Autowired
     private BoxStorageService boxStorageService;
 
-//    @RequiresPermissions("admin:storage:list")
-//    @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "查询")
-//    @GetMapping("/list")
-//    public Object list(String key, String name,
-//                       @RequestParam(defaultValue = "1") Integer page,
-//                       @RequestParam(defaultValue = "10") Integer limit,
-//                       @Sort @RequestParam(defaultValue = "add_time") String sort,
-//                       @Order @RequestParam(defaultValue = "desc") String order) {
-//        List<LitemallStorage> storageList = litemallStorageService.querySelective(key, name, page, limit, sort, order);
-//        return ResponseUtil.okList(storageList);
-//    }
+    @ApiOperation(value="查询对象存储列表")
+    @RequiresPermissions("admin:storage:list")
+    @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "查询")
+    @GetMapping("/list")
+    public Object list(String key, String name, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+        Page<BoxStorage> boxStoragePage = new Page<>();
+        boxStoragePage.setSize(limit);
+        boxStoragePage.setCurrent(page);
+        boxStoragePage.setDesc("add_time");
 
+        IPage<BoxStorage> boxStorageIPage = boxStorageService.listBoxStoragePage(boxStoragePage, key, name);
+        return Result.success().setData("boxStorageIPage", boxStorageIPage);
+    }
+
+    @ApiOperation(value="图片上传接口")
     @RequiresPermissions("admin:storage:create")
     @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "上传")
     @PostMapping("/create")
@@ -53,6 +61,7 @@ public class AdminStorageController {
         return Result.success().setData("boxStorage", boxStorage);
     }
 
+    @ApiOperation(value="对象存储详情")
     @RequiresPermissions("admin:storage:read")
     @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "详情")
     @PostMapping("/read")
@@ -64,6 +73,7 @@ public class AdminStorageController {
         return Result.success().setData("boxStorage", boxStorage);
     }
 
+    @ApiOperation(value="修改存储对象")
     @RequiresPermissions("admin:storage:update")
     @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "编辑")
     @PostMapping("/update")
@@ -77,6 +87,7 @@ public class AdminStorageController {
         return Result.success();
     }
 
+    @ApiOperation(value="根据storageKey删除图片对象")
     @RequiresPermissions("admin:storage:delete")
     @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "删除")
     @PostMapping("/delete")

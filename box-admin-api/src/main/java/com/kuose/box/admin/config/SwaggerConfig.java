@@ -1,50 +1,89 @@
 package com.kuose.box.admin.config;
 
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * Swagger2的接口配置
+ */
 @Configuration
-@EnableSwagger2 //注解启动swagger2
-public class SwaggerConfig {
-    @Bean
+@EnableSwagger2
+public class SwaggerConfig
+{
+
+    // 定义分隔符,配置Swagger多包
+    private static final String splitor = ";";
+
     /**
-     * 创建API应用
-     * apiInfo() 增加API相关信息
-     * select()
-     * apis()函数返回一个ApiSelectorBuilder实例，指定接口暴露给swagger
-     * paths
-     * build()
+     * 创建API
      */
-    public Docket createRestApi(){
+    @Bean
+    public Docket createRestApi()
+    {
         return new Docket(DocumentationType.SWAGGER_2)
+                // 详细定制
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.kuose.box.admin.admin.controller"))
+                // 指定当前包路径，这里就添加了两个包，注意方法变成了basePackage，中间加上成员变量splitor
+//                .apis(RequestHandlerSelectors.basePackage("com.kuose.box.admin.admin.controller"))
+                .apis(basePackage("com.kuose.box.admin.admin.controller"+splitor+"com.kuose.box.admin.storage.controller"))
+                // 扫描所有 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build();
     }
 
     /**
-     * 创建API基本信息（展现在文档页中）
-     * title: 标题 description：文档描述
-     * version:版本      contact:作者
-     * termsOfServiceUrl:服务URL
-     * @return
+     * 添加摘要信息
+     * 这里是接口的描述配置，不重要
      */
-    private ApiInfo apiInfo(){
+    private ApiInfo apiInfo()
+    {
+        // 用ApiInfoBuilder进行定制
         return new ApiInfoBuilder()
-                .title("阔色盒子接口文档")
-                .description("一个盒子系统接口文档的API")
-                .version("1.0")
-                .contact("方亚军")
-                .termsOfServiceUrl("")
+                .title("后台系统_接口文档")
+                .description("用于盒子后台系统开发组生成RESTapi风格的接口...")
+//                .contact(new Contact(Global.getName(), null, null))
+//                .version("版本号:" + Global.getVersion())
                 .build();
     }
+
+
+    /**
+     * 重写basePackage方法，使能够实现多包访问，复制贴上去
+     * @author  teavamc
+     * @date 2019/1/26
+     * @param
+     * @return com.google.common.base.Predicate<springfox.documentation.RequestHandler>
+     */
+    public static Predicate<RequestHandler> basePackage(final String basePackage) {
+        return input -> declaringClass(input).transform(handlerPackage(basePackage)).or(true);
+    }
+
+    private static Function<Class<?>, Boolean> handlerPackage(final String basePackage)     {
+        return input -> {
+            // 循环判断匹配
+            for (String strPackage : basePackage.split(splitor)) {
+                boolean isMatch = input.getPackage().getName().startsWith(strPackage);
+                if (isMatch) {
+                    return true;
+                }
+            }
+            return false;
+        };
+    }
+
+    private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
+        return Optional.fromNullable(input.declaringClass());
+    }
 }
+
