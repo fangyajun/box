@@ -46,7 +46,6 @@ public class ShiroConfig {
 
     @Bean
     public SessionManager sessionManager() {
-
         return new AdminWebSessionManager();
     }
 

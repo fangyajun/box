@@ -90,14 +90,11 @@ public class AdminAuthController {
         logHelper.logAuthSucceed("登录");
 
         // userInfo
-        Map<String, Object> adminInfo = new HashMap<String, Object>();
+        Map<String, Object> adminInfo = new HashMap(2);
         adminInfo.put("nickName", admin.getUsername());
         adminInfo.put("avatar", admin.getAvatar());
 
-        Map<Object, Object> result = new HashMap<Object, Object>();
-        result.put("token", currentUser.getSession().getId());
-        result.put("adminInfo", adminInfo);
-        return Result.success().setData("result", result);
+        return Result.success().setData("token", currentUser.getSession().getId()).setData("adminInfo", adminInfo);
     }
 
     /**
@@ -122,18 +119,12 @@ public class AdminAuthController {
         Subject currentUser = SecurityUtils.getSubject();
         BoxAdmin admin = (BoxAdmin) currentUser.getPrincipal();
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("name", admin.getUsername());
-        data.put("avatar", admin.getAvatar());
-
         Integer[] roleIds = admin.getRoleIds();
         Set<String> roles = roleService.queryByIds(roleIds);
         Set<String> permissions = permissionService.queryByRoleIds(roleIds);
-        data.put("roles", roles);
-        // NOTE
         // 这里需要转换perms结构，因为对于前端而已API形式的权限更容易理解
-        data.put("perms", toApi(permissions));
-        return Result.success().setData("data", data);
+        admin.setPassword(null);
+        return Result.success().setData("adminInfo", admin).setData("roles", roles).setData("permissions", toApi(permissions));
     }
 
     @Autowired
