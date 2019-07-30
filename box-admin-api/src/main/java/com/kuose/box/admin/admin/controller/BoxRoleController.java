@@ -15,6 +15,7 @@ import com.kuose.box.admin.util.PermissionUtil;
 import com.kuose.box.admin.vo.PermVo;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.JacksonUtil;
+import com.kuose.box.common.utils.PinYinUtils;
 import io.swagger.annotations.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -107,9 +108,10 @@ public class BoxRoleController {
         if (error != null) {
             return error;
         }
+        role.setSignName(PinYinUtils.changeToGetShortPinYin(role.getRoleName()).toUpperCase());
 
         List<BoxRole> roleList = roleService.list(new QueryWrapper<BoxRole>().eq("role_name", role.getRoleName()));
-        if (roleList != null || roleList.size() != 0) {
+        if (roleList != null && roleList.size() != 0) {
             return Result.failure("角色名称已经存在");
         }
 
@@ -199,7 +201,7 @@ public class BoxRoleController {
      *
      * @return 系统所有权限列表和管理员已分配权限
      */
-    @ApiOperation(value="管理员的权限信息")
+    @ApiOperation(value="角色的权限信息")
     @RequiresPermissions("admin:role:permission:get")
     @RequiresPermissionsDesc(menu = {"系统管理", "角色管理"}, button = "权限详情")
     @GetMapping("/getPermissions")
@@ -219,8 +221,14 @@ public class BoxRoleController {
      *
      * @param body
      * @return
+     *
+     * admin:storage:update
+     * admin:storage:delete
+     * admin:storage:read
+     * admin:storage:create
+     * admin:storage:list
      */
-    @ApiOperation(value="更新管理员的权限")
+    @ApiOperation(value="更新角色的权限")
     @RequiresPermissions("admin:role:permission:update")
     @RequiresPermissionsDesc(menu = {"系统管理", "角色管理"}, button = "权限变更")
     @PostMapping("/updatePermissions")

@@ -29,6 +29,12 @@ private static final long serialVersionUID=1L;
     private String roleName;
 
     /**
+     * 标记
+     */
+    @ApiModelProperty(value="角色英文名称")
+    private String signName;
+
+    /**
      * 角色描述
      */
     @ApiModelProperty(value="角色描述")
@@ -71,6 +77,14 @@ private static final long serialVersionUID=1L;
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getSignName() {
+        return signName;
+    }
+
+    public void setSignName(String signName) {
+        this.signName = signName;
     }
 
     public String getRoleName() {

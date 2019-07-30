@@ -131,6 +131,15 @@
                 <version>2.6</version>
             </dependency>
 
+            <!--汉字转拼音-->
+            <!-- https://mvnrepository.com/artifact/com.github.stuxuhai/jpinyin -->
+            <dependency>
+                <groupId>com.github.stuxuhai</groupId>
+                <artifactId>jpinyin</artifactId>
+                <version>1.1.8</version>
+            </dependency>
+
+
             <dependency>
                 <groupId>com.kuose</groupId>
                 <artifactId>box-common</artifactId>
@@ -149,6 +158,8 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>provided</scope>
         </dependency>
+
+
         <!-- 工具包-->
         <dependency>
             <groupId>com.google.guava</groupId>

@@ -1,6 +1,9 @@
 package com.kuose.box.admin.admin.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuose.box.admin.admin.entity.BoxAdmin;
+import com.kuose.box.admin.admin.entity.BoxPermission;
+import com.kuose.box.admin.admin.entity.BoxRole;
 import com.kuose.box.admin.admin.service.BoxAdminService;
 import com.kuose.box.admin.admin.service.BoxPermissionService;
 import com.kuose.box.admin.admin.service.BoxRoleService;
@@ -63,7 +66,7 @@ public class AdminAuthController {
         String password = boxAdmin.getPassword();
 
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
-            return Result.failure("用户名或密码为空");
+            return Result.failure(601,"用户名或密码为空");
         }
 
         Subject currentUser = SecurityUtils.getSubject();
@@ -71,14 +74,14 @@ public class AdminAuthController {
             currentUser.login(new UsernamePasswordToken(username, password));
         } catch (UnknownAccountException uae) {
             logHelper.logAuthFail("登录", "用户帐号或密码不正确");
-            return Result.failure("用户帐号或密码不正确");
+            return Result.failure(601, "用户帐号或密码不正确");
         } catch (LockedAccountException lae) {
             logHelper.logAuthFail("登录", "用户帐号已锁定不可用");
-            return Result.failure("用户帐号已锁定不可用");
+            return Result.failure(601 ,"用户帐号已锁定不可用");
 
         } catch (AuthenticationException ae) {
             logHelper.logAuthFail("登录", "认证失败");
-            return Result.failure("认证失败");
+            return Result.failure(601, "认证失败");
         }
 
         currentUser = SecurityUtils.getSubject();
@@ -115,16 +118,22 @@ public class AdminAuthController {
     @ApiOperation(value="获取当前登录用户信息")
     @RequiresAuthentication
     @GetMapping("/info")
-    public Object info() {
+    public Result info() {
         Subject currentUser = SecurityUtils.getSubject();
         BoxAdmin admin = (BoxAdmin) currentUser.getPrincipal();
 
         Integer[] roleIds = admin.getRoleIds();
-        Set<String> roles = roleService.queryByIds(roleIds);
-        Set<String> permissions = permissionService.queryByRoleIds(roleIds);
+
+        HashMap<String, Object> rolesIfo = new HashMap<>();
+        for (Integer roleId : roleIds) {
+            BoxRole boxRole = roleService.getById(roleId);
+            List<BoxPermission> rolePermissions = permissionService.list(new QueryWrapper<BoxPermission>().eq("role_id", roleId));
+            rolesIfo.put(boxRole.getSignName(), rolePermissions);
+        }
+
         // 这里需要转换perms结构，因为对于前端而已API形式的权限更容易理解
         admin.setPassword(null);
-        return Result.success().setData("adminInfo", admin).setData("roles", roles).setData("permissions", toApi(permissions));
+        return Result.success().setData("adminInfo", admin).setData("rolesIfo", rolesIfo);
     }
 
     @Autowired
@@ -160,7 +169,7 @@ public class AdminAuthController {
     @ApiIgnore()
     @GetMapping("/401")
     public Object page401() {
-        return Result.failure("请登录");
+        return Result.failure(501 ,"请登录");
     }
 
     @ApiIgnore()
@@ -172,6 +181,6 @@ public class AdminAuthController {
     @ApiIgnore()
     @GetMapping("/403")
     public Object page403() {
-        return Result.failure("无操作权限");
+        return Result.failure(506,"无操作权限");
     }
 }

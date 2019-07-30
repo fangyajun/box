@@ -116,10 +116,10 @@ public class BoxAdminController {
     @RequiresPermissionsDesc(menu = {"系统管理", "管理员管理"}, button = "编辑")
     @PostMapping("/update")
     public Object update(@RequestBody BoxAdmin admin) {
-        Object error = validate(admin);
-        if (error != null) {
-            return error;
-        }
+//        Object error = validate(admin);
+//        if (error != null) {
+//            return error;
+//        }
 
         Integer anotherAdminId = admin.getId();
         if (anotherAdminId == null) {
@@ -128,10 +128,7 @@ public class BoxAdminController {
 
         // 不允许管理员通过编辑接口修改密码
         admin.setPassword(null);
-
-        if (!adminService.updateById(admin)) {
-            return Result.failure("更新失败");
-        }
+        adminService.updateAdminById(admin);
 
         logHelper.logAuthSucceed("编辑管理员", admin.getUsername());
         return Result.success().setData("admin", admin);

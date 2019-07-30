@@ -11,11 +11,12 @@
         <result column="add_time" property="addTime" />
         <result column="update_time" property="updateTime" />
         <result column="deleted" property="deleted" />
+        <result column="sign_name" property="signName" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, role_name, role_desc, enabled, add_time, update_time, deleted
+        id, role_name, role_desc, enabled, add_time, update_time, deleted, sign_name
     </sql>
 
 </mapper>

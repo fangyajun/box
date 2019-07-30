@@ -19,9 +19,7 @@ public class AdminWebSessionManager extends DefaultWebSessionManager {
 
     @Override
     protected Serializable getSessionId(ServletRequest request, ServletResponse response) {
-        // 设置session过期时间3600s
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setGlobalSessionTimeout(3600000L);
+
 
         String id = WebUtils.toHttp(request).getHeader(LOGIN_TOKEN_KEY);
         if (!StringUtils.isEmpty(id)) {
