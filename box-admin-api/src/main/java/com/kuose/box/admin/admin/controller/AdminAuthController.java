@@ -85,6 +85,8 @@ public class AdminAuthController {
         }
 
         currentUser = SecurityUtils.getSubject();
+        // 设置登录过期时间 单位毫秒
+//        currentUser.getSession().setTimeout(3600);
         BoxAdmin admin = (BoxAdmin) currentUser.getPrincipal();
         admin.setLastLoginIp(IpUtil.getIpAddr(request));
         admin.setLastLoginTime(System.currentTimeMillis());

@@ -21,14 +21,14 @@ public class ShiroExceptionHandler {
     @ResponseBody
     public Object unauthenticatedHandler(AuthenticationException e) {
         logger.warn(e.getMessage(), e);
-        return Result.failure("请登录");
+        return Result.failure(501, "请登录");
     }
 
     @ExceptionHandler(AuthorizationException.class)
     @ResponseBody
     public Object unauthorizedHandler(AuthorizationException e) {
         logger.warn(e.getMessage(), e);
-        return Result.failure("无操作权限");
+        return Result.failure(506, "无操作权限");
     }
 
 }

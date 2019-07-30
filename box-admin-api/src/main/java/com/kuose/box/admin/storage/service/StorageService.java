@@ -53,6 +53,8 @@ public class StorageService {
         boxStorage.setStorageName(fileName);
         boxStorage.setStorageSize((int) contentLength);
         boxStorage.setStorageType(contentType);
+        boxStorage.setAddTime(System.currentTimeMillis());
+        boxStorage.setUpdateTime(System.currentTimeMillis());
         boxStorage.setStorageKey(key);
         boxStorage.setUrl(url);
         boxStorageService.save(boxStorage);

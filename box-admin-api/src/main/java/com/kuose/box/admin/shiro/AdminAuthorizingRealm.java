@@ -19,6 +19,9 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author 魔舞清华
+ */
 public class AdminAuthorizingRealm extends AuthorizingRealm {
 
     @Autowired
