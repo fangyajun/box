@@ -9,6 +9,6 @@ box 项目是根据用户填写的档案资料再结合大数据智能算法为�
 
 ## 架构图
 
-![Image text](https://github.com/fangyajun/box/blob/master/document/pic/系统架构图.png)
+![Image text](https://github.com/fangyajun/box/blob/master/document/pic/系统架构图.jpg)
 
 
