@@ -152,7 +152,7 @@ public class BoxAdminController {
         }
 
         // 逻辑删除
-        admin.setDeleted(true);
+        admin.setDeleted(1);
         adminService.updateAdminById(admin);
 
         logHelper.logAuthSucceed("删除管理员", admin.getUsername());

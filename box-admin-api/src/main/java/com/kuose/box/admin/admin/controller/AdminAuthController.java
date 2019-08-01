@@ -83,7 +83,7 @@ public class AdminAuthController {
 
         currentUser = SecurityUtils.getSubject();
         // 设置登录过期时间 单位毫秒
-        // currentUser.getSession().setTimeout(3600);
+         currentUser.getSession().setTimeout(3600*1000*24);
         BoxAdmin admin = (BoxAdmin) currentUser.getPrincipal();
         admin.setLastLoginIp(IpUtil.getIpAddr(request));
         admin.setLastLoginTime(System.currentTimeMillis());
@@ -163,7 +163,7 @@ public class AdminAuthController {
     @ApiIgnore()
     @GetMapping("/401")
     public Object page401() {
-        return Result.failure(501 ,"请登录");
+        return Result.failure(501 ,"未登录或登录已过期，请重新登录");
     }
 
     @ApiIgnore()

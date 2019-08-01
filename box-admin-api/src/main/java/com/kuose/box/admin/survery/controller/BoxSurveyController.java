@@ -86,6 +86,7 @@ public class BoxSurveyController {
         return Result.success().setData("boxSurvey", boxSurvey);
     }
 
+
     @ApiOperation(value="删除")
     @PostMapping
     public Result delete(@RequestBody  BoxSurvey boxSurvey) {

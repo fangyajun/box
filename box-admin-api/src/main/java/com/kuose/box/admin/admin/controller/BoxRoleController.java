@@ -140,15 +140,19 @@ public class BoxRoleController {
     @RequiresPermissions("admin:role:delete")
     @RequiresPermissionsDesc(menu = {"系统管理", "角色管理"}, button = "角色删除")
     @PostMapping("/delete")
-    public Object delete(@RequestParam("id") Integer id) {
+    public Object delete(@RequestBody BoxRole role) {
+        Integer id = role.getId();
         if (id == null) {
             return Result.failure("缺少必传参数");
         }
 
         // 如果当前角色所对应管理员仍存在，则拒绝删除角色。
-        List<BoxAdmin> adminList = adminService.list();
+        List<BoxAdmin> adminList = adminService.listAdmins(null);
         for (BoxAdmin admin : adminList) {
             Integer[] roleIds = admin.getRoleIds();
+            if (roleIds == null || roleIds.length == 0) {
+                continue;
+            }
             for (Integer roleId : roleIds) {
                 if (id.equals(roleId)) {
                     return Result.failure("当前角色存在管理员，不能删除");
@@ -159,7 +163,7 @@ public class BoxRoleController {
         BoxRole boxRole = new BoxRole();
         boxRole.setId(id);
         // 逻辑删除
-        boxRole.setDeleted(true);
+        boxRole.setDeleted(1);
         roleService.updateById(boxRole);
 
         return Result.success();
@@ -206,15 +210,18 @@ public class BoxRoleController {
     @RequiresPermissionsDesc(menu = {"系统管理", "角色管理"}, button = "权限详情")
     @GetMapping("/getPermissions")
     public Object getPermissions(Integer roleId) {
-        List<PermVo> systemPermissions = getSystemPermissions();
         Set<String> assignedPermissions = getAssignedPermissions(roleId);
-
-        Map<String, Object> data = new HashMap<>();
-        data.put("systemPermissions", systemPermissions);
-        data.put("assignedPermissions", assignedPermissions);
-        return Result.success().setData("data", data);
+        return Result.success().setData("assignedPermissions", assignedPermissions);
     }
 
+    @ApiOperation(value="获取系统所有的权限列表")
+    @RequiresPermissions("admin:permission:list")
+    @RequiresPermissionsDesc(menu = {"系统管理", "权限列表"}, button = "权限列表")
+    @GetMapping("getSysPermissions")
+    public Result getSysPermissions() {
+        List<PermVo> systemPermissions = getSystemPermissions();
+        return Result.success().setData("systemPermissions", systemPermissions);
+    }
 
     /**
      * 更新管理员的权限

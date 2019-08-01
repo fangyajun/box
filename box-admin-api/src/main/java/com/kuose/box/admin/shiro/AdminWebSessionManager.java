@@ -1,6 +1,8 @@
 package com.kuose.box.admin.shiro;
 
 import com.alibaba.druid.util.StringUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.SessionContext;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.apache.shiro.web.util.WebUtils;
@@ -17,10 +19,10 @@ public class AdminWebSessionManager extends DefaultWebSessionManager {
     public static final String LOGIN_TOKEN_KEY = "X-Litemall-Admin-Token";
     private static final String REFERENCED_SESSION_ID_SOURCE = "Stateless request";
 
+
+
     @Override
     protected Serializable getSessionId(ServletRequest request, ServletResponse response) {
-
-
         String id = WebUtils.toHttp(request).getHeader(LOGIN_TOKEN_KEY);
         if (!StringUtils.isEmpty(id)) {
             request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_SOURCE, REFERENCED_SESSION_ID_SOURCE);
@@ -28,7 +30,14 @@ public class AdminWebSessionManager extends DefaultWebSessionManager {
             request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_IS_VALID, Boolean.TRUE);
             return id;
         } else {
-            return super.getSessionId(request, response);
+            Serializable sessionId = super.getSessionId(request, response);
+            return sessionId;
         }
     }
+
+    @Override
+    protected void onStart(Session session, SessionContext context) {
+        super.onStart(session, context);
+    }
+
 }

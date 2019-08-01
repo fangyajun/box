@@ -1,9 +1,9 @@
 package com.kuose.box.admin.admin.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import lombok.Data;
 
 /**
  * <p>
@@ -13,6 +13,7 @@ import java.io.Serializable;
  * @author fangyajun
  * @since 2019-07-22
  */
+@Data
 public class BoxPermission extends Model<BoxPermission> {
 
 private static final long serialVersionUID=1L;
@@ -43,71 +44,5 @@ private static final long serialVersionUID=1L;
     /**
      * 逻辑删除
      */
-    private Boolean deleted;
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getPermission() {
-        return permission;
-    }
-
-    public void setPermission(String permission) {
-        this.permission = permission;
-    }
-
-    public Long getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(Long addTime) {
-        this.addTime = addTime;
-    }
-
-    public Long getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Long updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
-
-    @Override
-    public String toString() {
-        return "BoxPermission{" +
-        "id=" + id +
-        ", roleId=" + roleId +
-        ", permission=" + permission +
-        ", addTime=" + addTime +
-        ", updateTime=" + updateTime +
-        ", deleted=" + deleted +
-        "}";
-    }
+    private Integer deleted;
 }
