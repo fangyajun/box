@@ -1,9 +1,6 @@
 package com.kuose.box.admin.admin.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuose.box.admin.admin.entity.BoxAdmin;
-import com.kuose.box.admin.admin.entity.BoxPermission;
-import com.kuose.box.admin.admin.entity.BoxRole;
 import com.kuose.box.admin.admin.service.BoxAdminService;
 import com.kuose.box.admin.admin.service.BoxPermissionService;
 import com.kuose.box.admin.admin.service.BoxRoleService;
@@ -86,7 +83,7 @@ public class AdminAuthController {
 
         currentUser = SecurityUtils.getSubject();
         // 设置登录过期时间 单位毫秒
-//        currentUser.getSession().setTimeout(3600);
+        // currentUser.getSession().setTimeout(3600);
         BoxAdmin admin = (BoxAdmin) currentUser.getPrincipal();
         admin.setLastLoginIp(IpUtil.getIpAddr(request));
         admin.setLastLoginTime(System.currentTimeMillis());
@@ -125,17 +122,12 @@ public class AdminAuthController {
         BoxAdmin admin = (BoxAdmin) currentUser.getPrincipal();
 
         Integer[] roleIds = admin.getRoleIds();
-
+        Set<String> roles = roleService.queryByIds(roleIds);
+        Set<String> permissions = permissionService.queryByRoleIds(roleIds);
         HashMap<String, Object> rolesIfo = new HashMap<>();
-        for (Integer roleId : roleIds) {
-            BoxRole boxRole = roleService.getById(roleId);
-            List<BoxPermission> rolePermissions = permissionService.list(new QueryWrapper<BoxPermission>().eq("role_id", roleId));
-            rolesIfo.put(boxRole.getSignName(), rolePermissions);
-        }
-
         // 这里需要转换perms结构，因为对于前端而已API形式的权限更容易理解
         admin.setPassword(null);
-        return Result.success().setData("adminInfo", admin).setData("rolesIfo", rolesIfo);
+        return Result.success().setData("adminInfo", admin).setData("permissions", toApi(permissions)).setData("roles", roles);
     }
 
     @Autowired

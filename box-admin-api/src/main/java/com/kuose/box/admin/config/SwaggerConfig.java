@@ -36,7 +36,7 @@ public class SwaggerConfig
                 .select()
                 // 指定当前包路径，这里就添加了两个包，注意方法变成了basePackage，中间加上成员变量splitor
 //                .apis(RequestHandlerSelectors.basePackage("com.kuose.box.admin.admin.controller"))
-                .apis(basePackage("com.kuose.box.admin.admin.controller"+splitor+"com.kuose.box.admin.storage.controller"))
+                .apis(basePackage("com.kuose.box.admin.admin.controller"+splitor+"com.kuose.box.admin.storage.controller"+splitor+"com.kuose.box.admin.survery.controller"))
                 // 扫描所有 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build();

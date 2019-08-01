@@ -13,7 +13,7 @@ public class MpGenerator {
     public static void main(String[] args) {
         new MpGenerator().generator("D:\\MpGenerator"
                 , "jdbc:mysql://localhost:3306/box?characterEncoding=utf8"
-                , "com.kuose.box.admin.log"
+                , "com.kuose.box.admin.survery"
                 , "root"
                 , "123456");
     }
@@ -46,7 +46,7 @@ public class MpGenerator {
         StrategyConfig strategyConfig = new StrategyConfig();
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         // 生成的表
-        strategyConfig.setInclude("box_log");
+        strategyConfig.setInclude("box_survey","box_survey_question_options","box_survey_qusetion","box_survey_user_answer");
 
         new AutoGenerator().setDataSource(dataSourceConfig)
                 .setGlobalConfig(gc)
