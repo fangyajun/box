@@ -22,4 +22,6 @@ public interface BoxAdminService extends IService<BoxAdmin> {
     List<BoxAdmin> listAdmins(String username);
 
     void updateAdminById(BoxAdmin admin);
+
+    void saveBoxAdmin(BoxAdmin admin);
 }

@@ -43,4 +43,9 @@ public class BoxAdminServiceImpl extends ServiceImpl<BoxAdminMapper, BoxAdmin> i
     public void updateAdminById(BoxAdmin admin) {
         boxAdminMapper.updateAdminById(admin);
     }
+
+    @Override
+    public void saveBoxAdmin(BoxAdmin admin) {
+        boxAdminMapper.saveBoxAdmin(admin);
+    }
 }

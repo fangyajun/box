@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @author fangyajun
  * @since 2019-07-31
  */
-@Api(tags = {"问券"})
+@Api(tags = {"问券管理，问券管理"})
 @RestController
 @RequestMapping("/boxSurvey")
 public class BoxSurveyController {

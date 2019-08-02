@@ -23,4 +23,6 @@ public interface BoxAdminMapper extends BaseMapper<BoxAdmin> {
     void updateAdminById(BoxAdmin admin);
 
     IPage<BoxAdmin> listAdminsPage(Page<BoxAdmin> adminPage, @Param("username") String username);
+
+    void saveBoxAdmin(BoxAdmin admin);
 }

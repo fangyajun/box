@@ -109,6 +109,8 @@ public class BoxRoleController {
             return error;
         }
         role.setSignName(PinYinUtils.changeToGetShortPinYin(role.getRoleName()).toUpperCase());
+        role.setAddTime(System.currentTimeMillis());
+        role.setUpdateTime(System.currentTimeMillis());
 
         List<BoxRole> roleList = roleService.list(new QueryWrapper<BoxRole>().eq("role_name", role.getRoleName()));
         if (roleList != null && roleList.size() != 0) {

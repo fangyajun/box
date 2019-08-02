@@ -127,7 +127,7 @@ public class AdminAuthController {
         HashMap<String, Object> rolesIfo = new HashMap<>();
         // 这里需要转换perms结构，因为对于前端而已API形式的权限更容易理解
         admin.setPassword(null);
-        return Result.success().setData("adminInfo", admin).setData("permissions", toApi(permissions)).setData("roles", roles);
+        return Result.success().setData("adminInfo", admin).setData("permissions", permissions).setData("roles", roles);
     }
 
     @Autowired
@@ -161,19 +161,19 @@ public class AdminAuthController {
     }
 
     @ApiIgnore()
-    @GetMapping("/401")
+    @RequestMapping("/401")
     public Object page401() {
         return Result.failure(501 ,"未登录或登录已过期，请重新登录");
     }
 
     @ApiIgnore()
-    @GetMapping("/index")
+    @RequestMapping("/index")
     public Object pageIndex() {
         return Result.success();
     }
 
     @ApiIgnore()
-    @GetMapping("/403")
+    @RequestMapping("/403")
     public Object page403() {
         return Result.failure(506,"无操作权限");
     }

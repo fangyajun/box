@@ -81,4 +81,22 @@
         where deleted != 1 and id = #{id,jdbcType=INTEGER}
     </update>
 
+    <insert id="saveBoxAdmin" parameterType="com.kuose.box.admin.admin.entity.BoxAdmin">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into box_admin (username, `password`, last_login_ip, last_login_time,
+        avatar, add_time, update_time, deleted, role_ids
+        )
+        values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{lastLoginIp,jdbcType=VARCHAR},
+        #{lastLoginTime,jdbcType=BIGINT}, #{avatar,jdbcType=VARCHAR}, #{addTime,jdbcType=BIGINT},
+        #{updateTime,jdbcType=BIGINT}, #{deleted,jdbcType=BIT}, #{roleIds,jdbcType=VARCHAR,typeHandler=com.kuose.box.admin.mybatis.JsonIntegerArrayTypeHandler}
+        )
+    </insert>
+
+    <insert id="">
+
+
+    </insert>
+
 </mapper>

@@ -95,9 +95,10 @@ public class BoxAdminController {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(rawPassword);
         admin.setPassword(encodedPassword);
+        admin.setDeleted(0);
         admin.setAddTime(System.currentTimeMillis());
         admin.setUpdateTime(System.currentTimeMillis());
-        adminService.save(admin);
+        adminService.saveBoxAdmin(admin);
         logHelper.logAuthSucceed("添加管理员", username);
         return Result.success().setData("admin", admin);
     }
