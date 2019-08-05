@@ -1,7 +1,9 @@
 package com.kuose.box.admin.admin.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -18,6 +20,7 @@ import lombok.Data;
  */
 @Data
 @ApiModel(value="管理员用户信息")
+@TableName(resultMap = "BaseResultMap")
 public class BoxAdmin extends Model<BoxAdmin> {
 
 private static final long serialVersionUID=1L;
@@ -77,6 +80,7 @@ private static final long serialVersionUID=1L;
     /**
      * 角色列表
      */
+    @TableField(el = "roleIds,jdbcType=VARCHAR,typeHandler=com.kuose.box.admin.mybatis.JsonIntegerArrayTypeHandler")
     @ApiModelProperty(hidden = true)
     private Integer[] roleIds;
 

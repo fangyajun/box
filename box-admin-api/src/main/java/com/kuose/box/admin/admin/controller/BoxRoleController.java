@@ -32,6 +32,7 @@ import java.util.*;
 /**
  * @author 魔舞清华
  */
+//@CrossOrigin
 @Api(tags = {"系统管理，角色管理"})
 @RestController
 @RequestMapping("boxRole")
@@ -67,7 +68,7 @@ public class BoxRoleController {
     @ApiOperation(value="获取所有的角色信息")
     @GetMapping("/options")
     public Result options() {
-        List<BoxRole> roleList = roleService.list();
+        List<BoxRole> roleList = roleService.list(new QueryWrapper<BoxRole>().eq("deleted", 0));
 
         List<Map<String, Object>> options = new ArrayList<>(roleList.size());
         for (BoxRole role : roleList) {

@@ -72,13 +72,13 @@ private static final long serialVersionUID=1L;
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "创建时间", hidden = true)
     private Long createTime;
 
     /**
      * 修改时间
      */
-    @ApiModelProperty(value = "修改时间")
+    @ApiModelProperty(value = "修改时间", hidden = true)
     private Long updateTime;
 
     /**

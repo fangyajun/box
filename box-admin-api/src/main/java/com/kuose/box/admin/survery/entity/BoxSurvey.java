@@ -47,19 +47,19 @@ private static final long serialVersionUID=1L;
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间，添加修改不需要传入")
+    @ApiModelProperty(value = "创建时间，添加修改不需要传入", hidden = true)
     private Long createTime;
 
     /**
      * 修改时间
      */
-    @ApiModelProperty(value = "修改时间，添加修改不需要传入")
+    @ApiModelProperty(value = "修改时间，添加修改不需要传入", hidden = true)
     private Long updateTime;
 
     /**
      * 逻辑删除（1.删除，0正常）
      */
-    @ApiModelProperty(value = "是否删除，添加修改不需要传入")
+    @ApiModelProperty(value = "是否删除，添加修改不需要传入", hidden = true)
     @TableField("is_deleted")
     private Integer deleted;
 }

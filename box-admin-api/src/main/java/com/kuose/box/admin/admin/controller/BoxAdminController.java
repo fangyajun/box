@@ -10,6 +10,7 @@ import com.kuose.box.admin.annotation.RequiresPermissionsDesc;
 import com.kuose.box.admin.log.service.impl.LogHelper;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.RegexUtil;
+import com.kuose.box.common.utils.StringUtil;
 import com.kuose.box.common.utils.bcrypt.BCryptPasswordEncoder;
 import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
@@ -29,6 +30,7 @@ import java.util.List;
  * @author fangyajun
  * @since 2019-07-22
  */
+//@CrossOrigin
 @Api(tags = {"系统管理，管理员管理"})
 @RestController
 @RequestMapping("/boxAdmin")
@@ -86,7 +88,7 @@ public class BoxAdminController {
         }
 
         String username = admin.getUsername();
-        List<BoxAdmin> adminList = adminService.list(new QueryWrapper<BoxAdmin>().eq("username", username));
+        List<BoxAdmin> adminList = adminService.list(new QueryWrapper<BoxAdmin>().eq("username", username).eq("deleted", 0));
         if (adminList.size() > 0) {
             return Result.failure("管理员已经存在");
         }
@@ -99,6 +101,7 @@ public class BoxAdminController {
         admin.setAddTime(System.currentTimeMillis());
         admin.setUpdateTime(System.currentTimeMillis());
         adminService.saveBoxAdmin(admin);
+        admin.setPassword(null);
         logHelper.logAuthSucceed("添加管理员", username);
         return Result.success().setData("admin", admin);
     }
@@ -109,6 +112,7 @@ public class BoxAdminController {
     @GetMapping("/read")
     public Result read(Integer id) {
         BoxAdmin boxAdmin = adminService.getById(id);
+        boxAdmin.setPassword(null);
         return Result.success().setData("boxAdmin", boxAdmin);
     }
 
@@ -127,11 +131,17 @@ public class BoxAdminController {
             return Result.failure("缺少必传参数");
         }
 
-        // 不允许管理员通过编辑接口修改密码
-        admin.setPassword(null);
+        // 修改密码
+        if (!StringUtil.isBlank(admin.getPassword())) {
+            String rawPassword = admin.getPassword();
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            String encodedPassword = encoder.encode(rawPassword);
+            admin.setPassword(encodedPassword);
+        }
         adminService.updateAdminById(admin);
 
         logHelper.logAuthSucceed("编辑管理员", admin.getUsername());
+        admin.setPassword(null);
         return Result.success().setData("admin", admin);
     }
 

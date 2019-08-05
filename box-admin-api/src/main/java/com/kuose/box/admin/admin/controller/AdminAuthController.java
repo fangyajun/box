@@ -34,6 +34,7 @@ import java.util.*;
 /**
  * @author 魔舞清华
  */
+//@CrossOrigin
 @Api(tags = {"后台登录"})
 @RestController
 @RequestMapping("/admin/auth")

@@ -48,7 +48,7 @@ public class BoxRoleServiceImpl extends ServiceImpl<BoxRoleMapper, BoxRole> impl
     @Override
     public IPage<BoxRole> listRolePage(Page<BoxRole> rolePage) {
 
-        IPage<BoxRole> boxRoleIPage = boxRoleMapper.selectPage(rolePage, new QueryWrapper<BoxRole>().ne("deleted", 1));
+        IPage<BoxRole> boxRoleIPage = boxRoleMapper.selectPage(rolePage, new QueryWrapper<BoxRole>().eq("deleted", 0));
         return boxRoleIPage;
     }
 }
