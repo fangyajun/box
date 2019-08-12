@@ -12,8 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/*
-   <columnOverride column="json_string" javaType="com.fasterxml.jackson.databind.JsonNode" typeHandler="JsonNodeTypeHandler"/>
+/**
+ * @author 魔舞清华
  */
 public class JsonNodeTypeHandler extends BaseTypeHandler<JsonNode> {
     private static final ObjectMapper mapper = new ObjectMapper();

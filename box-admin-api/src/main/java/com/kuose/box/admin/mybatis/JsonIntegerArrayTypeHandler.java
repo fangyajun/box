@@ -9,8 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/*
-   <columnOverride column="ids" javaType="java.lang.Integer[]" typeHandler="JsonIntegerArrayTypeHandler"/>
+/**
+ * @author 魔舞清华
  */
 public class JsonIntegerArrayTypeHandler extends BaseTypeHandler<Integer[]> {
     private static final ObjectMapper mapper = new ObjectMapper();
