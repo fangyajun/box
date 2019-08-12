@@ -35,6 +35,7 @@ public class BoxSurveyController {
         if (boxSurvey == null) {
             return Result.failure("缺少必传参数");
         }
+
         if (StringUtil.isBlank(boxSurvey.getSurveyName())) {
             return Result.failure("缺少必传参数");
         }
