@@ -32,7 +32,6 @@ import java.util.*;
 /**
  * @author 魔舞清华
  */
-//@CrossOrigin
 @Api(tags = {"系统管理，角色管理"})
 @RestController
 @RequestMapping("boxRole")
