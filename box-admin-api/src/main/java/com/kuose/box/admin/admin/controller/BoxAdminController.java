@@ -12,7 +12,10 @@ import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.RegexUtil;
 import com.kuose.box.common.utils.StringUtil;
 import com.kuose.box.common.utils.bcrypt.BCryptPasswordEncoder;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
@@ -30,13 +33,10 @@ import java.util.List;
  * @author fangyajun
  * @since 2019-07-22
  */
-//@CrossOrigin
 @Api(tags = {"系统管理，管理员管理"})
 @RestController
 @RequestMapping("/boxAdmin")
 public class BoxAdminController {
-
-
     @Autowired
     private BoxAdminService adminService;
     @Autowired
