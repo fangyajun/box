@@ -4,7 +4,11 @@ import com.kuose.box.admin.survery.entity.BoxSurveyUserAnswer;
 import com.kuose.box.admin.survery.dao.BoxSurveyUserAnswerMapper;
 import com.kuose.box.admin.survery.service.BoxSurveyUserAnswerService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -17,4 +21,27 @@ import org.springframework.stereotype.Service;
 @Service
 public class BoxSurveyUserAnswerServiceImpl extends ServiceImpl<BoxSurveyUserAnswerMapper, BoxSurveyUserAnswer> implements BoxSurveyUserAnswerService {
 
+    @Autowired
+    private BoxSurveyUserAnswerMapper boxSurveyUserAnswerMapper;
+
+    @Override
+    public List<Map<Integer, String>> getQuestionShort(Integer id) {
+
+        return boxSurveyUserAnswerMapper.getQuestionShort(id);
+    }
+
+    @Override
+    public List<Map<Integer, String>> listUserQuestionAnswer(Integer id) {
+        return boxSurveyUserAnswerMapper.listUserQuestionAnswer(id);
+    }
+
+    @Override
+    public List<Map<Integer, String>> getOptionQuestionShort(Integer id) {
+        return boxSurveyUserAnswerMapper.getOptionQuestionShort(id);
+    }
+
+    @Override
+    public List<Map<Integer, String>> listUserOptionQuestionAnswer(Integer id) {
+        return boxSurveyUserAnswerMapper.listUserOptionQuestionAnswer(id);
+    }
 }

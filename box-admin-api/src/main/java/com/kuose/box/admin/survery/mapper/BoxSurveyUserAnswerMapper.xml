@@ -18,4 +18,47 @@
         id, user_id, question_id, option_id, option_content, create_time, update_time
     </sql>
 
+    <select id="getQuestionShort" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT bsqo.id, option_content, question_type
+        FROM box_survey_qusetion bsq
+        LEFT JOIN box_survey_question_options bsqo ON bsq.id = bsqo.question_id
+        WHERE bsq.id in (
+           SELECT question_id FROM box_survey_user_answer  WHERE user_id = #{_parameter} GROUP BY question_id
+        ) AND question_type = 3
+
+    </select>
+
+    <select id="getOptionQuestionShort" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT id, question_topic
+        FROM box_survey_qusetion
+        WHERE id in (
+          SELECT question_id FROM box_survey_user_answer  WHERE user_id = 1 GROUP BY question_id
+        ) AND question_type != 3
+
+    </select>
+
+    <select id="listUserQuestionAnswer" parameterType="java.lang.Integer" resultType="java.util.Map">
+      select a.id, b.option_content from (
+        SELECT bsqo.id, option_content, question_type
+        FROM box_survey_qusetion bsq
+        LEFT JOIN box_survey_question_options bsqo ON bsq.id = bsqo.question_id
+        WHERE bsq.id in (
+           SELECT question_id FROM box_survey_user_answer  WHERE user_id = #{_parameter} GROUP BY question_id
+        ) AND question_type = 3
+
+      ) a left join box_survey_user_answer b on a.id= b.option_id
+    </select>
+
+    <select id="listUserOptionQuestionAnswer" parameterType="java.lang.Integer" resultType="java.util.Map">
+      select a.id, group_concat(c.option_content) as optionContent, group_concat(c.option_pic) as optionPic  from (
+            SELECT id, question_topic
+            FROM box_survey_qusetion
+            WHERE id in (
+              SELECT question_id FROM box_survey_user_answer  WHERE user_id = #{_parameter} GROUP BY question_id
+            ) AND question_type != 3
+      ) a left join box_survey_user_answer b on a.id = b.question_id
+      left join box_survey_question_options c on b.option_id = c.id
+      group by id
+    </select>
+
 </mapper>

@@ -131,6 +131,14 @@ public class BoxAdminController {
             return Result.failure("缺少必传参数");
         }
 
+        if (!StringUtil.isBlank(admin.getUsername())) {
+            String username = admin.getUsername();
+            List<BoxAdmin> adminList = adminService.list(new QueryWrapper<BoxAdmin>().eq("username", username).eq("deleted", 0));
+            if (adminList.size() > 0) {
+                return Result.failure("管理员已经存在");
+            }
+        }
+
         // 修改密码
         if (!StringUtil.isBlank(admin.getPassword())) {
             String rawPassword = admin.getPassword();

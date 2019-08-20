@@ -13,7 +13,6 @@ import com.kuose.box.common.utils.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2019-07-31
  */
 @Api(tags = {"问券管理，问题管理"})
-@Controller
+@RestController
 @RequestMapping("/boxSurveyQusetion")
 public class BoxSurveyQusetionController {
 
