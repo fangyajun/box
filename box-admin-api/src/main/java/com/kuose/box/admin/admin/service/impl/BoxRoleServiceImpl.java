@@ -7,6 +7,7 @@ import com.kuose.box.admin.admin.entity.BoxRole;
 import com.kuose.box.admin.admin.dao.BoxRoleMapper;
 import com.kuose.box.admin.admin.service.BoxRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.kuose.box.common.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,9 +47,13 @@ public class BoxRoleServiceImpl extends ServiceImpl<BoxRoleMapper, BoxRole> impl
     }
 
     @Override
-    public IPage<BoxRole> listRolePage(Page<BoxRole> rolePage) {
-
-        IPage<BoxRole> boxRoleIPage = boxRoleMapper.selectPage(rolePage, new QueryWrapper<BoxRole>().eq("deleted", 0));
+    public IPage<BoxRole> listRolePage(Page<BoxRole> rolePage, String username) {
+        IPage<BoxRole> boxRoleIPage = null;
+        if (!StringUtil.isBlank(username)) {
+            boxRoleIPage = boxRoleMapper.selectPage(rolePage, new QueryWrapper<BoxRole>().eq("deleted", 0).like("role_name",username));
+        } else {
+            boxRoleIPage = boxRoleMapper.selectPage(rolePage, new QueryWrapper<BoxRole>().eq("deleted", 0));
+        }
         return boxRoleIPage;
     }
 }

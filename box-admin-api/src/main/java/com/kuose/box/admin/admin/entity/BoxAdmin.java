@@ -32,13 +32,13 @@ private static final long serialVersionUID=1L;
     /**
      * 管理员名称
      */
-    @ApiModelProperty(value="用户名", example = "admin123")
+    @ApiModelProperty(value="用户名", example = "admin")
     private String username;
 
     /**
      * 管理员密码
      */
-    @ApiModelProperty(value="密码",  example = "admin123")
+    @ApiModelProperty(value="密码",  example = "kuose123*")
     private String password;
 
     /**

@@ -16,6 +16,7 @@ import com.kuose.box.admin.vo.PermVo;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.JacksonUtil;
 import com.kuose.box.common.utils.PinYinUtils;
+import com.kuose.box.common.utils.StringUtil;
 import io.swagger.annotations.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -54,13 +55,13 @@ public class BoxRoleController {
     @RequiresPermissions("admin:role:list")
     @RequiresPermissionsDesc(menu = {"系统管理", "角色管理"}, button = "角色查询")
     @GetMapping("/list")
-    public Result list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public Result list(String roleName, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         Page<BoxRole> rolePage = new Page<>();
         rolePage.setSize(limit);
         rolePage.setCurrent(page);
         rolePage.setDesc("add_time");
 
-        IPage<BoxRole> boxRoleIPage = roleService.listRolePage(rolePage);
+        IPage<BoxRole> boxRoleIPage = roleService.listRolePage(rolePage, roleName);
         return Result.success().setData("boxRoleIPage", boxRoleIPage);
     }
 
@@ -112,7 +113,7 @@ public class BoxRoleController {
         role.setAddTime(System.currentTimeMillis());
         role.setUpdateTime(System.currentTimeMillis());
 
-        List<BoxRole> roleList = roleService.list(new QueryWrapper<BoxRole>().eq("role_name", role.getRoleName()));
+        List<BoxRole> roleList = roleService.list(new QueryWrapper<BoxRole>().eq("role_name", role.getRoleName()).eq("deleted",0));
         if (roleList != null && roleList.size() != 0) {
             return Result.failure("角色名称已经存在");
         }
@@ -132,6 +133,18 @@ public class BoxRoleController {
         Object error = validate(role);
         if (error != null) {
             return error;
+        }
+
+        if (!StringUtil.isBlank(role.getRoleName())) {
+            String roleName = role.getRoleName();
+            BoxRole boxRole = roleService.getById(role.getId());
+            if (!roleName.equals(boxRole.getRoleName())) {
+                // 名称有更新
+                List<BoxRole> roleList = roleService.list(new QueryWrapper<BoxRole>().eq("role_name", role.getRoleName()).eq("deleted",0));
+                if (roleList.size() > 0) {
+                    return Result.failure("角色名称已经存在");
+                }
+            }
         }
 
         roleService.updateById(role);
@@ -195,8 +208,7 @@ public class BoxRoleController {
             getSystemPermissions();
             assignedPermissions = systemPermissionsString;
         } else {
-            assignedPermissions = permissionService.queryByRoleId(roleId)
-            ;
+            assignedPermissions = permissionService.queryByRoleId(roleId);
         }
 
         return assignedPermissions;

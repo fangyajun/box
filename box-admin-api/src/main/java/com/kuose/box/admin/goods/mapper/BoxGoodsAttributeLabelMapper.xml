@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuose.box.admin.goods.dao.BoxGoodsAttributeLabelMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kuose.box.admin.goods.entity.BoxGoodsAttributeLabel">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="attribute_name" property="attributeName" />
+        <result column="attribute_code" property="attributeCode" />
+        <result column="type" property="type" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, parent_id, attribute_name, attribute_code, type, add_time, update_time, deleted
+    </sql>
+
+
+
+    <resultMap id="goodsAttributeLabelResultMap" type="java.util.Map" >
+        <id column="id" property="id" />
+        <result property="parent_id" column="parentId" />
+        <result property="attribute_name" column="attributeName" />
+        <result property="attribute_code" column="attributeCode" />
+        <result property="add_time" column="addTime" />
+        <result property="update_time" column="updateTime" />
+        <collection property="children" ofType = "java.util.Map" select="com.kuose.box.admin.goods.dao.BoxGoodsAttributeLabelMapper.listGoodsAttributeLabelByParentId" column="id" />
+    </resultMap>
+
+    <select id="listGoodsAttributeLabel" parameterType="com.kuose.box.admin.goods.entity.BoxGoodsAttributeLabel" resultMap="goodsAttributeLabelResultMap">
+        select
+        id, parent_id, attribute_name, attribute_code, `type`, add_time, update_time
+        from box_goods_attribute_label
+        <where>
+            parent_id = 0
+            <if test="_parameter != null" >
+                and `type` = #{_parameter}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="listGoodsAttributeLabelByParentId" parameterType="java.lang.String" resultType="com.kuose.box.admin.goods.entity.BoxGoodsAttributeLabel">
+        select
+        id, parent_id, attribute_name, attribute_code, `type`, add_time, update_time
+        from box_goods_attribute_label
+        where parent_id = #{id}
+    </select>
+
+
+</mapper>

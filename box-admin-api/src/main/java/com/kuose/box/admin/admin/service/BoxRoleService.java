@@ -19,5 +19,5 @@ public interface BoxRoleService extends IService<BoxRole> {
 
     Set<String> queryByIds(Integer[] roleIds);
 
-    IPage<BoxRole> listRolePage(Page<BoxRole> rolePage);
+    IPage<BoxRole> listRolePage(Page<BoxRole> rolePage, String username);
 }

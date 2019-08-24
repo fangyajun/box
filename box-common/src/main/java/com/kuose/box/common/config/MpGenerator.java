@@ -12,8 +12,8 @@ public class MpGenerator {
 
     public static void main(String[] args) {
         new MpGenerator().generator("D:\\MpGenerator"
-                , "jdbc:mysql://localhost:3306/box?characterEncoding=utf8"
-                , "com.kuose.box.admin.generalize"
+                , "jdbc:mysql://192.168.5.176:3306/box?characterEncoding=utf8"
+                , "com.kuose.box.admin.goods"
                 , "root"
                 , "123456");
     }
@@ -46,7 +46,8 @@ public class MpGenerator {
         StrategyConfig strategyConfig = new StrategyConfig();
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         // 生成的表
-        strategyConfig.setInclude("box_coupon_user");
+//        strategyConfig.setInclude("box_goods_attribute_label");
+        strategyConfig.setInclude("box_goods_category");
 
         new AutoGenerator().setDataSource(dataSourceConfig)
                 .setGlobalConfig(gc)

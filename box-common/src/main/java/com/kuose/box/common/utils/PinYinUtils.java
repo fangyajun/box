@@ -6,6 +6,8 @@ import com.github.stuxuhai.jpinyin.PinyinFormat;
 import com.github.stuxuhai.jpinyin.PinyinHelper;
 import org.springframework.stereotype.Component;
 
+import java.util.Random;
+
 @Component
 public class PinYinUtils {
 
@@ -149,10 +151,25 @@ public class PinYinUtils {
 
     }
 
-//  public static void main(String[] args) {
-//      String str = "重慶 most input";
-//      ChangeToPinYinJP jp = new ChangeToPinYinJP();
-//      System.out.println(jp.changeToSimplified(str));
-//      System.out.println(jp.checkPinYin('重'));
-//  }
+    /**
+     *  随机生成指定位数的字符串
+     */
+    public static String getRandomString(int length){
+        if( length <= 0){
+            return null;
+        }
+        String base = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        for(int i=0; i<length; i++){
+            int number = random.nextInt(base.length());
+            sb.append(base.charAt(number));
+        }
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        String toTonePinYin = changeToTonePinYin("2342");
+        System.out.println("toTonePinYin = " + toTonePinYin);
+    }
 }

@@ -133,9 +133,13 @@ public class BoxAdminController {
 
         if (!StringUtil.isBlank(admin.getUsername())) {
             String username = admin.getUsername();
-            List<BoxAdmin> adminList = adminService.list(new QueryWrapper<BoxAdmin>().eq("username", username).eq("deleted", 0));
-            if (adminList.size() > 0) {
-                return Result.failure("管理员已经存在");
+            BoxAdmin boxAdmin = adminService.getById(admin.getId());
+            if (!username.equals(boxAdmin.getUsername())) {
+                // 名称有更新
+                List<BoxAdmin> adminList = adminService.list(new QueryWrapper<BoxAdmin>().eq("username", username).eq("deleted", 0));
+                if (adminList.size() > 0) {
+                    return Result.failure("管理员名称已经存在");
+                }
             }
         }
 
