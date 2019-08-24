@@ -47,7 +47,7 @@ public class MpGenerator {
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         // 生成的表
 //        strategyConfig.setInclude("box_goods_attribute_label");
-        strategyConfig.setInclude("box_goods_category");
+        strategyConfig.setInclude("box_goods","box_goods_attribute", "box_goods_sku");
 
         new AutoGenerator().setDataSource(dataSourceConfig)
                 .setGlobalConfig(gc)

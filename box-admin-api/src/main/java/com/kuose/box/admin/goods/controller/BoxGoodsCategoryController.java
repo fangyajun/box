@@ -79,9 +79,6 @@ public class BoxGoodsCategoryController {
         goodsCategory.setUpdateTime(System.currentTimeMillis());
         boxGoodsCategoryService.updateById(goodsCategory);
         return Result.success();
-
     }
-
-
 }
 

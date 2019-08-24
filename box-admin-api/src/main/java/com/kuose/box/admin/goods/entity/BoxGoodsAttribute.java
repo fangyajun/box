@@ -8,14 +8,14 @@ import lombok.Data;
 
 /**
  * <p>
- * 商品分类表
+ * 商品参数表
  * </p>
  *
  * @author fangyajun
  * @since 2019-08-24
  */
 @Data
-public class BoxGoodsCategory extends Model<BoxGoodsCategory> {
+public class BoxGoodsAttribute extends Model<BoxGoodsAttribute> {
 
 private static final long serialVersionUID=1L;
 
@@ -23,28 +23,28 @@ private static final long serialVersionUID=1L;
     private Integer id;
 
     /**
-     * 父分类，0,表示头分类
+     * 商品表的商品ID
      */
-    @ApiModelProperty(value="父类别，0,表示没有父分类，头节点")
-    private Integer parentId;
+    @ApiModelProperty(value="商品表的商品ID")
+    private Integer goodsId;
 
     /**
-     * 商品分类名称
+     * 商品参数名称
      */
-    @ApiModelProperty(value="商品分类名称")
-    private String categoryName;
+    @ApiModelProperty(value="商品参数名称")
+    private String attribute;
 
     /**
-     * 商品分类编码
+     * 商品参数编码
      */
-    @ApiModelProperty(value="商品分类编码")
-    private String categoryCode;
+    @ApiModelProperty(value="商品参数编码")
+    private String attributeCode;
 
     /**
-     * 分类名称拼音
+     * 商品参数值
      */
-    @ApiModelProperty(hidden = true)
-    private String pinyin;
+    @ApiModelProperty(value="商品参数值,目前与参数名称一致")
+    private String value;
 
     /**
      * 创建时间

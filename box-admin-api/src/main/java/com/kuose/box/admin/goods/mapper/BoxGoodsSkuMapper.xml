@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuose.box.admin.goods.dao.BoxGoodsSkuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kuose.box.admin.goods.entity.BoxGoodsSku">
+        <id column="id" property="id" />
+        <result column="goods_no" property="goodsNo" />
+        <result column="sku_code" property="skuCode" />
+        <result column="specifications" property="specifications" />
+        <result column="color_name" property="colorName" />
+        <result column="color_code" property="colorCode" />
+        <result column="size_name" property="sizeName" />
+        <result column="size_code" property="sizeCode" />
+        <result column="counter_price" property="counterPrice" />
+        <result column="tag price" property="tag price" />
+        <result column="retail_price" property="retailPrice" />
+        <result column="number" property="number" />
+        <result column="status" property="status" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, goods_no, sku_code, specifications, color_name, color_code, size_name, size_code, counter_price, tag price, retail_price, number, status, add_time, update_time, deleted
+    </sql>
+
+</mapper>
