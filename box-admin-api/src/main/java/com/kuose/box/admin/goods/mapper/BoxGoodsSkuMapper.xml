@@ -5,7 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.kuose.box.admin.goods.entity.BoxGoodsSku">
         <id column="id" property="id" />
-        <result column="goods_no" property="goodsNo" />
+        <result column="goods_id" property="goodsId" />
         <result column="sku_code" property="skuCode" />
         <result column="specifications" property="specifications" />
         <result column="color_name" property="colorName" />
@@ -24,7 +24,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, goods_no, sku_code, specifications, color_name, color_code, size_name, size_code, counter_price, tag price, retail_price, number, status, add_time, update_time, deleted
+        id, goods_id, sku_code, specifications, color_name, color_code, size_name, size_code, counter_price, tag price, retail_price, number, status, add_time, update_time, deleted
     </sql>
 
 </mapper>

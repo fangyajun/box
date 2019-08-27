@@ -1,8 +1,12 @@
 package com.kuose.box.admin.goods.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kuose.box.admin.goods.dto.GoodsAllinone;
+import com.kuose.box.admin.goods.dto.GoodsQueryParameter;
 import com.kuose.box.admin.goods.entity.BoxGoods;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kuose.box.common.config.Result;
 
 /**
  * <p>
@@ -14,5 +18,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BoxGoodsService extends IService<BoxGoods> {
 
-    void save(GoodsAllinone goodsAllinone);
+    Result save(GoodsAllinone goodsAllinone);
+
+    void deleteGoods(BoxGoods boxGoods);
+
+    IPage<BoxGoods> listGoodsPage(Page<BoxGoods> adminPage, GoodsQueryParameter goodsQueryParameter);
+
+    Result update(GoodsAllinone goodsAllinone);
 }

@@ -31,4 +31,45 @@
         id, goods_no, `name`, brand, category_code, img, tmall_url, is_on_sale, quarter, `year`, features_style_nos, match_style_nos, counter_price, tag price, retail_price, remark, register_date, create_time, update_time, deleted
     </sql>
 
+
+
+    <select id="listGoodsPage" resultMap="BaseResultMap">
+        SELECT bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
+        FROM box_goods bg
+        LEFT JOIN box_goods_attribute bga ON bg.id = bga.goods_id
+        <where>
+            bg.deleted = 0
+            <if test="categoryCode != null">
+                and bg.category_code = #{categoryCode,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsNo != null" >
+                and bg.goods_no like CONCAT('%',#{goodsNo},'%')
+            </if>
+            <if test="goodsName != null" >
+                and bg.name like CONCAT('%',#{goodsName},'%')
+            </if>
+            <if test="quarter != null" >
+                and bg.quarter like CONCAT('%',#{quarter},'%')
+            </if>
+            <if test="year != null">
+                bg.year = #{year,jdbcType=INTEGER},
+            </if>
+            <if test="lowPrice != null">
+                and bg.retail_price &gt;= #{lowPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="highPrice != null">
+                and bg.retail_price &lt;= #{highPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="goodsAttributeCodes != null">
+                and bga.attribute_code in
+                <foreach collection="goodsAttributeCodes" index="index" item="goodsAttributeCodes" open="(" separator="," close=")">
+                    #{goodsAttributeCodes}
+                </foreach>
+            </if>
+
+        </where>
+        GROUP BY bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
+        order by add_time desc
+    </select>
+
 </mapper>

@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -28,8 +27,8 @@ private static final long serialVersionUID=1L;
     /**
      * 商品表的商品ID
      */
-    @ApiModelProperty(value="商品分类编码")
-    private String goodsNo;
+    @ApiModelProperty(value="商品分类编码", example = "1")
+    private Integer goodsId;
 
     /**
      * sku编码
@@ -101,13 +100,13 @@ private static final long serialVersionUID=1L;
      * 创建时间
      */
     @ApiModelProperty(hidden = true)
-    private LocalDateTime addTime;
+    private Long addTime;
 
     /**
      * 更新时间
      */
     @ApiModelProperty(hidden = true)
-    private LocalDateTime updateTime;
+    private Long updateTime;
 
     /**
      * 逻辑删除
