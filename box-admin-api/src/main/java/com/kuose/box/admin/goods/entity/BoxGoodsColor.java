@@ -4,18 +4,20 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * <p>
- * 商品参数表
+ * 颜色表
  * </p>
  *
  * @author fangyajun
- * @since 2019-08-24
+ * @since 2019-08-27
  */
-@Data
-public class BoxGoodsAttribute extends Model<BoxGoodsAttribute> {
+@Getter
+@Setter
+public class BoxGoodsColor extends Model<BoxGoodsColor> {
 
 private static final long serialVersionUID=1L;
 
@@ -23,28 +25,22 @@ private static final long serialVersionUID=1L;
     private Integer id;
 
     /**
-     * 商品表的商品ID
+     * 颜色名称
      */
-    @ApiModelProperty(value="商品表的商品ID")
-    private Integer goodsId;
+    @ApiModelProperty(example = "白色")
+    private String colorName;
 
     /**
-     * 商品参数名称
+     * 颜色编码
      */
-    @ApiModelProperty(value="商品参数名称")
-    private String attribute;
+    @ApiModelProperty(example = "111")
+    private String colorCode;
 
     /**
-     * 商品参数编码
+     * 状态,0:正常状态
      */
-    @ApiModelProperty(value="商品参数编码")
-    private String attributeCode;
-
-    /**
-     * 商品参数值
-     */
-    @ApiModelProperty(value="商品参数值,一般与参数名称一致，特殊情况如面料的时候填百分比：80", example = "80%")
-    private String value;
+    @ApiModelProperty(hidden = true)
+    private Integer colorStatus;
 
     /**
      * 创建时间

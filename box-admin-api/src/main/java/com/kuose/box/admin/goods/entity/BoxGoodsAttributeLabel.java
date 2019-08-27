@@ -45,7 +45,7 @@ private static final long serialVersionUID=1L;
     /**
      * 属性类别
      */
-    @ApiModelProperty(value="属性类别")
+    @ApiModelProperty(value="属性类别，特殊情况下需要填写，如需要单纯查出来的时候根据填写的type查询", example = "一般不需要填写，需要单纯查出来的时候根据填写的type查询,如:衣服的材质")
     private String type;
 
     /**

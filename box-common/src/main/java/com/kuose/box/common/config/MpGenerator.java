@@ -46,8 +46,8 @@ public class MpGenerator {
         StrategyConfig strategyConfig = new StrategyConfig();
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         // 生成的表
-//        strategyConfig.setInclude("box_goods_attribute_label");
-        strategyConfig.setInclude("box_goods","box_goods_attribute", "box_goods_sku");
+        strategyConfig.setInclude("box_goods_color");
+//        strategyConfig.setInclude("box_goods","box_goods_attribute", "box_goods_sku");
 
         new AutoGenerator().setDataSource(dataSourceConfig)
                 .setGlobalConfig(gc)

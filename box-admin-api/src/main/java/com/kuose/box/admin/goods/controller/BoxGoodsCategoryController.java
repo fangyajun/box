@@ -37,6 +37,12 @@ public class BoxGoodsCategoryController {
             return Result.failure("缺少必传参数");
         }
 
+        int count = boxGoodsCategoryService.count(new QueryWrapper<BoxGoodsCategory>().eq("deleted", 0).eq("category_name", goodsCategory.getCategoryName()).
+                or().eq("category_code", goodsCategory.getCategoryCode()));
+        if (count >= 1){
+            return Result.failure("分类名称或者分类编码已经存在");
+        }
+
         goodsCategory.setPinyin(PinYinUtils.changeToTonePinYin(goodsCategory.getCategoryName()));
         goodsCategory.setAddTime(System.currentTimeMillis());
         goodsCategory.setUpdateTime(System.currentTimeMillis());
@@ -49,6 +55,12 @@ public class BoxGoodsCategoryController {
     public Result update(@RequestBody BoxGoodsCategory goodsCategory) {
         if (goodsCategory.getId() == null) {
             return Result.failure("缺少必传参数");
+        }
+
+        int count = boxGoodsCategoryService.count(new QueryWrapper<BoxGoodsCategory>().eq("deleted", 0).ne("id",goodsCategory.getId()).
+                eq("category_name", goodsCategory.getCategoryName()).or().eq("category_code", goodsCategory.getCategoryCode()));
+        if (count >= 1){
+            return Result.failure("分类名称或者分类编码已经存在");
         }
 
         goodsCategory.setUpdateTime(System.currentTimeMillis());
