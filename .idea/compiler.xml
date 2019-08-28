@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="box-admin-api" />
         <module name="box-common" />
+        <module name="box-goods-source" />
         <module name="box-wx-api" />
       </profile>
     </annotationProcessing>

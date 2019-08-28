@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuose.source.goods.dao.RipreportProductinformationskuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kuose.source.goods.entity.RipreportProductinformationsku">
+        <id column="autoid" property="autoid" />
+        <result column="productno" property="productno" />
+        <result column="colorTableAutoid" property="colorTableAutoid" />
+        <result column="color" property="color" />
+        <result column="colorCode" property="colorCode" />
+        <result column="sizeCodeTableAutoid" property="sizeCodeTableAutoid" />
+        <result column="sizeCodeTableCode" property="sizeCodeTableCode" />
+        <result column="sizeCodeTableName" property="sizeCodeTableName" />
+        <result column="skuCode" property="skuCode" />
+        <result column="flag" property="flag" />
+        <result column="gbCode" property="gbCode" />
+        <result column="weights" property="weights" />
+        <result column="weightUnit" property="weightUnit" />
+        <result column="useState" property="useState" />
+        <result column="productInformationAutoid" property="productInformationAutoid" />
+        <result column="sort" property="sort" />
+        <result column="msrepl_tran_version" property="msreplTranVersion" />
+        <result column="gbCodeCreateTime" property="gbCodeCreateTime" />
+        <result column="tagPrice" property="tagPrice" />
+        <result column="success" property="success" />
+        <result column="failure" property="failure" />
+        <result column="webPrice" property="webPrice" />
+        <result column="hdPrice" property="hdPrice" />
+        <result column="vipPrice" property="vipPrice" />
+    </resultMap>
+
+    <resultMap id="GoodsSkuResultMap" type="com.kuose.source.goods.entity.BoxGoodsSku" >
+        <result column="skuCode" property="skuCode" />
+        <result column="color" property="colorName" />
+        <result column="colorCode" property="colorCode" />
+        <result column="sizeCodeTableName" property="sizeName" />
+        <result column="sizeCodeTableCode" property="sizeCode" />
+        <result column="webPrice" property="counterPrice" />
+        <result column="tagPrice" property="tagPrice" />
+        <result column="hdPrice" property="retailPrice" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        autoid, productno, colorTableAutoid, color, colorCode, sizeCodeTableAutoid, sizeCodeTableCode, sizeCodeTableName, skuCode, flag, gbCode, weights, weightUnit, useState, productInformationAutoid, sort, msrepl_tran_version, gbCodeCreateTime, tagPrice, success, failure, webPrice, hdPrice, vipPrice
+    </sql>
+
+    <select id="listGoodsSku" resultMap="GoodsSkuResultMap">
+        select skuCode,color,colorCode,sizeCodeTableName,sizeCodeTableCode,webPrice,tagPrice,hdPrice
+        from ripreport_ProductInformationSku
+        where  flag = 0  AND productno = #{productno}
+    </select>
+
+</mapper>

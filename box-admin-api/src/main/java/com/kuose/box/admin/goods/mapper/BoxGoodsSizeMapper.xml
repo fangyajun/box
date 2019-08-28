@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kuose.box.admin.goods.dao.BoxGoodsColorMapper">
+<mapper namespace="com.kuose.box.admin.goods.dao.BoxGoodsSizeMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.kuose.box.admin.goods.entity.BoxGoodsColor">
+    <resultMap id="BaseResultMap" type="com.kuose.box.admin.goods.entity.BoxGoodsSize">
         <id column="id" property="id" />
-        <result column="color_name" property="colorName" />
-        <result column="color_code" property="colorCode" />
+        <result column="size_name" property="sizeName" />
+        <result column="size_code" property="sizeCode" />
         <result column="color_status" property="colorStatus" />
-        <result column="alias_name" property="aliasName" />
         <result column="add_time" property="addTime" />
         <result column="update_time" property="updateTime" />
         <result column="deleted" property="deleted" />
@@ -16,7 +15,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, color_name, color_code, color_status,alias_name add_time, update_time, deleted
+        id, size_name, size_code, color_status, add_time, update_time, deleted
     </sql>
 
 </mapper>

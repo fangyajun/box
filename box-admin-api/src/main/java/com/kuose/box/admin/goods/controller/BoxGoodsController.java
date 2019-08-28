@@ -39,6 +39,8 @@ public class BoxGoodsController {
     @Autowired
     private BoxGoodsAttributeService boxGoodsAttributeService;
     @Autowired
+
+
     private BoxGoodsSkuService boxGoodsSkuService;
 
     @ApiOperation(value="添加商品")

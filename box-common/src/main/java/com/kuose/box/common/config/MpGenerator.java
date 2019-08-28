@@ -16,6 +16,12 @@ public class MpGenerator {
                 , "com.kuose.box.admin.goods"
                 , "root"
                 , "123456");
+
+//        new MpGenerator().generator("D:\\MpGenerator"
+//                , "jdbc:sqlserver://192.168.5.108:1433;DatabaseName=SCM_PRODUCT"
+//                , "com.kuose.source.goods"
+//                , "wx"
+//                , "WXuser&2019");
     }
 
     public void generator(String outPutPath, String mysqlUrl, String parentPackage, String userName, String pwd) {
@@ -36,8 +42,10 @@ public class MpGenerator {
 
         // 数据源配置
         DataSourceConfig dataSourceConfig = new DataSourceConfig()
+//                .setDbType(DbType.SQL_SERVER)
                 .setDbType(DbType.MYSQL)
                 .setDriverName("com.mysql.jdbc.Driver")
+//                .setDriverName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
                 .setUrl(mysqlUrl)
                 .setUsername(userName)
                 .setPassword(pwd);
@@ -46,7 +54,7 @@ public class MpGenerator {
         StrategyConfig strategyConfig = new StrategyConfig();
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         // 生成的表
-        strategyConfig.setInclude("box_goods_color");
+        strategyConfig.setInclude("box_goods_size");
 //        strategyConfig.setInclude("box_goods","box_goods_attribute", "box_goods_sku");
 
         new AutoGenerator().setDataSource(dataSourceConfig)

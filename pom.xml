@@ -13,6 +13,7 @@
         <module>box-wx-api</module>
         <module>box-admin-api</module>
         <module>box-common</module>
+        <module>box-goods-source</module>
     </modules>
 
     <parent>

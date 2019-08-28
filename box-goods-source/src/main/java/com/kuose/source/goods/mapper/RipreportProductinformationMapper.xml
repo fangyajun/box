@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuose.source.goods.dao.RipreportProductinformationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kuose.source.goods.entity.RipreportProductinformation">
+        <id column="autoid" property="autoid" />
+        <result column="sizeTableAutoid" property="sizeTableAutoid" />
+        <result column="productno" property="productno" />
+        <result column="firstCategory" property="firstCategory" />
+        <result column="secondCategory" property="secondCategory" />
+        <result column="thirdCategory" property="thirdCategory" />
+        <result column="bidsReceived" property="bidsReceived" />
+        <result column="webcost" property="webcost" />
+        <result column="ggcost" property="ggcost" />
+        <result column="jhscost" property="jhscost" />
+        <result column="hdcost" property="hdcost" />
+        <result column="bzcost" property="bzcost" />
+        <result column="tagcost" property="tagcost" />
+        <result column="incost" property="incost" />
+        <result column="remark" property="remark" />
+        <result column="flag" property="flag" />
+        <result column="retailcost" property="retailcost" />
+        <result column="companyCode" property="companyCode" />
+        <result column="companyName" property="companyName" />
+        <result column="companyAutoid" property="companyAutoid" />
+        <result column="suites" property="suites" />
+        <result column="secondCategoryStr" property="secondCategoryStr" />
+        <result column="thirdCategoryStr" property="thirdCategoryStr" />
+        <result column="layoutBigType2Key" property="layoutBigType2Key" />
+        <result column="layoutBigType2Name" property="layoutBigType2Name" />
+        <result column="gbCode" property="gbCode" />
+        <result column="standardPrice" property="standardPrice" />
+        <result column="dataFrom" property="dataFrom" />
+        <result column="promotionPrice" property="promotionPrice" />
+        <result column="brandAutoid" property="brandAutoid" />
+        <result column="layoutTypeManageAutoid" property="layoutTypeManageAutoid" />
+        <result column="requireDate" property="requireDate" />
+        <result column="vipRequireDate" property="vipRequireDate" />
+        <result column="newBand" property="newBand" />
+        <result column="lifeCycle" property="lifeCycle" />
+        <result column="platformProperty" property="platformProperty" />
+        <result column="productUrl" property="productUrl" />
+        <result column="vipcost" property="vipcost" />
+        <result column="status" property="status" />
+        <result column="img" property="img" />
+        <result column="year" property="year" />
+        <result column="quarter" property="quarter" />
+        <result column="planSeries" property="planSeries" />
+        <result column="productGroupName" property="productGroupName" />
+        <result column="teamNumber" property="teamNumber" />
+        <result column="saleStatus" property="saleStatus" />
+        <result column="lifeCycle1" property="lifeCycle1" />
+        <result column="msrepl_tran_version" property="msreplTranVersion" />
+        <result column="confirmDate" property="confirmDate" />
+        <result column="productName" property="productName" />
+        <result column="createPerson" property="createPerson" />
+        <result column="createTime" property="createTime" />
+        <result column="importFile" property="importFile" />
+        <result column="daiMaiState" property="daiMaiState" />
+        <result column="success" property="success" />
+        <result column="failure" property="failure" />
+        <result column="result" property="result" />
+        <result column="sex" property="sex" />
+        <result column="sjcost" property="sjcost" />
+        <result column="styleTowards" property="styleTowards" />
+        <result column="lastUpdateDatetime" property="lastUpdateDatetime" />
+        <result column="sizeGroupId" property="sizeGroupId" />
+        <result column="sizeGroupType" property="sizeGroupType" />
+        <result column="kisSuccess" property="kisSuccess" />
+        <result column="kisFailure" property="kisFailure" />
+        <result column="kisResult" property="kisResult" />
+    </resultMap>
+
+    <resultMap id="GoodsResultMap" type="com.kuose.source.goods.entity.BoxGoods" >
+        <result column="productno" property="goodsNo" />
+        <result column="thirdCategoryStr" property="name" />
+        <result column="firstCategory" property="brand" />
+        <result column="secondCategory" property="categoryCode" />
+        <result column="img" property="img" />
+        <result column="productUrl" property="tmallUrl" />
+        <result column="quarter" property="quarter" />
+        <result column="year" property="year" />
+        <result column="webcost" property="counterPrice" />
+        <result column="tagcost" property="tagPrice" />
+        <result column="hdcost" property="retailPrice" />
+        <result column="requireDate" property="registerDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        autoid, sizeTableAutoid, productno, firstCategory, secondCategory, thirdCategory, bidsReceived, webcost, ggcost, jhscost, hdcost, bzcost, tagcost, incost, remark, flag, retailcost, companyCode, companyName, companyAutoid, suites, secondCategoryStr, thirdCategoryStr, layoutBigType2Key, layoutBigType2Name, gbCode, standardPrice, dataFrom, promotionPrice, brandAutoid, layoutTypeManageAutoid, requireDate, vipRequireDate, newBand, lifeCycle, platformProperty, productUrl, vipcost, status, img, year, quarter, planSeries, productGroupName, teamNumber, saleStatus, lifeCycle1, msrepl_tran_version, confirmDate, productName, createPerson, createTime, importFile, daiMaiState, success, failure, result, sex, sjcost, styleTowards, lastUpdateDatetime, sizeGroupId, sizeGroupType, kisSuccess, kisFailure, kisResult
+    </sql>
+    
+    <select id="listGoods" resultMap="GoodsResultMap">
+        select productno,thirdCategoryStr,firstCategory,secondCategory,img,productUrl,quarter,year,webcost,tagcost,hdcost,requireDate
+        from ripreport_ProductInformation
+        <where>
+            flag = 0 and status = 0
+
+            <if test="productno != null" >
+                and productno like CONCAT('%',#{productno},'%')
+            </if>
+            <if test="goodsName != null" >
+                and thirdCategoryStr like CONCAT('%',#{goodsName},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getGoods" resultMap="GoodsResultMap">
+        select productno,thirdCategoryStr,firstCategory,secondCategory,img,productUrl,quarter,year,webcost,tagcost,hdcost,requireDate
+        from ripreport_ProductInformation
+        where productno = #{productno}
+    </select>
+
+
+</mapper>

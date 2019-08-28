@@ -37,6 +37,12 @@ private static final long serialVersionUID=1L;
     private String colorCode;
 
     /**
+     * 色系
+     */
+    @ApiModelProperty(example = "白色系")
+    private String aliasName;
+
+    /**
      * 状态,0:正常状态
      */
     @ApiModelProperty(hidden = true)

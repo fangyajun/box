@@ -40,7 +40,7 @@
         <where>
             bg.deleted = 0
             <if test="categoryCode != null">
-                and bg.category_code = #{categoryCode,jdbcType=VARCHAR},
+                and bg.category_code = #{categoryCode,jdbcType=VARCHAR}
             </if>
             <if test="goodsNo != null" >
                 and bg.goods_no like CONCAT('%',#{goodsNo},'%')
@@ -52,13 +52,13 @@
                 and bg.quarter like CONCAT('%',#{quarter},'%')
             </if>
             <if test="year != null">
-                bg.year = #{year,jdbcType=INTEGER},
+                and bg.year = #{year,jdbcType=INTEGER}
             </if>
             <if test="lowPrice != null">
-                and bg.retail_price &gt;= #{lowPrice,jdbcType=DOUBLE},
+                and bg.retail_price &gt;= #{lowPrice,jdbcType=DOUBLE}
             </if>
             <if test="highPrice != null">
-                and bg.retail_price &lt;= #{highPrice,jdbcType=DOUBLE},
+                and bg.retail_price &lt;= #{highPrice,jdbcType=DOUBLE}
             </if>
             <if test="goodsAttributeCodes != null">
                 and bga.attribute_code in
