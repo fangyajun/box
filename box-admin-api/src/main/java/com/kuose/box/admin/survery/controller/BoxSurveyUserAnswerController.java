@@ -1,17 +1,17 @@
 package com.kuose.box.admin.survery.controller;
 
 
+import com.kuose.box.admin.survery.entity.BoxSurveyUserAnswer;
 import com.kuose.box.admin.survery.service.BoxSurveyUserAnswerService;
 import com.kuose.box.common.config.Result;
+import com.kuose.box.common.utils.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -29,22 +29,21 @@ public class BoxSurveyUserAnswerController {
     @Autowired
     private BoxSurveyUserAnswerService boxSurveyUserAnswerService;
 
-    @ApiOperation(value="获取填空问题简称列表和答案")
-    @GetMapping("questionShortList")
-    public Result getQuestionShort(Integer id) {
-        List<Map<Integer,String>> questionShortList = boxSurveyUserAnswerService.getQuestionShort(id);
-        List<Map<Integer,String>> listBoxSurveyUserAnswer = boxSurveyUserAnswerService.listUserQuestionAnswer(id);
-        return Result.success().setData("questionShortList", questionShortList).setData("listBoxSurveyUserAnswer", listBoxSurveyUserAnswer);
+    @ApiOperation(value="新增用户问券答案")
+    @PostMapping("/add")
+    public Result add(@RequestBody BoxSurveyUserAnswer boxSurveyUserAnswer) {
+        if (StringUtil.isBlank(boxSurveyUserAnswer.getLabelCode()) || boxSurveyUserAnswer.getOptionValues() == null ||
+                boxSurveyUserAnswer.getUserId() == null) {
+            return Result.failure("缺少必传参数");
+        }
+
+        boxSurveyUserAnswer.setUpdateTime(System.currentTimeMillis());
+        boxSurveyUserAnswer.setCreateTime(System.currentTimeMillis());
+        boxSurveyUserAnswerService.save(boxSurveyUserAnswer);
+        return Result.success();
     }
 
-    @ApiOperation(value="获取选择问题简称列表和答案")
-    @GetMapping("/getOptionQuestionShort")
-    public Result getOptionQuestionShort(Integer id) {
-        List<Map<Integer,String>> boxSurveyUserAnswerServiceOptionQuestionShort = boxSurveyUserAnswerService.getOptionQuestionShort(id);
-        List<Map<Integer,String>> listUserOptionQuestionAnswer = boxSurveyUserAnswerService.listUserOptionQuestionAnswer(id);
-        return Result.success().setData("boxSurveyUserAnswerServiceOptionQuestionShort", boxSurveyUserAnswerServiceOptionQuestionShort).
-                setData("listUserOptionQuestionAnswer", listUserOptionQuestionAnswer);
-    }
+
 
 }
 

@@ -10,6 +10,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>box-goods-source</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <name>box-goods-source</name>
     <description>Demo project for Spring Boot</description>
 
@@ -45,6 +46,16 @@
             <artifactId>lombok</artifactId>
             <version>1.18.8</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!--swagger -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
 
         <!-- mybatis-plus begin -->

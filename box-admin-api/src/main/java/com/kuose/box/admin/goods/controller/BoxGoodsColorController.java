@@ -29,54 +29,54 @@ public class BoxGoodsColorController {
     @Autowired
     private BoxGoodsColorService boxGoodsColorService;
 
-    @ApiOperation(value="添加颜色")
-    @PostMapping("/add")
-    public Result add(@RequestBody BoxGoodsColor boxGoodsColor) {
-        if (StringUtil.isBlank(boxGoodsColor.getColorName()) || StringUtil.isBlank(boxGoodsColor.getColorCode())) {
-            return Result.failure("缺少必传参数");
-        }
-
-        if (boxGoodsColorService.count(new QueryWrapper<BoxGoodsColor>().eq("deleted", 0).eq("color_code", boxGoodsColor.getColorCode()).or().
-                eq("color_name", boxGoodsColor.getColorName())) >= 1) {
-            return Result.failure("颜色名称或者颜色编码以及存在");
-        }
-
-        boxGoodsColor.setAddTime(System.currentTimeMillis());
-        boxGoodsColor.setUpdateTime(System.currentTimeMillis());
-        boxGoodsColorService.save(boxGoodsColor);
-        return Result.success();
-    }
-
-    @ApiOperation(value="删除颜色")
-    @PostMapping("/delete")
-    public Result delete(@RequestBody BoxGoodsColor boxGoodsColor) {
-        if (boxGoodsColor.getId() == null) {
-            return Result.failure("缺少必传参数");
-        }
-
-        // 逻辑删除
-        boxGoodsColor.setDeleted(1);
-        boxGoodsColorService.updateById(boxGoodsColor);
-        return Result.success();
-    }
-
-    @ApiOperation(value="修改颜色")
-    @PostMapping("/update")
-    public Result update(@RequestBody BoxGoodsColor boxGoodsColor) {
-        if (boxGoodsColor.getId() == null) {
-            return Result.failure("缺少必传参数");
-        }
-
-        int count = boxGoodsColorService.count(new QueryWrapper<BoxGoodsColor>().eq("deleted", 0).ne("id", boxGoodsColor.getId()).
-                eq("color_code", boxGoodsColor.getColorCode()).or().eq("color_name", boxGoodsColor.getColorName()));
-        if (count >=1) {
-            return Result.failure("颜色名称或者颜色编码以及存在");
-        }
-
-        boxGoodsColor.setUpdateTime(System.currentTimeMillis());
-        boxGoodsColorService.updateById(boxGoodsColor);
-        return Result.success();
-    }
+//    @ApiOperation(value="添加颜色")
+//    @PostMapping("/add")
+//    public Result add(@RequestBody BoxGoodsColor boxGoodsColor) {
+//        if (StringUtil.isBlank(boxGoodsColor.getColorName()) || StringUtil.isBlank(boxGoodsColor.getColorCode())) {
+//            return Result.failure("缺少必传参数");
+//        }
+//
+//        if (boxGoodsColorService.count(new QueryWrapper<BoxGoodsColor>().eq("deleted", 0).eq("color_code", boxGoodsColor.getColorCode()).or().
+//                eq("color_name", boxGoodsColor.getColorName())) >= 1) {
+//            return Result.failure("颜色名称或者颜色编码以及存在");
+//        }
+//
+//        boxGoodsColor.setAddTime(System.currentTimeMillis());
+//        boxGoodsColor.setUpdateTime(System.currentTimeMillis());
+//        boxGoodsColorService.save(boxGoodsColor);
+//        return Result.success();
+//    }
+//
+//    @ApiOperation(value="删除颜色")
+//    @PostMapping("/delete")
+//    public Result delete(@RequestBody BoxGoodsColor boxGoodsColor) {
+//        if (boxGoodsColor.getId() == null) {
+//            return Result.failure("缺少必传参数");
+//        }
+//
+//        // 逻辑删除
+//        boxGoodsColor.setDeleted(1);
+//        boxGoodsColorService.updateById(boxGoodsColor);
+//        return Result.success();
+//    }
+//
+//    @ApiOperation(value="修改颜色")
+//    @PostMapping("/update")
+//    public Result update(@RequestBody BoxGoodsColor boxGoodsColor) {
+//        if (boxGoodsColor.getId() == null) {
+//            return Result.failure("缺少必传参数");
+//        }
+//
+//        int count = boxGoodsColorService.count(new QueryWrapper<BoxGoodsColor>().eq("deleted", 0).ne("id", boxGoodsColor.getId()).
+//                eq("color_code", boxGoodsColor.getColorCode()).or().eq("color_name", boxGoodsColor.getColorName()));
+//        if (count >=1) {
+//            return Result.failure("颜色名称或者颜色编码以及存在");
+//        }
+//
+//        boxGoodsColor.setUpdateTime(System.currentTimeMillis());
+//        boxGoodsColorService.updateById(boxGoodsColor);
+//        return Result.success();
+//    }
 
     @ApiOperation(value="颜色列表")
     @GetMapping("/list")

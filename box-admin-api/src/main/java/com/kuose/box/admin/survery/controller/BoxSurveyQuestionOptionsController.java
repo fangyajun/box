@@ -3,6 +3,7 @@ package com.kuose.box.admin.survery.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuose.box.admin.survery.entity.BoxSurveyQuestionOptions;
 import com.kuose.box.admin.survery.service.BoxSurveyQuestionOptionsService;
+import com.kuose.box.admin.survery.service.BoxSurveyQusetionService;
 import com.kuose.box.common.config.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +27,8 @@ public class BoxSurveyQuestionOptionsController {
 
     @Autowired
     private BoxSurveyQuestionOptionsService boxSurveyQuestionOptionsService;
+    @Autowired
+    private BoxSurveyQusetionService boxSurveyQusetionService;
 
     @ApiOperation(value="新增问题选项")
     @PostMapping("add")

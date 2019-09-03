@@ -1,14 +1,13 @@
 package com.kuose.source.goods.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.StringUtil;
 import com.kuose.source.goods.entity.BoxGoods;
 import com.kuose.source.goods.entity.BoxGoodsSku;
-import com.kuose.source.goods.entity.RipreportProductinformation;
 import com.kuose.source.goods.service.RipreportProductinformationService;
 import com.kuose.source.goods.service.RipreportProductinformationskuService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +24,7 @@ import java.util.List;
  * @author fangyajun
  * @since 2019-08-28
  */
+@Api(tags = {"商品数据源"})
 @RestController
 @RequestMapping("/ripreportProductinformation")
 public class RipreportProductInformationController {
@@ -34,23 +34,24 @@ public class RipreportProductInformationController {
     @Autowired
     private RipreportProductinformationskuService ripreportProductinformationskuService;
 
-    @GetMapping("/list")
-    public Result list(String productno, String goodsName) {
-        QueryWrapper<RipreportProductinformation> ripreportProductinformationQueryWrapper = new QueryWrapper<>();
-
-        if (!StringUtil.isBlank(productno)) {
-            ripreportProductinformationQueryWrapper.like("prodectno", productno);
-        }
-        if (!StringUtil.isBlank(goodsName)) {
-            ripreportProductinformationQueryWrapper.like("thirdCategoryStr", goodsName);
-        }
-        List<RipreportProductinformation> goodsList = ripreportProductinformationService.list(ripreportProductinformationQueryWrapper);
-        return Result.success().setData("goodsList", goodsList);
-    }
+//    @ApiOperation(value="根据货号或者商品名称查询商品数据")
+//    @GetMapping("/list")
+//    public Result list(String productno, String goodsName) {
+//        QueryWrapper<RipreportProductinformation> ripreportProductinformationQueryWrapper = new QueryWrapper<>();
+//
+//        if (!StringUtil.isBlank(productno)) {
+//            ripreportProductinformationQueryWrapper.like("prodectno", productno);
+//        }
+//        if (!StringUtil.isBlank(goodsName)) {
+//            ripreportProductinformationQueryWrapper.like("thirdCategoryStr", goodsName);
+//        }
+//        List<RipreportProductinformation> goodsList = ripreportProductinformationService.list(ripreportProductinformationQueryWrapper);
+//        return Result.success().setData("goodsList", goodsList);
+//    }
 
     @GetMapping("/listGoods")
-    public Result listGoods(String productno, String goodsName) {
-        List<BoxGoods> goodsList = ripreportProductinformationService.listGoods(productno, goodsName);
+    public Result listGoods(String productno, String goodsName, String year) {
+        List<BoxGoods> goodsList = ripreportProductinformationService.listGoods(productno, goodsName, year);
         return Result.success().setData("goodsList", goodsList);
     }
 

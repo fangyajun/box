@@ -32,31 +32,32 @@ private static final long serialVersionUID=1L;
     /**
      * 问题的id
      */
-    @ApiModelProperty(value = "问题的id")
+    @ApiModelProperty(value = "问题的id", example = "1")
     private Integer questionId;
 
     /**
      * 选项的内容
      */
-    @ApiModelProperty(value = "选项的内容")
+    @ApiModelProperty(value = "选项的内容", example = "贴身裁剪")
     private String optionContent;
 
     /**
      * 选项的图片
      */
-    @ApiModelProperty(value = "选项的图片")
+    @ApiModelProperty(value = "选项的图片", example = "/sfdsdfs/sdfsdfs/sfdsdfs.jpg")
     private String optionPic;
+
 
     /**
      * 选项排序,数越大排序靠前
      */
-    @ApiModelProperty(value = "选项排序,数越大排序靠前")
+    @ApiModelProperty(value = "选项排序,数越大排序靠前", example = "12")
     private Integer sort;
 
     /**
      * 备注
      */
-    @ApiModelProperty(value = "备注")
+    @ApiModelProperty(value = "备注", example = "充分展示身材")
     private String remark;
 
     /**

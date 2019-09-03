@@ -8,9 +8,10 @@
         <result column="question_type" property="questionType" />
         <result column="question_topic" property="questionTopic" />
         <result column="question_pic" property="questionPic" />
+        <result column="label_code" property="labelCode" />
         <result column="survey_id" property="surveyId" />
         <result column="sort" property="sort" />
-        <result column="is_qequired" property="isQequired" />
+        <result column="is_qequired" property="qequired" />
         <result column="description" property="description" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
@@ -19,7 +20,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, question_type, question_topic, question_pic, survey_id, sort, is_qequired, description, create_time, update_time, is_deleted
+        id, question_type, question_topic,label_code, question_pic, survey_id, sort, is_qequired, description, create_time, update_time, is_deleted
     </sql>
 
 </mapper>

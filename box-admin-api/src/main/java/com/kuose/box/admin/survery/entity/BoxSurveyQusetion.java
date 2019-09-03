@@ -30,13 +30,19 @@ private static final long serialVersionUID=1L;
     /**
      * 问题类型，1单选，2多选，3填空
      */
-    @ApiModelProperty(value = "问题类型，1单选，2多选，3填空")
+    @ApiModelProperty(value = "问题类型，1单选，2多选，3填空", example = "2")
     private Integer questionType;
+
+    /**
+     * 问题标签编号
+     */
+    @ApiModelProperty(value = "问题标签编号", example = "XZCJ")
+    private String labelCode;
 
     /**
      * 问题主题内容
      */
-    @ApiModelProperty(value = "问题主题内容")
+    @ApiModelProperty(value = "问题主题内容", example = "下半身你偏向于哪种裁剪？")
     private String questionTopic;
 
     /**
@@ -48,20 +54,21 @@ private static final long serialVersionUID=1L;
     /**
      * 问卷id
      */
-    @ApiModelProperty(value = "问卷id")
+    @ApiModelProperty(value = "问卷id", example = "1")
     private Integer surveyId;
 
     /**
      * 排序，数字越大，排序越靠前
      */
-    @ApiModelProperty(value = "排序，数字越大，排序越靠前")
+    @ApiModelProperty(value = "排序，数字越大，排序越靠前", example = "10")
     private Integer sort;
 
     /**
      * 是否必填，0 否，1 是
      */
-    @ApiModelProperty(value = "是否必填，0 否，1 是")
-    private Integer isQequired;
+    @ApiModelProperty(value = "是否必填，0 否，1 是", example = "1")
+    @TableField("is_qequired")
+    private Integer qequired;
 
     /**
      * 说明，描述

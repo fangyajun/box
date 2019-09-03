@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface RipreportProductinformationService extends IService<RipreportProductinformation> {
 
-    List<BoxGoods> listGoods(String productno, String goodsName);
+    List<BoxGoods> listGoods(String productno, String goodsName, String year);
 
     BoxGoods getGoods(String productno);
 }

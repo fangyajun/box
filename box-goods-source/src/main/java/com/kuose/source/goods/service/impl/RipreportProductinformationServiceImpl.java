@@ -25,8 +25,8 @@ public class RipreportProductinformationServiceImpl extends ServiceImpl<Riprepor
     private RipreportProductinformationMapper productinformationMapper;
 
     @Override
-    public List<BoxGoods> listGoods(String productno, String goodsName) {
-        return productinformationMapper.listGoods(productno, goodsName);
+    public List<BoxGoods> listGoods(String productno, String goodsName, String year) {
+        return productinformationMapper.listGoods(productno, goodsName, year);
     }
 
     @Override

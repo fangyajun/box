@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface RipreportProductinformationMapper extends BaseMapper<RipreportProductinformation> {
 
-    List<BoxGoods> listGoods(@Param("productno") String productno, @Param("goodsName") String goodsName);
+    List<BoxGoods> listGoods(@Param("productno") String productno, @Param("goodsName") String goodsName, @Param("year") String year);
 
     BoxGoods getGoods(@Param("productno") String productno);
 }

@@ -73,7 +73,7 @@ private static final long serialVersionUID=1L;
     /**
      * 年份
      */
-    @TableField("`year`")
+    @TableField("year")
     private String year;
 
 

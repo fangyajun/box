@@ -36,7 +36,8 @@ public class BoxSurveyQusetionController {
     @ApiOperation(value="新增问题")
     @PostMapping("add")
     public Result add(@RequestBody  BoxSurveyQusetion boxSurveyQusetion) {
-        if (StringUtil.isBlank(boxSurveyQusetion.getQuestionTopic()) || boxSurveyQusetion.getQuestionType() == null) {
+        if (StringUtil.isBlank(boxSurveyQusetion.getQuestionTopic()) || boxSurveyQusetion.getQuestionType() == null ||
+                boxSurveyQusetion.getSurveyId() == null || StringUtil.isBlank(boxSurveyQusetion.getLabelCode())) {
             return Result.failure("缺少必传参数");
         }
 
@@ -49,7 +50,9 @@ public class BoxSurveyQusetionController {
 
     @ApiOperation(value="问题列表")
     @GetMapping("list")
-    public Result list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public Result list(Integer surveyId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit)
+
+    {
         if (page == null || limit == null) {
             return Result.failure("缺少必传参数");
         }
@@ -59,7 +62,8 @@ public class BoxSurveyQusetionController {
         boxSurveyQusetionPage.setCurrent(page);
         boxSurveyQusetionPage.setDesc("create_time");
 
-        IPage<BoxSurveyQusetion> boxSurveyQusetionIPage = boxSurveyQusetionService.page(boxSurveyQusetionPage, new QueryWrapper<BoxSurveyQusetion>().eq("is_deleted", 0));
+        IPage<BoxSurveyQusetion> boxSurveyQusetionIPage = boxSurveyQusetionService.page(boxSurveyQusetionPage, new QueryWrapper<BoxSurveyQusetion>().
+                eq("is_deleted", 0).eq("survey_id", surveyId));
         return Result.success().setData("boxSurveyQusetionIPage", boxSurveyQusetionIPage);
     }
 

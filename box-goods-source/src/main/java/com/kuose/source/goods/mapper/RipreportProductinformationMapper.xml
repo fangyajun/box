@@ -99,10 +99,13 @@
             flag = 0 and status = 0
 
             <if test="productno != null" >
-                and productno like CONCAT('%',#{productno},'%')
+                and productno like '%${productno}%'
             </if>
             <if test="goodsName != null" >
-                and thirdCategoryStr like CONCAT('%',#{goodsName},'%')
+                and thirdCategoryStr like '%${goodsName}%'
+            </if>
+            <if test="year != null" >
+                and year like '%${year}%'
             </if>
         </where>
     </select>
