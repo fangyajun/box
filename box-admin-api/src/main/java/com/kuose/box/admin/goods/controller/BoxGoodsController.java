@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kuose.box.admin.goods.dto.GoodsAllinone;
 import com.kuose.box.admin.goods.dto.GoodsQueryParameter;
+import com.kuose.box.admin.goods.dto.GoodsSkuVo;
 import com.kuose.box.admin.goods.entity.BoxGoods;
 import com.kuose.box.admin.goods.entity.BoxGoodsAttribute;
 import com.kuose.box.admin.goods.entity.BoxGoodsSku;
@@ -52,9 +53,9 @@ public class BoxGoodsController {
         if (StringUtil.isBlank(goodsAllinone.getBoxGoods().getName())) {
             return Result.failure("缺少商品基本数据");
         }
-        if ( goodsAllinone.getBoxGoodsAttributes().length <= 0 || goodsAllinone.getBoxGoodsSkus().length <= 0) {
-            return Result.failure("缺少商品基本属性");
-        }
+//        if ( goodsAllinone.getBoxGoodsAttributes().length <= 0 || goodsAllinone.getBoxGoodsSkus().length <= 0) {
+//            return Result.failure("缺少商品基本属性");
+//        }
 
         Result result = boxGoodsService.save(goodsAllinone);
         return result;
@@ -74,11 +75,11 @@ public class BoxGoodsController {
     @ApiOperation(value="商品列表")
     @GetMapping("list")
     public Result list(GoodsQueryParameter goodsQueryParameter, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
-        Page<BoxGoods> adminPage = new Page<>();
-        adminPage.setSize(limit);
-        adminPage.setCurrent(page);
+        Page<BoxGoods> boxGoodsPage = new Page<>();
+        boxGoodsPage.setSize(limit);
+        boxGoodsPage.setCurrent(page);
 
-        IPage<BoxGoods> boxGoodsIPage = boxGoodsService.listGoodsPage(adminPage, goodsQueryParameter);
+        IPage<BoxGoods> boxGoodsIPage = boxGoodsService.listGoodsPage(boxGoodsPage, goodsQueryParameter);
         return Result.success().setData("boxGoodsIPage", boxGoodsIPage);
     }
 
@@ -102,14 +103,25 @@ public class BoxGoodsController {
             return Result.failure("缺少参数");
         }
         if (StringUtil.isBlank(goodsAllinone.getBoxGoods().getName())) {
-            return Result.failure("缺少商品基本数据");
+            return Result.failure("商品名称不能为空");
         }
-        if ( goodsAllinone.getBoxGoodsAttributes().length <= 0 || goodsAllinone.getBoxGoodsSkus().length <= 0) {
-            return Result.failure("缺少商品基本属性");
-        }
+//        if ( goodsAllinone.getBoxGoodsAttributes().length <= 0 || goodsAllinone.getBoxGoodsSkus().length <= 0) {
+//            return Result.failure("缺少商品基本属性");
+//        }
 
         Result result = boxGoodsService.update(goodsAllinone);
         return result;
+    }
+
+    @ApiOperation(value="商品列表（包含SKU信息）")
+    @GetMapping("/listGoodsAndSku")
+    public Result listGoodsAndSku(GoodsQueryParameter goodsQueryParameter, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+        Page<BoxGoods> boxGoodsPage = new Page<>();
+        boxGoodsPage.setSize(limit);
+        boxGoodsPage.setCurrent(page);
+
+        IPage<GoodsSkuVo> boxGoodsIPage = boxGoodsService.listGoodsAndSku(boxGoodsPage, goodsQueryParameter);
+        return Result.success().setData("boxGoodsIPage", boxGoodsIPage);
     }
 
 }

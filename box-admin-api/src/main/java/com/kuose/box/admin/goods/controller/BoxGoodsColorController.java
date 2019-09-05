@@ -9,9 +9,13 @@ import com.kuose.box.common.utils.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -87,8 +91,21 @@ public class BoxGoodsColorController {
         }
 
         List<BoxGoodsColor> goodsColorList = boxGoodsColorService.list(queryWrapper);
-        return Result.success().setData("goodsColorList", goodsColorList);
+        if (goodsColorList == null || goodsColorList.size() == 0) {
+            return Result.failure("暂无数据");
+        }
+
+        Map<String, String> color = new HashMap<>();
+        for (BoxGoodsColor boxGoodsColor : goodsColorList) {
+            color.put(boxGoodsColor.getColorCode(), boxGoodsColor.getColorName());
+        }
+
+        return Result.success().setData("color", color);
     }
+
+
+
+
 
 
 }

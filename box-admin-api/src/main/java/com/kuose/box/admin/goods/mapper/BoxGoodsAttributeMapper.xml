@@ -15,7 +15,7 @@
     </resultMap>
 
     <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
+    <sql id="Base_Column_List" >
         id, goods_id, attribute, attribute_code, value, add_time, update_time, deleted
     </sql>
 

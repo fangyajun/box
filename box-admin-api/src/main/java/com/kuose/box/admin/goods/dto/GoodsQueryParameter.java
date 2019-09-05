@@ -25,13 +25,13 @@ public class GoodsQueryParameter {
     @ApiModelProperty(value="季节")
     private String quarter;
 
-    @ApiModelProperty(value="年份", example = "2018")
+    @ApiModelProperty(value="年份")
     private Integer year;
 
-    @ApiModelProperty(value="最低价格", example = "20.00")
+    @ApiModelProperty(value="最低价格")
     private Double lowPrice;
 
-    @ApiModelProperty(value="最高价格", example = "220.00")
+    @ApiModelProperty(value="最高价格")
     private Double highPrice;
 
     @ApiModelProperty(value="属性编号（数组）")

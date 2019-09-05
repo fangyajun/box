@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -34,7 +36,16 @@ public class BoxGoodsSizeController {
     @GetMapping("/list")
     public Result list() {
         List<BoxGoodsSize> boxGoodsSizes = boxGoodsSizeService.list(new QueryWrapper<BoxGoodsSize>().eq("deleted", 0));
-        return Result.success().setData("boxGoodsSizes",boxGoodsSizes);
+        if (boxGoodsSizes == null || boxGoodsSizes.size() == 0) {
+            return Result.failure("暂无数据");
+        }
+
+        Map<String, String> goodsSize = new HashMap<>(20);
+        for (BoxGoodsSize boxGoodsSize : boxGoodsSizes) {
+            goodsSize.put(boxGoodsSize.getSizeCode(), boxGoodsSize.getSizeName());
+        }
+
+        return Result.success().setData("goodsSize",goodsSize);
     }
 
 }

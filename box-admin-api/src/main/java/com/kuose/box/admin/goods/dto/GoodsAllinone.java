@@ -15,5 +15,4 @@ public class GoodsAllinone {
     private BoxGoods boxGoods;
     private BoxGoodsAttribute[] boxGoodsAttributes;
     private BoxGoodsSku[] boxGoodsSkus;
-
 }

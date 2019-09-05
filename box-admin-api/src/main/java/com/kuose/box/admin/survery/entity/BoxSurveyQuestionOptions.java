@@ -47,6 +47,12 @@ private static final long serialVersionUID=1L;
     @ApiModelProperty(value = "选项的图片", example = "/sfdsdfs/sdfsdfs/sfdsdfs.jpg")
     private String optionPic;
 
+    /**
+     * 选项的标签编号，有选项的填空题需要填写
+     */
+    @ApiModelProperty(value = "选项的标签编号，有选项的填空题需要填写", example = "SG")
+    private String labelCode;
+
 
     /**
      * 选项排序,数越大排序靠前

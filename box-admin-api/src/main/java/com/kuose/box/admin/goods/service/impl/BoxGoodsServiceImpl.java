@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kuose.box.admin.goods.dao.BoxGoodsMapper;
 import com.kuose.box.admin.goods.dto.GoodsAllinone;
 import com.kuose.box.admin.goods.dto.GoodsQueryParameter;
+import com.kuose.box.admin.goods.dto.GoodsSkuVo;
 import com.kuose.box.admin.goods.entity.BoxGoods;
 import com.kuose.box.admin.goods.entity.BoxGoodsAttribute;
 import com.kuose.box.admin.goods.entity.BoxGoodsSku;
@@ -51,37 +52,43 @@ public class BoxGoodsServiceImpl extends ServiceImpl<BoxGoodsMapper, BoxGoods> i
         if (selectCount >= 1) {
             return Result.failure("此商品已经存在！");
         }
+        boxGoods.setUpdateTime(System.currentTimeMillis());
+        boxGoods.setCreateTime(System.currentTimeMillis());
         boxGoodsMapper.insert(boxGoods);
 
         // 添加商品属性
-        for (BoxGoodsAttribute boxGoodsAttribute : boxGoodsAttributes) {
-            boxGoodsAttribute.setGoodsId(boxGoods.getId());
-            boxGoodsAttribute.setAddTime(System.currentTimeMillis());
-            boxGoodsAttribute.setUpdateTime(System.currentTimeMillis());
+        if (boxGoodsAttributes != null && boxGoodsAttributes.length != 0) {
+            for (BoxGoodsAttribute boxGoodsAttribute : boxGoodsAttributes) {
+                boxGoodsAttribute.setGoodsId(boxGoods.getId());
+                boxGoodsAttribute.setAddTime(System.currentTimeMillis());
+                boxGoodsAttribute.setUpdateTime(System.currentTimeMillis());
 
-            if (boxGoodsAttributeService.count(new QueryWrapper<BoxGoodsAttribute>().eq("goods_id", boxGoods.getId()).eq("attribute_code", boxGoodsAttribute.getAttributeCode()).
-                    eq("deleted", 0)) >= 1) {
-                boxGoodsMapper.deleteById(boxGoods.getId());
-                return Result.failure("商品属性编码" + boxGoodsAttribute.getAttributeCode() + "已经存在，请重新添加");
+                if (boxGoodsAttributeService.count(new QueryWrapper<BoxGoodsAttribute>().eq("goods_id", boxGoods.getId()).eq("attribute_code", boxGoodsAttribute.getAttributeCode()).
+                        eq("deleted", 0)) >= 1) {
+                    boxGoodsMapper.deleteById(boxGoods.getId());
+                    return Result.failure("商品属性编码" + boxGoodsAttribute.getAttributeCode() + "已经存在，请重新添加");
+                }
+
+                boxGoodsAttributeService.save(boxGoodsAttribute);
             }
-
-            boxGoodsAttributeService.save(boxGoodsAttribute);
         }
 
-        // 添加商品SKU
-        for (BoxGoodsSku goodsSkus : boxGoodsSkus) {
-            goodsSkus.setGoodsId(boxGoods.getId());
-            goodsSkus.setAddTime(System.currentTimeMillis());
-            goodsSkus.setUpdateTime(System.currentTimeMillis());
+        if (boxGoodsSkus != null && boxGoodsSkus.length != 0) {
+            // 添加商品SKU
+            for (BoxGoodsSku goodsSkus : boxGoodsSkus) {
+                goodsSkus.setGoodsId(boxGoods.getId());
+                goodsSkus.setAddTime(System.currentTimeMillis());
+                goodsSkus.setUpdateTime(System.currentTimeMillis());
 
-            if (boxGoodsSkuService.count(new QueryWrapper<BoxGoodsSku>().eq("sku_code", goodsSkus.getSkuCode()).
-                    eq("deleted", 0)) >= 1) {
-                boxGoodsMapper.deleteById(boxGoods.getId());
-                boxGoodsAttributeService.remove(new QueryWrapper<BoxGoodsAttribute>().eq("goods_id", boxGoods.getId()));
-                return Result.failure("商品SKU编码" + goodsSkus.getSkuCode() + "已经存在，请重新添加");
+                if (boxGoodsSkuService.count(new QueryWrapper<BoxGoodsSku>().eq("sku_code", goodsSkus.getSkuCode()).
+                        eq("deleted", 0)) >= 1) {
+                    boxGoodsMapper.deleteById(boxGoods.getId());
+                    boxGoodsAttributeService.remove(new QueryWrapper<BoxGoodsAttribute>().eq("goods_id", boxGoods.getId()));
+                    return Result.failure("商品SKU编码" + goodsSkus.getSkuCode() + "已经存在，请重新添加");
+                }
+
+                boxGoodsSkuService.save(goodsSkus);
             }
-
-            boxGoodsSkuService.save(goodsSkus);
         }
 
         return Result.success();
@@ -114,26 +121,38 @@ public class BoxGoodsServiceImpl extends ServiceImpl<BoxGoodsMapper, BoxGoods> i
         boxGoods.setUpdateTime(System.currentTimeMillis());
         boxGoodsMapper.updateById(boxGoods);
 
-        boxGoodsAttributeService.remove(new QueryWrapper<BoxGoodsAttribute>().eq("goods_id", boxGoods.getId()));
-        for (BoxGoodsAttribute boxGoodsAttribute : boxGoodsAttributes) {
-            boxGoodsAttribute.setGoodsId(boxGoods.getId());
-            boxGoodsAttribute.setAddTime(System.currentTimeMillis());
-            boxGoodsAttribute.setUpdateTime(System.currentTimeMillis());
 
-            boxGoodsAttributeService.save(boxGoodsAttribute);
+        if (boxGoodsAttributes != null && boxGoodsAttributes.length != 0) {
+            boxGoodsAttributeService.remove(new QueryWrapper<BoxGoodsAttribute>().eq("goods_id", boxGoods.getId()));
+            for (BoxGoodsAttribute boxGoodsAttribute : boxGoodsAttributes) {
+                boxGoodsAttribute.setGoodsId(boxGoods.getId());
+                boxGoodsAttribute.setAddTime(System.currentTimeMillis());
+                boxGoodsAttribute.setUpdateTime(System.currentTimeMillis());
+
+                boxGoodsAttributeService.save(boxGoodsAttribute);
+            }
         }
 
-        // 先删除在添加
-        boxGoodsSkuService.remove(new QueryWrapper<BoxGoodsSku>().eq("goods_id", boxGoods.getId()));
-        // 添加商品SKU
-        for (BoxGoodsSku goodsSkus : boxGoodsSkus) {
-            goodsSkus.setGoodsId(boxGoods.getId());
-            goodsSkus.setAddTime(System.currentTimeMillis());
-            goodsSkus.setUpdateTime(System.currentTimeMillis());
+        if (boxGoodsSkus != null && boxGoodsSkus.length != 0) {
+            // 先删除在添加
+            boxGoodsSkuService.remove(new QueryWrapper<BoxGoodsSku>().eq("goods_id", boxGoods.getId()));
+            // 添加商品SKU
+            for (BoxGoodsSku goodsSkus : boxGoodsSkus) {
+                goodsSkus.setGoodsId(boxGoods.getId());
+                goodsSkus.setAddTime(System.currentTimeMillis());
+                goodsSkus.setUpdateTime(System.currentTimeMillis());
 
-            boxGoodsSkuService.save(goodsSkus);
+                boxGoodsSkuService.save(goodsSkus);
+            }
         }
 
         return Result.success();
     }
+
+    @Override
+    public IPage<GoodsSkuVo> listGoodsAndSku(Page<BoxGoods> boxGoodsPage, GoodsQueryParameter goodsQueryParameter) {
+        return boxGoodsMapper.listGoodsAndSku(boxGoodsPage, goodsQueryParameter.getCategoryCode(), goodsQueryParameter.getGoodsNo(), goodsQueryParameter.getGoodsName(),
+                goodsQueryParameter.getQuarter(), goodsQueryParameter.getYear(), goodsQueryParameter.getLowPrice(), goodsQueryParameter.getHighPrice(), goodsQueryParameter.getGoodsAttributeCodes());
+    }
 }
+

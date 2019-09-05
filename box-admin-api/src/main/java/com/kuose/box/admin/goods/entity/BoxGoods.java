@@ -78,7 +78,7 @@ private static final long serialVersionUID=1L;
      * 年份
      */
     @TableField("`year`")
-    @ApiModelProperty(value="年份")
+    @ApiModelProperty(value="年份", example = "2")
     private Integer year;
 
     /**

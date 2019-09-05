@@ -62,7 +62,7 @@ private static final long serialVersionUID=1L;
     /**
      * 选项内容,填空填写
      */
-    @ApiModelProperty(value = "选项内容,填空填写", example = "贴身裁剪,合身裁剪,直筒裁剪")
+    @ApiModelProperty(value = "选项内容,填空填写,格式：[{:},{:}]", example = "[{\"SG\":\"165cm\"},{\"TZ\":\"50kg\"}]")
     private String optionContent;
 
     /**

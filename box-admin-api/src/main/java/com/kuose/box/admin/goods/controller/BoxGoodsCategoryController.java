@@ -9,9 +9,13 @@ import com.kuose.box.common.utils.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -67,6 +71,20 @@ public class BoxGoodsCategoryController {
 //        return Result.success();
 //    }
 
+//    @ApiOperation(value="获取商品分类列表")
+//    @GetMapping("/list")
+//    public Result list(String categoryName) {
+//        QueryWrapper<BoxGoodsCategory> queryWrapper = new QueryWrapper<BoxGoodsCategory>().eq("parent_id", 0).eq("deleted", 0);
+//        if (!StringUtil.isBlank(categoryName)) {
+//            queryWrapper.like("category_name", categoryName).or().like("pinyin", categoryName);
+//        }
+//
+//        List<BoxGoodsCategory> goodsCategoryList = boxGoodsCategoryService.list(queryWrapper);
+//        return Result.success().setData("goodsCategoryList", goodsCategoryList);
+//    }
+
+
+
     @ApiOperation(value="获取商品分类列表")
     @GetMapping("/list")
     public Result list(String categoryName) {
@@ -76,8 +94,17 @@ public class BoxGoodsCategoryController {
         }
 
         List<BoxGoodsCategory> goodsCategoryList = boxGoodsCategoryService.list(queryWrapper);
-        return Result.success().setData("goodsCategoryList", goodsCategoryList);
+        if (goodsCategoryList == null || goodsCategoryList.size() == 0) {
+            return Result.failure("暂无数据");
+        }
+
+        Map<String, String> category = new HashMap<>();
+        for (BoxGoodsCategory boxGoodsCategory : goodsCategoryList) {
+            category.put(boxGoodsCategory.getCategoryCode(), boxGoodsCategory.getCategoryName());
+        }
+        return Result.success().setData("category", category);
     }
+
 
 //    @ApiOperation(value="删除商品分类列表")
 //    @PostMapping("/delete")

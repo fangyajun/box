@@ -1,17 +1,19 @@
 package com.kuose.box.admin.survery.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.kuose.box.admin.survery.entity.BoxSurveyQusetionLabel;
 import com.kuose.box.admin.survery.entity.BoxSurveyUserAnswer;
+import com.kuose.box.admin.survery.service.BoxSurveyQusetionLabelService;
 import com.kuose.box.admin.survery.service.BoxSurveyUserAnswerService;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -28,6 +30,8 @@ public class BoxSurveyUserAnswerController {
 
     @Autowired
     private BoxSurveyUserAnswerService boxSurveyUserAnswerService;
+    @Autowired
+    private BoxSurveyQusetionLabelService boxSurveyQusetionLabelService;
 
     @ApiOperation(value="新增用户问券答案")
     @PostMapping("/add")
@@ -43,7 +47,16 @@ public class BoxSurveyUserAnswerController {
         return Result.success();
     }
 
+    @ApiOperation(value="获取用户档案详情,搭配后台调用")
+    @GetMapping("/getUserAnswer")
+    public Result getUserAnswer(Integer userId) {
+        if (userId == null) {
+            return Result.failure("缺少必传参数");
+        }
 
-
+        List<BoxSurveyQusetionLabel> surveyQusetionLabels = boxSurveyQusetionLabelService.list(new QueryWrapper<BoxSurveyQusetionLabel>().eq("deleted", 0));
+        List<BoxSurveyUserAnswer> surveyUserAnswers = boxSurveyUserAnswerService.list(new QueryWrapper<BoxSurveyUserAnswer>().eq("user_id", userId));
+        return Result.success().setData("surveyQusetionLabels", surveyQusetionLabels).setData("surveyUserAnswers", surveyUserAnswers);
+    }
 }
 
