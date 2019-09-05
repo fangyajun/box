@@ -79,7 +79,7 @@ private static final long serialVersionUID=1L;
      */
     @TableField("`year`")
     @ApiModelProperty(value="年份", example = "2")
-    private Integer year;
+    private String year;
 
     /**
      * 风貌编号，多个用逗号隔开

@@ -40,6 +40,7 @@ public class SwaggerConfig
                         "com.kuose.box.admin.storage.controller"+splitor+
                         "com.kuose.box.admin.survery.controller"+splitor+
                         "com.kuose.box.admin.goods.controller"+splitor+
+                        "com.kuose.box.admin.order.controller"+splitor+
                          "com.kuose.box.admin.generalize.controller"))
                 // 扫描所有 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
