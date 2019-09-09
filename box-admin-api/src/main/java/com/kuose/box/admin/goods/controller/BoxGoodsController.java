@@ -53,9 +53,6 @@ public class BoxGoodsController {
         if (StringUtil.isBlank(goodsAllinone.getBoxGoods().getName())) {
             return Result.failure("缺少商品基本数据");
         }
-//        if ( goodsAllinone.getBoxGoodsAttributes().length <= 0 || goodsAllinone.getBoxGoodsSkus().length <= 0) {
-//            return Result.failure("缺少商品基本属性");
-//        }
 
         Result result = boxGoodsService.save(goodsAllinone);
         return result;
@@ -89,7 +86,7 @@ public class BoxGoodsController {
         if (id == null) {
             return Result.failure("参数必传");
         }
-        BoxGoods boxGoods = boxGoodsService.getById(id);
+        BoxGoods boxGoods = boxGoodsService.getOne(new QueryWrapper<BoxGoods>().eq("id", id).eq("deleted", 0));
         List<BoxGoodsAttribute> goodsAttributeList = boxGoodsAttributeService.list(new QueryWrapper<BoxGoodsAttribute>().eq("goods_id", id).eq("deleted", 0));
         List<BoxGoodsSku> goodsSkuList = boxGoodsSkuService.list(new QueryWrapper<BoxGoodsSku>().eq("goods_id", id).eq("deleted", 0));
 
@@ -105,9 +102,6 @@ public class BoxGoodsController {
         if (StringUtil.isBlank(goodsAllinone.getBoxGoods().getName())) {
             return Result.failure("商品名称不能为空");
         }
-//        if ( goodsAllinone.getBoxGoodsAttributes().length <= 0 || goodsAllinone.getBoxGoodsSkus().length <= 0) {
-//            return Result.failure("缺少商品基本属性");
-//        }
 
         Result result = boxGoodsService.update(goodsAllinone);
         return result;
@@ -121,6 +115,17 @@ public class BoxGoodsController {
         boxGoodsPage.setCurrent(page);
 
         IPage<GoodsSkuVo> boxGoodsIPage = boxGoodsService.listGoodsAndSku(boxGoodsPage, goodsQueryParameter);
+        return Result.success().setData("boxGoodsIPage", boxGoodsIPage);
+    }
+
+    @ApiOperation(value="商品列表（匹配）")
+    @GetMapping("/listMatchGoods")
+    public Result listMatchGoods(GoodsQueryParameter goodsQueryParameter, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+        Page<BoxGoods> boxGoodsPage = new Page<>();
+        boxGoodsPage.setSize(limit);
+        boxGoodsPage.setCurrent(page);
+
+        IPage<GoodsSkuVo> boxGoodsIPage = boxGoodsService.listMatchGoods(boxGoodsPage, goodsQueryParameter);
         return Result.success().setData("boxGoodsIPage", boxGoodsIPage);
     }
 

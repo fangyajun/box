@@ -74,6 +74,9 @@ public class GoodsSkuVo {
     @ApiModelProperty(value="零售价格")
     private BigDecimal retailPrice;
 
+    @ApiModelProperty(value="零售价格")
+    private String skuIds;
+
 
     @ApiModelProperty(value="商品的sku集合")
     private List<BoxGoodsSku> boxGoodsSkuList;

@@ -34,4 +34,19 @@
         where goods_id = #{id}
     </select>
 
+    <select id="listSkuById" parameterType="java.lang.String" resultType="com.kuose.box.admin.goods.entity.BoxGoodsSku" >
+        select
+         id, goods_id, sku_code, specifications, color_name, color_code, size_name, size_code, retail_price, number, status
+        from box_goods_sku
+        where id in (
+                SELECT
+                SUBSTRING_INDEX(SUBSTRING_INDEX(#{skuIds},',',help_topic_id+1),',',-1) AS num
+                FROM
+                mysql.help_topic
+                WHERE
+                help_topic_id &lt; LENGTH(#{skuIds})-LENGTH(REPLACE(#{skuIds},',',''))+1
+                )
+
+    </select>
+
 </mapper>

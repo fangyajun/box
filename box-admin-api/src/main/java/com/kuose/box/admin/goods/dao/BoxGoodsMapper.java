@@ -25,5 +25,12 @@ public interface BoxGoodsMapper extends BaseMapper<BoxGoods> {
 
     IPage<GoodsSkuVo> listGoodsAndSku(Page<BoxGoods> boxGoodsPage, @Param("categoryCode") String categoryCode, @Param("goodsNo") String goodsNo,
                                       @Param("goodsName") String goodsName,@Param("quarter") String quarter, @Param("year") Integer year, @Param("lowPrice") Double lowPrice,
-                                      @Param("highPrice") Double highPrice, @Param("goodsAttributeCodes") String[] goodsAttributeCodes);
+                                      @Param("highPrice") Double highPrice, @Param("goodsAttributeCodes") String[] goodsAttributeCodes,
+                                      @Param("colorName") String colorName, @Param("colorCode") String colorCode, @Param("sizeCode") String sizeCode);
+
+
+    IPage<GoodsSkuVo> listMatchGoods(Page<BoxGoods> boxGoodsPage, @Param("categoryCode") String categoryCode, @Param("goodsNo") String goodsNo,
+                                      @Param("goodsName") String goodsName,@Param("quarter") String quarter, @Param("year") Integer year, @Param("lowPrice") Double lowPrice,
+                                      @Param("highPrice") Double highPrice, @Param("avoidGoodsAttributeCodes") String[] avoidGoodsAttributeCodes, @Param("avoidGoodsColorCodes") String[] avoidGoodsColorCodes,
+                                     @Param("colorName") String colorName, @Param("colorCode") String colorCode, @Param("sizeCode") String sizeCode);
 }

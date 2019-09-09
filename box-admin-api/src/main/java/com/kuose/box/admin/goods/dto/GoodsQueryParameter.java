@@ -36,4 +36,22 @@ public class GoodsQueryParameter {
 
     @ApiModelProperty(value="属性编号（数组）")
     private String[] goodsAttributeCodes;
+
+    @ApiModelProperty(value="避免的属性编号（数组）")
+    private String[] avoidGoodsAttributeCodes;
+
+    @ApiModelProperty(value="避免的颜色编号（数组）")
+    private String[] avoidGoodsColorCodes;
+
+    @ApiModelProperty(value="颜色名称")
+    private String colorName;
+
+    @ApiModelProperty(value="颜色编码")
+    private String colorCode;
+
+    @ApiModelProperty(value="尺寸编码")
+    private String sizeCode;
+
+
+
 }

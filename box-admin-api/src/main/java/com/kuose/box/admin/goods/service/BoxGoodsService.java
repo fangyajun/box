@@ -28,4 +28,6 @@ public interface BoxGoodsService extends IService<BoxGoods> {
     Result update(GoodsAllinone goodsAllinone);
 
     IPage<GoodsSkuVo> listGoodsAndSku(Page<BoxGoods> boxGoodsPage, GoodsQueryParameter goodsQueryParameter);
+
+    IPage<GoodsSkuVo> listMatchGoods(Page<BoxGoods> boxGoodsPage, GoodsQueryParameter goodsQueryParameter);
 }

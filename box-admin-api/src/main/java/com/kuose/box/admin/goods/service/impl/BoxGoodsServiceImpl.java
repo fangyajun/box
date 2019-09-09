@@ -16,8 +16,6 @@ import com.kuose.box.admin.goods.service.BoxGoodsAttributeService;
 import com.kuose.box.admin.goods.service.BoxGoodsService;
 import com.kuose.box.admin.goods.service.BoxGoodsSkuService;
 import com.kuose.box.common.config.Result;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,7 +98,6 @@ public class BoxGoodsServiceImpl extends ServiceImpl<BoxGoodsMapper, BoxGoods> i
         // 逻辑删除
         boxGoods.setDeleted(1);
         boxGoodsMapper.updateById(boxGoods);
-
         boxGoodsAttributeService.update(new UpdateWrapper<BoxGoodsAttribute>().eq("goods_id", boxGoods.getId()).set("deleted", 1));
         boxGoodsSkuService.update(new UpdateWrapper<BoxGoodsSku>().eq("goods_id", boxGoods.getId()).set("deleted", 1));
     }
@@ -152,7 +149,16 @@ public class BoxGoodsServiceImpl extends ServiceImpl<BoxGoodsMapper, BoxGoods> i
     @Override
     public IPage<GoodsSkuVo> listGoodsAndSku(Page<BoxGoods> boxGoodsPage, GoodsQueryParameter goodsQueryParameter) {
         return boxGoodsMapper.listGoodsAndSku(boxGoodsPage, goodsQueryParameter.getCategoryCode(), goodsQueryParameter.getGoodsNo(), goodsQueryParameter.getGoodsName(),
-                goodsQueryParameter.getQuarter(), goodsQueryParameter.getYear(), goodsQueryParameter.getLowPrice(), goodsQueryParameter.getHighPrice(), goodsQueryParameter.getGoodsAttributeCodes());
+                goodsQueryParameter.getQuarter(), goodsQueryParameter.getYear(), goodsQueryParameter.getLowPrice(), goodsQueryParameter.getHighPrice(), goodsQueryParameter.getGoodsAttributeCodes(),
+                goodsQueryParameter.getColorName(), goodsQueryParameter.getColorCode(), goodsQueryParameter.getSizeCode());
+    }
+
+    @Override
+    public IPage<GoodsSkuVo> listMatchGoods(Page<BoxGoods> boxGoodsPage, GoodsQueryParameter goodsQueryParameter) {
+        return boxGoodsMapper.listMatchGoods(boxGoodsPage, goodsQueryParameter.getCategoryCode(), goodsQueryParameter.getGoodsNo(), goodsQueryParameter.getGoodsName(),
+                goodsQueryParameter.getQuarter(), goodsQueryParameter.getYear(), goodsQueryParameter.getLowPrice(), goodsQueryParameter.getHighPrice(),
+                goodsQueryParameter.getAvoidGoodsAttributeCodes(), goodsQueryParameter.getAvoidGoodsColorCodes(),goodsQueryParameter.getColorName(),
+                goodsQueryParameter.getColorCode(), goodsQueryParameter.getSizeCode());
     }
 }
 
