@@ -78,5 +78,10 @@ private static final long serialVersionUID=1L;
      */
     private Integer number;
 
+    /**
+     * sku对应的图片
+     */
+    private String skuImg;
+
 
 }

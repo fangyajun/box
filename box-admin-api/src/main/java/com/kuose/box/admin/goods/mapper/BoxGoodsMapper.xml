@@ -203,5 +203,4 @@
         GROUP BY bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
         order by bg.year desc
     </select>
-
 </mapper>

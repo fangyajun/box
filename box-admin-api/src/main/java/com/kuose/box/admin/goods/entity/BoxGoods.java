@@ -117,6 +117,8 @@ private static final long serialVersionUID=1L;
     @ApiModelProperty(value="商品简介、备注")
     private String remark;
 
+
+
     /**
      * 上架时间
      */

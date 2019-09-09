@@ -39,6 +39,7 @@
         <result column="webPrice" property="counterPrice" />
         <result column="tagPrice" property="tagPrice" />
         <result column="hdPrice" property="retailPrice" />
+        <result column="productColorPic" property="skuImg" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -47,9 +48,17 @@
     </sql>
 
     <select id="listGoodsSku" resultMap="GoodsSkuResultMap">
-        select skuCode,color,colorCode,sizeCodeTableName,sizeCodeTableCode,webPrice,tagPrice,hdPrice
-        from ripreport_ProductInformationSku
-        where  flag = 0  AND productno = #{productno}
+        select skuCode,color,colorCode,sizeCodeTableName,sizeCodeTableCode,webPrice,tagPrice,hdPrice,pc.productColorPic
+        from ripreport_ProductInformationSku ps
+        LEFT JOIN ripreport_ProductInformationColor pc ON ps.productno = pc.productno AND ps.colorCode = pc.colorTableCode
+        where  ps.flag = 0  AND ps.productno = #{productno}
+    </select>
+
+    <select id="getGoodsSkuImg" resultMap="GoodsSkuResultMap">
+        select skuCode,color,colorCode,sizeCodeTableName,sizeCodeTableCode,webPrice,tagPrice,hdPrice,pc.productColorPic
+        from ripreport_ProductInformationSku ps
+        LEFT JOIN ripreport_ProductInformationColor pc ON ps.productno = pc.productno AND ps.colorCode = pc.colorTableCode
+        where  ps.flag = 0  AND ps.productno = #{productno}
     </select>
 
 </mapper>

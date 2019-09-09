@@ -97,6 +97,12 @@ private static final long serialVersionUID=1L;
     private Integer status;
 
     /**
+     * sku对应的图片
+     */
+    @ApiModelProperty(value="sku图片")
+    private String skuImg;
+
+    /**
      * 创建时间
      */
     @ApiModelProperty(hidden = true)
