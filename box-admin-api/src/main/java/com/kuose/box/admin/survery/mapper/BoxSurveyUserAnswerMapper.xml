@@ -12,7 +12,7 @@
         <result column="option_values" jdbcType="VARCHAR" property="optionValues" typeHandler="com.kuose.box.admin.mybatis.JsonStringArrayTypeHandler" />
         <result column="option_content" property="optionContent" />
         <result column="create_time" property="createTime" />
-        <result column="update_time" property="deleted" />
+        <result column="update_time" property="updateTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->

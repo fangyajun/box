@@ -15,6 +15,7 @@ import com.kuose.box.admin.goods.entity.BoxGoodsSku;
 import com.kuose.box.admin.goods.service.BoxGoodsAttributeService;
 import com.kuose.box.admin.goods.service.BoxGoodsService;
 import com.kuose.box.admin.goods.service.BoxGoodsSkuService;
+import com.kuose.box.admin.match.dto.GoodsMatchParameter;
 import com.kuose.box.common.config.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -154,11 +155,14 @@ public class BoxGoodsServiceImpl extends ServiceImpl<BoxGoodsMapper, BoxGoods> i
     }
 
     @Override
-    public IPage<GoodsSkuVo> listMatchGoods(Page<BoxGoods> boxGoodsPage, GoodsQueryParameter goodsQueryParameter) {
-        return boxGoodsMapper.listMatchGoods(boxGoodsPage, goodsQueryParameter.getCategoryCode(), goodsQueryParameter.getGoodsNo(), goodsQueryParameter.getGoodsName(),
-                goodsQueryParameter.getQuarter(), goodsQueryParameter.getYear(), goodsQueryParameter.getLowPrice(), goodsQueryParameter.getHighPrice(),
-                goodsQueryParameter.getAvoidGoodsAttributeCodes(), goodsQueryParameter.getAvoidGoodsColorCodes(),goodsQueryParameter.getColorName(),
-                goodsQueryParameter.getColorCode(), goodsQueryParameter.getSizeCode());
+    public IPage<GoodsSkuVo> listMatchGoods(Page<BoxGoods> boxGoodsPage, GoodsMatchParameter goodsMatchParameter) {
+        return boxGoodsMapper.listMatchGoods(boxGoodsPage, goodsMatchParameter.getCategoryCode(), goodsMatchParameter.getGoodsNo(), goodsMatchParameter.getGoodsName(),
+                goodsMatchParameter.getQuarter(), goodsMatchParameter.getYear(), goodsMatchParameter.getLowPrice(), goodsMatchParameter.getHighPrice(),
+                goodsMatchParameter.getGoodsAttributeCodes(), goodsMatchParameter.getColorName(), goodsMatchParameter.getColorCode(), goodsMatchParameter.getSizeCode(),
+                goodsMatchParameter.getAvoidColor(), goodsMatchParameter.getAvoidTexture(), goodsMatchParameter.getAvoidCategory(), goodsMatchParameter.getAvoidFigure(),
+                goodsMatchParameter.getTopSize(), goodsMatchParameter.getDressSize(), goodsMatchParameter.getBottomsSize(), goodsMatchParameter.getJeansSize(),
+                goodsMatchParameter.getTopLowPrice(),goodsMatchParameter.getTopHighPrice(),goodsMatchParameter.getBottomsLowPrice(),goodsMatchParameter.getBottomsHighPrice(),
+                goodsMatchParameter.getDressLowPrice(),goodsMatchParameter.getDressHighPrice(),goodsMatchParameter.getOvercoatLowPrice(),goodsMatchParameter.getOvercoatHighPrice());
     }
 }
 

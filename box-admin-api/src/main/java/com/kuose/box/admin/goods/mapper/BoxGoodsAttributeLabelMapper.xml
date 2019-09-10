@@ -8,6 +8,7 @@
         <result column="parent_id" property="parentId" />
         <result column="attribute_name" property="attributeName" />
         <result column="attribute_code" property="attributeCode" />
+        <result column="attribute_flag" property="attributeLlag" />
         <result column="type" property="type" />
         <result column="add_time" property="addTime" />
         <result column="update_time" property="updateTime" />
@@ -26,6 +27,8 @@
         <result property="parent_id" column="parentId" />
         <result property="attribute_name" column="attributeName" />
         <result property="attribute_code" column="attributeCode" />
+        <result property="attribute_flag" column="attributeFlag" />
+        <result property="type" column="type" />
         <result property="add_time" column="addTime" />
         <result property="update_time" column="updateTime" />
         <collection property="children" ofType = "java.util.Map" select="com.kuose.box.admin.goods.dao.BoxGoodsAttributeLabelMapper.listGoodsAttributeLabelByParentId" column="id" />
@@ -33,20 +36,20 @@
 
     <select id="listGoodsAttributeLabel" parameterType="com.kuose.box.admin.goods.entity.BoxGoodsAttributeLabel" resultMap="goodsAttributeLabelResultMap">
         select
-        id, parent_id, attribute_name, attribute_code, `type`, add_time, update_time
+        id, parent_id, attribute_name, attribute_code,attribute_flag, `type`, add_time, update_time
         from box_goods_attribute_label
         <where>
             parent_id = 0
             <if test="_parameter != null" >
-                and `type` = #{_parameter}
+                and attribute_flag = #{_parameter}
             </if>
         </where>
 
     </select>
 
-    <select id="listGoodsAttributeLabelByParentId" parameterType="java.lang.String" resultType="com.kuose.box.admin.goods.entity.BoxGoodsAttributeLabel">
+    <select id="listGoodsAttributeLabelByParentId" parameterType="java.lang.String" resultMap="goodsAttributeLabelResultMap">
         select
-        id, parent_id, attribute_name, attribute_code, `type`, add_time, update_time
+        id, parent_id, attribute_name, attribute_code,attribute_flag,`type`, add_time, update_time
         from box_goods_attribute_label
         where parent_id = #{id}
     </select>

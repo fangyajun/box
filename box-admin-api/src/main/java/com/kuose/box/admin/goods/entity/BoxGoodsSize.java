@@ -1,9 +1,9 @@
 package com.kuose.box.admin.goods.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import lombok.Data;
 
 /**
  * <p>
@@ -13,6 +13,7 @@ import java.io.Serializable;
  * @author fangyajun
  * @since 2019-08-28
  */
+@Data
 public class BoxGoodsSize extends Model<BoxGoodsSize> {
 
 private static final long serialVersionUID=1L;
@@ -50,78 +51,4 @@ private static final long serialVersionUID=1L;
      */
     private Boolean deleted;
 
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getSizeName() {
-        return sizeName;
-    }
-
-    public void setSizeName(String sizeName) {
-        this.sizeName = sizeName;
-    }
-
-    public String getSizeCode() {
-        return sizeCode;
-    }
-
-    public void setSizeCode(String sizeCode) {
-        this.sizeCode = sizeCode;
-    }
-
-    public Integer getColorStatus() {
-        return colorStatus;
-    }
-
-    public void setColorStatus(Integer colorStatus) {
-        this.colorStatus = colorStatus;
-    }
-
-    public Long getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(Long addTime) {
-        this.addTime = addTime;
-    }
-
-    public Long getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Long updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
-
-    @Override
-    public String toString() {
-        return "BoxGoodsSize{" +
-        "id=" + id +
-        ", sizeName=" + sizeName +
-        ", sizeCode=" + sizeCode +
-        ", colorStatus=" + colorStatus +
-        ", addTime=" + addTime +
-        ", updateTime=" + updateTime +
-        ", deleted=" + deleted +
-        "}";
-    }
 }

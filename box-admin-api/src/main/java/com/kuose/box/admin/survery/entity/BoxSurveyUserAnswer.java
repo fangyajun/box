@@ -3,6 +3,7 @@ package com.kuose.box.admin.survery.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,6 +17,7 @@ import lombok.Data;
  * @since 2019-07-31
  */
 @Data
+@TableName(value = "box_survey_user_answer", resultMap = "BaseResultMap")
 public class BoxSurveyUserAnswer extends Model<BoxSurveyUserAnswer> {
 
 private static final long serialVersionUID=1L;
@@ -56,7 +58,7 @@ private static final long serialVersionUID=1L;
      * 问题答案值,数组
      */
     @ApiModelProperty(value = "问题答案值,数组", example = "[\"贴身裁剪\",\"合身裁剪\",\"直筒裁剪\"]")
-    @TableField(el = "optionValues,jdbcType=VARCHAR,typeHandler=com.kuose.box.admin.mybatis.JsonStringArrayTypeHandler")
+    @TableField(value = "option_values", el = "optionValues,jdbcType=VARCHAR,typeHandler=com.kuose.box.admin.mybatis.JsonStringArrayTypeHandler")
     private String[] optionValues;
 
     /**
@@ -76,4 +78,6 @@ private static final long serialVersionUID=1L;
      */
     @ApiModelProperty(value = "修改时间", hidden = true)
     private Long updateTime;
+
+
 }

@@ -17,8 +17,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface BoxGoodsMapper extends BaseMapper<BoxGoods> {
 
-//    IPage<BoxGoods> listGoodsPage(Page<BoxGoods> boxGoodsPage, GoodsQueryParameter goodsQueryParameter);
-
     IPage<BoxGoods> listGoodsPage(Page<BoxGoods> boxGoodsPage, @Param("categoryCode") String categoryCode, @Param("goodsNo") String goodsNo,
                                   @Param("goodsName") String goodsName,@Param("quarter") String quarter, @Param("year") Integer year, @Param("lowPrice") Double lowPrice,
                                   @Param("highPrice") Double highPrice, @Param("goodsAttributeCodes") String[] goodsAttributeCodes);
@@ -28,9 +26,13 @@ public interface BoxGoodsMapper extends BaseMapper<BoxGoods> {
                                       @Param("highPrice") Double highPrice, @Param("goodsAttributeCodes") String[] goodsAttributeCodes,
                                       @Param("colorName") String colorName, @Param("colorCode") String colorCode, @Param("sizeCode") String sizeCode);
 
-
-    IPage<GoodsSkuVo> listMatchGoods(Page<BoxGoods> boxGoodsPage, @Param("categoryCode") String categoryCode, @Param("goodsNo") String goodsNo,
-                                      @Param("goodsName") String goodsName,@Param("quarter") String quarter, @Param("year") Integer year, @Param("lowPrice") Double lowPrice,
-                                      @Param("highPrice") Double highPrice, @Param("avoidGoodsAttributeCodes") String[] avoidGoodsAttributeCodes, @Param("avoidGoodsColorCodes") String[] avoidGoodsColorCodes,
-                                     @Param("colorName") String colorName, @Param("colorCode") String colorCode, @Param("sizeCode") String sizeCode);
+    IPage<GoodsSkuVo> listMatchGoods(Page<BoxGoods> boxGoodsPage, @Param("categoryCode")String categoryCode, @Param("goodsNo")String goodsNo, @Param("goodsName")String goodsName,
+                                     @Param("quarter")String quarter, @Param("year")Integer year, @Param("lowPrice")Double lowPrice, @Param("highPrice")Double highPrice,
+                                     @Param("goodsAttributeCodes")String[] goodsAttributeCodes, @Param("colorName")String colorName, @Param("colorCode")String colorCode,
+                                     @Param("sizeCode")String sizeCode, @Param("avoidColor")String[] avoidColor, @Param("avoidTexture")String[] avoidTexture,
+                                     @Param("avoidCategory")String[] avoidCategory,@Param("avoidFigure") String[] avoidFigure, @Param("topSize")String topSize,
+                                     @Param("dressSize")String dressSize, @Param("bottomsSize")String bottomsSize, @Param("jeansSize")String jeansSize,
+                                     @Param("topLowPrice")Double topLowPrice, @Param("topHighPrice")Double topHighPrice, @Param("bottomsLowPrice")Double bottomsLowPrice,
+                                     @Param("bottomsHighPrice")Double bottomsHighPrice, @Param("dressLowPrice")Double dressLowPrice, @Param("dressHighPrice")Double dressHighPrice,
+                                     @Param("overcoatLowPrice")Double overcoatLowPrice, @Param("overcoatHighPrice")Double overcoatHighPrice);
 }

@@ -27,7 +27,7 @@ private static final long serialVersionUID=1L;
     /**
      * 父节点，0,表示第一节点
      */
-    @ApiModelProperty(value="父节点，0,表示头节点",example = "0")
+    @ApiModelProperty(value="父节点，0,表示头节点",example = "父节点，0:表示头节点")
     private Integer parentId;
 
     /**
@@ -43,10 +43,17 @@ private static final long serialVersionUID=1L;
     private String attributeCode;
 
     /**
+     * 属性的标记
+     */
+    @ApiModelProperty(value="属性标记，特殊情况下需要填写，如需要单纯查出来的时候根据填写的attributeFlag查询", example = "一般不需要填写，需要单纯查出来的时候根据填写的attributeFlag查询,如:衣服的材质")
+    private String attributeFlag;
+
+
+    /**
      * 属性类别
      */
-    @ApiModelProperty(value="属性类别，特殊情况下需要填写，如需要单纯查出来的时候根据填写的type查询", example = "一般不需要填写，需要单纯查出来的时候根据填写的type查询,如:衣服的材质")
-    private String type;
+    @ApiModelProperty(value="属性的类别，0:无选择，如叶子节点，1:单选，2:多选，3:填空", example = "属性的类别，0:无选择，如叶子节点，1:单选，2:多选，3:填空")
+    private Integer type;
 
     /**
      * 创建时间

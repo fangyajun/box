@@ -54,4 +54,26 @@ public class GoodsQueryParameter {
 
 
 
+    @ApiModelProperty(value="上装尺寸")
+    private String topSize;
+
+    @ApiModelProperty(value="上装最低价格")
+    private Double topLowPrice;
+
+    @ApiModelProperty(value="上装最高价格")
+    private Double topHighPrice;
+
+    @ApiModelProperty(value="下装尺寸编码")
+    private String bottomsSize;
+
+    @ApiModelProperty(value="下装最低价格")
+    private Double bottomsLowPrice;
+
+    @ApiModelProperty(value="下装最高价格")
+    private Double bottomsHighPrice;
+
+
+
+
+
 }

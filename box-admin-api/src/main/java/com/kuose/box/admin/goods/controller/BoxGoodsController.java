@@ -40,8 +40,6 @@ public class BoxGoodsController {
     @Autowired
     private BoxGoodsAttributeService boxGoodsAttributeService;
     @Autowired
-
-
     private BoxGoodsSkuService boxGoodsSkuService;
 
     @ApiOperation(value="添加商品")
@@ -115,17 +113,6 @@ public class BoxGoodsController {
         boxGoodsPage.setCurrent(page);
 
         IPage<GoodsSkuVo> boxGoodsIPage = boxGoodsService.listGoodsAndSku(boxGoodsPage, goodsQueryParameter);
-        return Result.success().setData("boxGoodsIPage", boxGoodsIPage);
-    }
-
-    @ApiOperation(value="商品列表（匹配）")
-    @GetMapping("/listMatchGoods")
-    public Result listMatchGoods(GoodsQueryParameter goodsQueryParameter, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
-        Page<BoxGoods> boxGoodsPage = new Page<>();
-        boxGoodsPage.setSize(limit);
-        boxGoodsPage.setCurrent(page);
-
-        IPage<GoodsSkuVo> boxGoodsIPage = boxGoodsService.listMatchGoods(boxGoodsPage, goodsQueryParameter);
         return Result.success().setData("boxGoodsIPage", boxGoodsIPage);
     }
 

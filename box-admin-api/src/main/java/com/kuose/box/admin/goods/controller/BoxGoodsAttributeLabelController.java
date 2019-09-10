@@ -63,10 +63,10 @@ public class BoxGoodsAttributeLabelController {
     }
 
     @ApiOperation(value="商品属性标签列表")
-    @ApiImplicitParam(name = "type", value = "属性类别,特殊时候需要填写，根据添加时候传入的", required = false, dataType = "String")
+    @ApiImplicitParam(name = "attributeFlag", value = "属性属性标记,特殊时候需要填写，根据添加时候传入的", required = false, dataType = "String")
     @GetMapping("/list")
-    public Result list(String type) {
-        List<BoxGoodsAttributeLabel> boxGoodsAttributeLabelList = boxGoodsAttributeLabelService.listGoodsAttributeLabel(type);
+    public Result list(String attributeFlag) {
+        List<BoxGoodsAttributeLabel> boxGoodsAttributeLabelList = boxGoodsAttributeLabelService.listGoodsAttributeLabel(attributeFlag);
         return Result.success().setData("boxGoodsAttributeLabelList", boxGoodsAttributeLabelList);
     }
 
