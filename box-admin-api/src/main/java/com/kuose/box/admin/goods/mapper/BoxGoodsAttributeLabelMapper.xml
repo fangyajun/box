@@ -44,8 +44,8 @@
                 and attribute_flag = #{_parameter}
             </if>
         </where>
-
     </select>
+
 
     <select id="listGoodsAttributeLabelByParentId" parameterType="java.lang.String" resultMap="goodsAttributeLabelResultMap">
         select

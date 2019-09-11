@@ -1,5 +1,6 @@
 package com.kuose.source.goods.service.impl;
 
+import com.kuose.source.goods.entity.AttributeSource;
 import com.kuose.source.goods.entity.BoxGoods;
 import com.kuose.source.goods.entity.RipreportProductinformation;
 import com.kuose.source.goods.dao.RipreportProductinformationMapper;
@@ -32,5 +33,10 @@ public class RipreportProductinformationServiceImpl extends ServiceImpl<Riprepor
     @Override
     public BoxGoods getGoods(String productno) {
         return productinformationMapper.getGoods(productno);
+    }
+
+    @Override
+    public List<AttributeSource> listAllAttibutes() {
+        return productinformationMapper.listAllAttibutes();
     }
 }

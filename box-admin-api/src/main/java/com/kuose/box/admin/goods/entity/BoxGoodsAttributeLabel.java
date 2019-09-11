@@ -1,6 +1,7 @@
 package com.kuose.box.admin.goods.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModelProperty;
@@ -77,6 +78,7 @@ private static final long serialVersionUID=1L;
      * 子节点
      */
     @ApiModelProperty(value="子节点", hidden = true)
+    @TableField(exist = false)
     private List<BoxGoodsAttributeLabel> children;
 
 }

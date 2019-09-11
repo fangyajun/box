@@ -117,4 +117,49 @@
     </select>
 
 
+    <resultMap id="AttibutesResultMap" type="com.kuose.source.goods.entity.AttributeSource" >
+        <result column="Attributegroupname" property="attributeGroupname" />
+        <result column="attributename" property="attributeName" />
+        <result column="attributedata" property="attributeData" />
+    </resultMap>
+    <!--获取数据源的所有属性-->
+    <select id="listAllAttibutes" resultMap="AttibutesResultMap">
+        SELECT Attributegroupname,attributename,attributedata FROM (
+            SELECT
+                d.designstyle ,
+                ag.Attributegroupname,
+                adata.attributeGroupId,
+                a.attributename,
+                adata.attributeId,
+                adata.attributedata
+            FROM
+                SCM_PRODUCT.dbo.ripreport_AttributeData AS adata
+            LEFT JOIN SCM_PRODUCT.dbo.ripreport_designstylerecords AS d ON d.autoid = adata.businessautoid
+            LEFT JOIN SCM_PRODUCT.dbo.ripreport_Attributegroup AS ag ON ag.autoid = adata.attributegroupid
+            LEFT JOIN SCM_PRODUCT.dbo.ripreport_Attribute AS a ON a.autoid = adata.attributeid
+            WHERE
+                adata.flag = 0
+        ) t GROUP BY t.Attributegroupname,attributename,attributedata ORDER BY Attributegroupname,attributename
+    </select>
+
+    <!--根据商品id获取商品的属性-->
+    <select id="getGoodsAttibuteByGoodsId" resultMap="GoodsResultMap">
+        select
+            ag.Attributegroupname,
+            a.attributename,
+            adata.attributedata
+        from ripreport_ProductInformationDesignstyle rpds
+        left join ripreport_designstylerecords as d on rpds.designStyle = d.designStyle
+        left join ripreport_AttributeData as adata ON d.autoid = adata.businessautoid
+        left join ripreport_Attributegroup AS ag ON ag.autoid = adata.attributegroupid
+        LEFT JOIN ripreport_Attribute AS a ON a.autoid = adata.attributeid
+        where adata.flag = 0 and rpds.productInformationAutoid = #{goodsId}
+    </select>
+
+
+
+
+
+
+
 </mapper>

@@ -1,5 +1,6 @@
 package com.kuose.source.goods.dao;
 
+import com.kuose.source.goods.entity.AttributeSource;
 import com.kuose.source.goods.entity.BoxGoods;
 import com.kuose.source.goods.entity.RipreportProductinformation;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -20,4 +21,6 @@ public interface RipreportProductinformationMapper extends BaseMapper<RipreportP
     List<BoxGoods> listGoods(@Param("productno") String productno, @Param("goodsName") String goodsName, @Param("year") String year);
 
     BoxGoods getGoods(@Param("productno") String productno);
+
+    List<AttributeSource> listAllAttibutes();
 }

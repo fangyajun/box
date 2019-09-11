@@ -1,5 +1,6 @@
 package com.kuose.source.goods.service;
 
+import com.kuose.source.goods.entity.AttributeSource;
 import com.kuose.source.goods.entity.BoxGoods;
 import com.kuose.source.goods.entity.RipreportProductinformation;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -19,4 +20,6 @@ public interface RipreportProductinformationService extends IService<RipreportPr
     List<BoxGoods> listGoods(String productno, String goodsName, String year);
 
     BoxGoods getGoods(String productno);
+
+    List<AttributeSource> listAllAttibutes();
 }

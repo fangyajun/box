@@ -43,7 +43,6 @@ public class GoodsMatchController {
             return Result.failure("数据异常,无此用户的基本信息");
         }
 
-
         Page<BoxGoods> boxGoodsPage = new Page<>();
         boxGoodsPage.setSize(limit);
         boxGoodsPage.setCurrent(page);
