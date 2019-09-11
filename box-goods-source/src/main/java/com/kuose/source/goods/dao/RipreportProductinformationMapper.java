@@ -23,4 +23,6 @@ public interface RipreportProductinformationMapper extends BaseMapper<RipreportP
     BoxGoods getGoods(@Param("productno") String productno);
 
     List<AttributeSource> listAllAttibutes();
+
+    List<AttributeSource > getGoodsAttibuteByGoodsId(Integer id);
 }

@@ -73,6 +73,7 @@
     </resultMap>
 
     <resultMap id="GoodsResultMap" type="com.kuose.source.goods.entity.BoxGoods" >
+        <result column="autoid" property="sourceGoodsId" />
         <result column="productno" property="goodsNo" />
         <result column="thirdCategoryStr" property="name" />
         <result column="firstCategory" property="brand" />
@@ -93,7 +94,7 @@
     </sql>
     
     <select id="listGoods" resultMap="GoodsResultMap">
-        select productno,thirdCategoryStr,firstCategory,secondCategory,img,productUrl,quarter,year,webcost,tagcost,hdcost,requireDate
+        select autoid,productno,thirdCategoryStr,firstCategory,secondCategory,img,productUrl,quarter,year,webcost,tagcost,hdcost,requireDate
         from ripreport_ProductInformation
         <where>
             flag = 0 and status = 0
@@ -143,7 +144,7 @@
     </select>
 
     <!--根据商品id获取商品的属性-->
-    <select id="getGoodsAttibuteByGoodsId" resultMap="GoodsResultMap">
+    <select id="getGoodsAttibuteByGoodsId" resultMap="AttibutesResultMap">
         select
             ag.Attributegroupname,
             a.attributename,
@@ -155,11 +156,6 @@
         LEFT JOIN ripreport_Attribute AS a ON a.autoid = adata.attributeid
         where adata.flag = 0 and rpds.productInformationAutoid = #{goodsId}
     </select>
-
-
-
-
-
 
 
 </mapper>

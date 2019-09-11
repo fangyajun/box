@@ -25,6 +25,9 @@ private static final long serialVersionUID=1L;
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    @ApiModelProperty(value="数据源商品表的id")
+    private Integer sourceGoodsId;
+
     /**
      * 商品编号/货号
      */

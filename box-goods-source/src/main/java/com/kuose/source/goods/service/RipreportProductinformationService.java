@@ -22,4 +22,6 @@ public interface RipreportProductinformationService extends IService<RipreportPr
     BoxGoods getGoods(String productno);
 
     List<AttributeSource> listAllAttibutes();
+
+    List<AttributeSource> getGoodsAttibuteByGoodsId(Integer id);
 }

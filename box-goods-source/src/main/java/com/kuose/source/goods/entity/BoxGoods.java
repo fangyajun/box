@@ -23,8 +23,10 @@ public class BoxGoods extends Model<BoxGoods> {
 
 private static final long serialVersionUID=1L;
 
-    @TableId(value = "autoid", type = IdType.AUTO)
     private Integer id;
+
+    @TableId(value = "autoid", type = IdType.AUTO)
+    private Integer sourceGoodsId;
 
     /**
      * 商品编号/货号

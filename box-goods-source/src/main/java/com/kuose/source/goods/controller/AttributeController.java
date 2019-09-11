@@ -30,5 +30,11 @@ public class AttributeController {
         return Result.success().setData("attributeSourceList", attributeSourceList);
     }
 
+    @GetMapping("/getGoodsAttibutes")
+    public Result getGoodsAttibutes(Integer id) {
+        List<AttributeSource> goodsAttributeList = ripreportProductinformationService.getGoodsAttibuteByGoodsId(id);
+        return Result.success().setData("goodsAttributeList", goodsAttributeList);
+    }
+
 
 }

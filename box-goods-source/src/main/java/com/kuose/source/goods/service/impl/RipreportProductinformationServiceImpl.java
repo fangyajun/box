@@ -39,4 +39,9 @@ public class RipreportProductinformationServiceImpl extends ServiceImpl<Riprepor
     public List<AttributeSource> listAllAttibutes() {
         return productinformationMapper.listAllAttibutes();
     }
+
+    @Override
+    public List<AttributeSource>getGoodsAttibuteByGoodsId(Integer id) {
+        return productinformationMapper.getGoodsAttibuteByGoodsId(id);
+    }
 }

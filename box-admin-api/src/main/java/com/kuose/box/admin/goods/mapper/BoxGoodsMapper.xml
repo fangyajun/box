@@ -5,6 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.kuose.box.admin.goods.entity.BoxGoods">
         <id column="id" property="id" />
+        <id column="source_goods_id" property="sourceGoodsId" />
         <result column="goods_no" property="goodsNo" />
         <result column="name" property="name" />
         <result column="brand" property="brand" />
@@ -134,7 +135,6 @@
     </select>
 
     <resultMap id="goodsMatchSkuResultMap" type="java.util.Map" >
-
         <id column="id" property="id" />
         <result column="goods_no" property="goodsNo" />
         <result column="name" property="name" />
