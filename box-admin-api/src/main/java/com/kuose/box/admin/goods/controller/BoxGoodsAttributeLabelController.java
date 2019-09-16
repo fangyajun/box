@@ -78,13 +78,13 @@ public class BoxGoodsAttributeLabelController {
     }
 
     @ApiOperation(value="同步属性标签,从数据源同步属性")
-    @GetMapping
+    @GetMapping("/syncAttributeSource")
     public Result syncAttributeSource () {
-        String bookListUrl = "http://localhost:10303/ripreportProductinformation/listAllAttibutes";
+        String listAllAttibutesUrl = "http://localhost:10303/attributeController/listAllAttibutes";
         HttpHeaders requestHeaders = new HttpHeaders();
         HttpEntity<String> httpEntity = new HttpEntity<>(null, requestHeaders);
 
-        ResponseEntity<JSONObject> exchange = restTemplate.exchange(bookListUrl, HttpMethod.GET, httpEntity, JSONObject.class);
+        ResponseEntity<JSONObject> exchange = restTemplate.exchange(listAllAttibutesUrl, HttpMethod.GET, httpEntity, JSONObject.class);
         JSONObject jsonResult = exchange.getBody();
         JSONObject data = jsonResult.getJSONObject("data");
         JSONArray jsonArray = data.getJSONArray("attributeSourceList");
@@ -118,14 +118,14 @@ public class BoxGoodsAttributeLabelController {
             BoxGoodsAttributeLabel secondAttributeLabel = boxGoodsAttributeLabelService.getOne(new QueryWrapper<BoxGoodsAttributeLabel>().
                     eq("parent_id", firstAttributeLabel.getId()).eq("deleted", 0).eq("attribute_name", attributeName));
             if (secondAttributeLabel == null) {
-               secondAttributeLabel = new BoxGoodsAttributeLabel();
-               secondAttributeLabel.setParentId(firstAttributeLabel.getId());
-               secondAttributeLabel.setAttributeName(attributeName);
-               secondAttributeLabel.setAttributeCode(generateAttributeCode(attributeName));
-               secondAttributeLabel.setAttributeFlag("sync");
-               secondAttributeLabel.setType(1);
-               secondAttributeLabel.setUpdateTime(System.currentTimeMillis());
-               secondAttributeLabel.setAddTime(System.currentTimeMillis());
+                secondAttributeLabel = new BoxGoodsAttributeLabel();
+                secondAttributeLabel.setParentId(firstAttributeLabel.getId());
+                secondAttributeLabel.setAttributeName(attributeName);
+                secondAttributeLabel.setAttributeCode(generateAttributeCode(attributeName));
+                secondAttributeLabel.setAttributeFlag("sync");
+                secondAttributeLabel.setType(1);
+                secondAttributeLabel.setUpdateTime(System.currentTimeMillis());
+                secondAttributeLabel.setAddTime(System.currentTimeMillis());
 
                boxGoodsAttributeLabelService.save(secondAttributeLabel);
            }
@@ -149,7 +149,6 @@ public class BoxGoodsAttributeLabelController {
 
         return Result.success();
     }
-
 
 
     @ApiOperation(value="商品属性标签列表")
@@ -210,7 +209,6 @@ public class BoxGoodsAttributeLabelController {
             List<BoxGoodsAttributeLabel> attributeLabels = boxGoodsAttributeLabelService.list(new QueryWrapper<BoxGoodsAttributeLabel>().eq("parent_id", boxGoodsAttributeLabel.getId()));
             remove(attributeLabels);
         }
-
     }
 }
 

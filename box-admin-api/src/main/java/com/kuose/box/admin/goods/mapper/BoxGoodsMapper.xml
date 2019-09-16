@@ -35,7 +35,7 @@
     <select id="listGoodsPage" resultMap="BaseResultMap">
         SELECT bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
         FROM box_goods bg
-        LEFT JOIN box_goods_attribute bga ON bg.id = bga.goods_id
+        left JOIN box_goods_attribute bga ON bg.id = bga.goods_id
         <where>
             bg.deleted = 0
             <if test="categoryCode != null">
@@ -88,8 +88,8 @@
     <select id="listGoodsAndSku" parameterType="com.kuose.box.admin.goods.dto.GoodsSkuVo" resultMap="goodsMatchSkuResultMap">
         SELECT bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price,GROUP_CONCAT(bgs.id) AS sku_ids
         FROM box_goods bg
-        LEFT JOIN box_goods_attribute bga ON bg.id = bga.goods_id
-        right JOIN box_goods_sku bgs ON bg.id = bgs.goods_id
+        left JOIN box_goods_attribute bga ON bg.id = bga.goods_id
+        left JOIN box_goods_sku bgs ON bg.id = bgs.goods_id
         <where>
             bg.id is not NULL
             and bg.deleted = 0
@@ -152,7 +152,7 @@
         SELECT bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price,GROUP_CONCAT(bgs.id) AS sku_ids
         FROM box_goods bg
         LEFT JOIN box_goods_attribute bga ON bg.id = bga.goods_id
-        right JOIN box_goods_sku bgs ON bg.id = bgs.goods_id
+        LEFT JOIN box_goods_sku bgs ON bg.id = bgs.goods_id
         <where>
             bg.id is not NULL
             and bg.deleted = 0

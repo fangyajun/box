@@ -27,4 +27,21 @@
         id, username, password, gender, birthday, last_login_time, last_login_ip, nickname, mobile, userpic, weixin_openid, session_key, status, create_time, update_time, deleted
     </sql>
 
+
+    <select id="listUser" parameterType="com.kuose.box.admin.goods.dto.GoodsSkuVo" resultMap="BaseResultMap">
+        SELECT id, gender, birthday, last_login_time, last_login_ip, nickname, mobile, userpic, weixin_openid, session_key, status, create_time, update_time
+        FROM box_user
+        <where>
+              deleted = 0
+            <if test="mobile != null" >
+                and mobile like CONCAT('%',#{mobile},'%')
+            </if>
+            <if test="weixinOpenid != null" >
+                and weixin_openid like CONCAT('%',#{weixinOpenid},'%')
+            </if>
+        </where>
+    </select>
+
+
+
 </mapper>

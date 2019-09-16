@@ -61,6 +61,9 @@ public class RipreportProductInformationController {
             return Result.failure("参数商品货号必传");
         }
         BoxGoods boxGoods = ripreportProductinformationService.getGoods(productno);
+        if (boxGoods == null) {
+            return Result.failure("无此此商品数据，查看货号是否正确");
+        }
         List<BoxGoodsSku> goodsSkuList = ripreportProductinformationskuService.listGoodsSku(boxGoods.getGoodsNo());
         return Result.success().setData("boxGoods", boxGoods).setData("goodsSkuList", goodsSkuList);
     }

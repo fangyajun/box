@@ -89,7 +89,7 @@ public class BoxSurveyController {
 
 
     @ApiOperation(value="删除")
-    @PostMapping
+    @PostMapping("/delete")
     public Result delete(@RequestBody BoxSurvey boxSurvey) {
         if (boxSurvey.getId() == null) {
             return Result.failure("缺少必传参数");

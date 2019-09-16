@@ -112,7 +112,7 @@
     </select>
 
     <select id="getGoods" resultMap="GoodsResultMap">
-        select productno,thirdCategoryStr,firstCategory,secondCategory,img,productUrl,quarter,year,webcost,tagcost,hdcost,requireDate
+        select autoid,productno,thirdCategoryStr,firstCategory,secondCategory,img,productUrl,quarter,year,webcost,tagcost,hdcost,requireDate
         from ripreport_ProductInformation
         where productno = #{productno}
     </select>

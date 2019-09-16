@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Api(tags = {"商品属性"})
 @RestController
-@RequestMapping("/ripreportProductinformation")
+@RequestMapping("/attributeController")
 public class AttributeController {
 
     @Autowired

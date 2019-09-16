@@ -54,7 +54,7 @@ public class MpGenerator {
         StrategyConfig strategyConfig = new StrategyConfig();
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         // 生成的表
-        strategyConfig.setInclude("box_user_base");
+        strategyConfig.setInclude("box_user");
 //        strategyConfig.setInclude("box_order", "box_order_goods");
 
         new AutoGenerator().setDataSource(dataSourceConfig)
