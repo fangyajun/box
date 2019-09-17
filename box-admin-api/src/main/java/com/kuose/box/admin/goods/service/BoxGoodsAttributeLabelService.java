@@ -15,5 +15,7 @@ import java.util.List;
  */
 public interface BoxGoodsAttributeLabelService extends IService<BoxGoodsAttributeLabel> {
 
-    List<BoxGoodsAttributeLabel> listGoodsAttributeLabel(String type);
+    List<BoxGoodsAttributeLabel> listGoodsAttributeLabel(String type, String nodeCategory);
+
+    List<BoxGoodsAttributeLabel> listNodeCategory();
 }

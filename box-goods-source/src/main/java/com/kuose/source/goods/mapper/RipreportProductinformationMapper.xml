@@ -118,44 +118,71 @@
     </select>
 
 
-    <resultMap id="AttibutesResultMap" type="com.kuose.source.goods.entity.AttributeSource" >
-        <result column="Attributegroupname" property="attributeGroupname" />
-        <result column="attributename" property="attributeName" />
-        <result column="attributedata" property="attributeData" />
-    </resultMap>
+
     <!--获取数据源的所有属性-->
-    <select id="listAllAttibutes" resultMap="AttibutesResultMap">
-        SELECT Attributegroupname,attributename,attributedata FROM (
-            SELECT
-                d.designstyle ,
-                ag.Attributegroupname,
-                adata.attributeGroupId,
-                a.attributename,
-                adata.attributeId,
-                adata.attributedata
-            FROM
-                SCM_PRODUCT.dbo.ripreport_AttributeData AS adata
-            LEFT JOIN SCM_PRODUCT.dbo.ripreport_designstylerecords AS d ON d.autoid = adata.businessautoid
-            LEFT JOIN SCM_PRODUCT.dbo.ripreport_Attributegroup AS ag ON ag.autoid = adata.attributegroupid
-            LEFT JOIN SCM_PRODUCT.dbo.ripreport_Attribute AS a ON a.autoid = adata.attributeid
-            WHERE
-                adata.flag = 0
-        ) t GROUP BY t.Attributegroupname,attributename,attributedata ORDER BY Attributegroupname,attributename
-    </select>
+    <!--<select id="listAllAttibutes" resultMap="AttibutesResultMap">-->
+        <!--SELECT Attributegroupname,attributename,attributedata FROM (-->
+            <!--SELECT-->
+                <!--d.designstyle ,-->
+                <!--ag.Attributegroupname,-->
+                <!--adata.attributeGroupId,-->
+                <!--a.attributename,-->
+                <!--adata.attributeId,-->
+                <!--adata.attributedata-->
+            <!--FROM-->
+                <!--SCM_PRODUCT.dbo.ripreport_AttributeData AS adata-->
+            <!--LEFT JOIN SCM_PRODUCT.dbo.ripreport_designstylerecords AS d ON d.autoid = adata.businessautoid-->
+            <!--LEFT JOIN SCM_PRODUCT.dbo.ripreport_Attributegroup AS ag ON ag.autoid = adata.attributegroupid-->
+            <!--LEFT JOIN SCM_PRODUCT.dbo.ripreport_Attribute AS a ON a.autoid = adata.attributeid-->
+            <!--WHERE-->
+                <!--adata.flag = 0-->
+        <!--) t GROUP BY t.Attributegroupname,attributename,attributedata ORDER BY Attributegroupname,attributename-->
+    <!--</select>-->
+
+    <resultMap id="AttibutesGoodsResultMap" type="com.kuose.source.goods.entity.AttributeSource" >
+        <result column="Attributegroupname" property="attributeGroupName" />
+        <result column="attributename" property="attributeName" />
+        <result column="attributedata" property="attributeValueName" />
+        <result column="attributeGroupType" property="attributeGroupType" />
+    </resultMap>
 
     <!--根据商品id获取商品的属性-->
-    <select id="getGoodsAttibuteByGoodsId" resultMap="AttibutesResultMap">
+    <select id="getGoodsAttibuteByGoodsId" resultMap="AttibutesGoodsResultMap">
         select
             ag.Attributegroupname,
             a.attributename,
+            baa.attributeGroupType,
             adata.attributedata
         from ripreport_ProductInformationDesignstyle rpds
         left join ripreport_designstylerecords as d on rpds.designStyle = d.designStyle
         left join ripreport_AttributeData as adata ON d.autoid = adata.businessautoid
         left join ripreport_Attributegroup AS ag ON ag.autoid = adata.attributegroupid
+        left JOIN ripreport_BusinessAttributeAppliedNew baa ON baa.attributeGroupId = ag.autoid AND baa.flag = 0
         LEFT JOIN ripreport_Attribute AS a ON a.autoid = adata.attributeid
         where adata.flag = 0 and rpds.productInformationAutoid = #{goodsId}
     </select>
+
+
+    <resultMap id="AttibutesResultMap" type="com.kuose.source.goods.entity.AttributeSource" >
+        <result column="attributeGroupName" property="attributeGroupName" />
+        <result column="attributeGroupType" property="attributeGroupType" />
+        <result column="attributeName" property="attributeName" />
+        <result column="attributeOrder" property="attributeOrder" />
+        <result column="selectWay" property="selectWay" />
+        <result column="attributeValueName" property="attributeValueName" />
+        <result column="attributeValueOrder" property="attributeValueOrder" />
+    </resultMap>
+    <select id="listAllAttibutes" resultMap="AttibutesResultMap">
+       SELECT ag.attributeGroupName,baa.attributeGroupType,ra.attributeName,ragt.itemOrder as attributeOrder,ragt.selectWay,av.attributeValueName,ar.itemOrder AS attributeValueOrder
+       FROM ripreport_Attributegroup ag
+       RIGHT JOIN ripreport_BusinessAttributeAppliedNew baa ON baa.attributeGroupId = ag.autoid AND baa.flag = 0
+       LEFT JOIN ripreport_AttributeGroupRelation ragt ON ag.autoid = ragt.attributeGroupId AND ragt.flag = 0
+       LEFT JOIN ripreport_Attribute ra on ragt.attributeId = ra.autoid AND ra.flag = 0
+       LEFT JOIN ripreport_AttributeRelation ar ON ar.attributeId = ra.autoid AND ar.flag = 0
+       LEFT JOIN ripreport_AttributeValue av ON av.autoid = ar.attributeValueId AND av.flag = 0
+       WHERE ag.attributeGroupName in ('产品指数','流行元素','风格','面料版型') and attributeValueName is not null and attributeName is not null
+    </select>
+
 
 
 </mapper>

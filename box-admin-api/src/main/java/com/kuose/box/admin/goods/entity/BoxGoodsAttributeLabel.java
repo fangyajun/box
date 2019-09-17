@@ -43,17 +43,23 @@ private static final long serialVersionUID=1L;
     @ApiModelProperty(value="商品参数编码，新增不用传")
     private String attributeCode;
 
+    @ApiModelProperty(value="头标签的类别")
+    private String headNodeCategory;
+
     /**
      * 属性的标记
      */
     @ApiModelProperty(value="属性标记，特殊情况下需要填写，如需要单纯查出来的时候根据填写的attributeFlag查询", example = "一般不需要填写，需要单纯查出来的时候根据填写的attributeFlag查询,如:衣服的材质")
     private String attributeFlag;
 
+    @ApiModelProperty(value="标签的排序")
+    private Integer attributeSort;
+
 
     /**
      * 属性类别
      */
-    @ApiModelProperty(value="属性的类别，0:无选择，如叶子节点，1:单选，2:多选，3:填空", example = "属性的类别，0:无选择，如叶子节点，1:单选，2:多选，3:填空")
+    @ApiModelProperty(value="属性的类别，-1:无选择，如叶子节点，0:单选，1:多选，2:填空", example = "属性的类别，-1:无选择，如叶子节点，0:单选，1:多选，2:填空")
     private Integer type;
 
     /**

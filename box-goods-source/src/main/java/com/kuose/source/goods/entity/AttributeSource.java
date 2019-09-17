@@ -9,8 +9,11 @@ import lombok.Data;
  */
 @Data
 public class AttributeSource {
-
-    private String attributeGroupname;
+    private String attributeGroupName;
+    private String attributeGroupType;
     private String attributeName;
-    private String attributeData;
+    private Integer attributeOrder;
+    private Integer selectWay;
+    private String attributeValueName;
+    private Integer attributeValueOrder;
 }

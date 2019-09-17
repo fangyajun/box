@@ -24,7 +24,12 @@ public class BoxGoodsAttributeLabelServiceImpl extends ServiceImpl<BoxGoodsAttri
     private  BoxGoodsAttributeLabelMapper boxGoodsAttributeLabelMapper;
 
     @Override
-    public List<BoxGoodsAttributeLabel> listGoodsAttributeLabel(String type) {
-        return boxGoodsAttributeLabelMapper.listGoodsAttributeLabel(type);
+    public List<BoxGoodsAttributeLabel> listGoodsAttributeLabel(String type,String nodeCategory) {
+        return boxGoodsAttributeLabelMapper.listGoodsAttributeLabel(type, nodeCategory);
+    }
+
+    @Override
+    public List<BoxGoodsAttributeLabel> listNodeCategory() {
+        return boxGoodsAttributeLabelMapper.listNodeCategory();
     }
 }

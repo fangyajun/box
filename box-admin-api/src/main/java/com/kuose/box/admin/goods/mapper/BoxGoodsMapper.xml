@@ -93,8 +93,11 @@
         <where>
             bg.id is not NULL
             and bg.deleted = 0
-            <if test="categoryCode != null">
-                and bg.category_code = #{categoryCode,jdbcType=VARCHAR}
+            <if test="categoryCode != null and categoryCode.length >= 1">
+                and bg.category_code in
+                <foreach collection="categoryCode" index="index" item="categoryCode" open="(" separator="," close=")">
+                    #{categoryCode}
+                </foreach>
             </if>
             <if test="goodsNo != null" >
                 and bg.goods_no like CONCAT('%',#{goodsNo},'%')
@@ -145,7 +148,7 @@
         <result column="quarter" property="quarter" />
         <result column="year" property="year" />
         <result column="retail_price" property="retailPrice" />
-        <result column="sku_ids" property="skuIds" />
+        <!--<result column="sku_ids" property="skuIds" />-->
         <collection property="boxGoodsSkuList" ofType = "java.util.Map" select="com.kuose.box.admin.goods.dao.BoxGoodsSkuMapper.listSkuById" column="sku_ids" />
     </resultMap>
     <select id="listMatchGoods" parameterType="com.kuose.box.admin.goods.dto.GoodsSkuVo" resultMap="goodsMatchSkuResultMap" >
@@ -156,8 +159,11 @@
         <where>
             bg.id is not NULL
             and bg.deleted = 0
-            <if test="categoryCode != null">
-                and bg.category_code = #{categoryCode,jdbcType=VARCHAR}
+            <if test="categoryCode != null and categoryCode.length >= 1">
+                and bg.category_code in
+                <foreach collection="categoryCode" index="index" item="categoryCode" open="(" separator="," close=")">
+                    #{categoryCode}
+                </foreach>
             </if>
             <if test="goodsNo != null" >
                 and bg.goods_no like CONCAT('%',#{goodsNo},'%')

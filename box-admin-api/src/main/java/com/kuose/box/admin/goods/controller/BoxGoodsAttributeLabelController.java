@@ -21,7 +21,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -80,7 +82,8 @@ public class BoxGoodsAttributeLabelController {
     @ApiOperation(value="同步属性标签,从数据源同步属性")
     @GetMapping("/syncAttributeSource")
     public Result syncAttributeSource () {
-        String listAllAttibutesUrl = "http://localhost:10303/attributeController/listAllAttibutes";
+        // String listAllAttibutesUrl = "http://localhost:10303/attributeController/listAllAttibutes";
+        String listAllAttibutesUrl = "http://192.168.5.177:10303/ripreportProductinformation/listAllAttibutes";
         HttpHeaders requestHeaders = new HttpHeaders();
         HttpEntity<String> httpEntity = new HttpEntity<>(null, requestHeaders);
 
@@ -94,20 +97,27 @@ public class BoxGoodsAttributeLabelController {
         List<AttributeSource> attributeSourceList = jsonArray.toJavaList(AttributeSource.class);
 
         for (AttributeSource attributeSource : attributeSourceList) {
-            String attributeGroupname = attributeSource.getAttributeGroupname();
+            String attributeGroupName = attributeSource.getAttributeGroupName();
+            String attributeGroupType = attributeSource.getAttributeGroupType();
+
             String attributeName = attributeSource.getAttributeName();
-            String attributeData = attributeSource.getAttributeData();
+            Integer attributeOrder = attributeSource.getAttributeOrder();
+            Integer selectWay = attributeSource.getSelectWay();
+
+            String attributeData = attributeSource.getAttributeValueName();
+            Integer attributeValueOrder = attributeSource.getAttributeValueOrder();
 
             BoxGoodsAttributeLabel firstAttributeLabel = boxGoodsAttributeLabelService.getOne(new QueryWrapper<BoxGoodsAttributeLabel>().
-                    eq("attribute_name", attributeGroupname).eq("deleted", 0).eq("parent_id", 0));
+                    eq("attribute_name", attributeGroupName).eq("head_node_category",attributeGroupType).eq("deleted", 0).eq("parent_id", 0));
             // 没有查到，创建头节点
            if (firstAttributeLabel == null) {
                firstAttributeLabel = new BoxGoodsAttributeLabel();
                firstAttributeLabel.setParentId(0);
-               firstAttributeLabel.setAttributeName(attributeGroupname);
-               firstAttributeLabel.setAttributeCode(generateAttributeCode(attributeGroupname));
+               firstAttributeLabel.setAttributeName(attributeGroupName);
+               firstAttributeLabel.setAttributeCode(generateAttributeCode(attributeGroupName));
+               firstAttributeLabel.setHeadNodeCategory(attributeGroupType);
                firstAttributeLabel.setAttributeFlag("sync");
-               firstAttributeLabel.setType(0);
+               firstAttributeLabel.setType(-1);
                firstAttributeLabel.setUpdateTime(System.currentTimeMillis());
                firstAttributeLabel.setAddTime(System.currentTimeMillis());
 
@@ -123,7 +133,8 @@ public class BoxGoodsAttributeLabelController {
                 secondAttributeLabel.setAttributeName(attributeName);
                 secondAttributeLabel.setAttributeCode(generateAttributeCode(attributeName));
                 secondAttributeLabel.setAttributeFlag("sync");
-                secondAttributeLabel.setType(1);
+                secondAttributeLabel.setType(selectWay);
+                secondAttributeLabel.setAttributeSort(attributeOrder);
                 secondAttributeLabel.setUpdateTime(System.currentTimeMillis());
                 secondAttributeLabel.setAddTime(System.currentTimeMillis());
 
@@ -138,8 +149,9 @@ public class BoxGoodsAttributeLabelController {
                 thirdAttributeLabel.setParentId(secondAttributeLabel.getId());
                 thirdAttributeLabel.setAttributeName(attributeData);
                 thirdAttributeLabel.setAttributeCode(generateAttributeCode(attributeData));
+                thirdAttributeLabel.setAttributeSort(attributeValueOrder);
                 thirdAttributeLabel.setAttributeFlag("sync");
-                thirdAttributeLabel.setType(1);
+                thirdAttributeLabel.setType(-1);
                 thirdAttributeLabel.setUpdateTime(System.currentTimeMillis());
                 thirdAttributeLabel.setAddTime(System.currentTimeMillis());
 
@@ -154,8 +166,8 @@ public class BoxGoodsAttributeLabelController {
     @ApiOperation(value="商品属性标签列表")
     @ApiImplicitParam(name = "attributeFlag", value = "属性属性标记,特殊时候需要填写，根据添加时候传入的", required = false, dataType = "String")
     @GetMapping("/list")
-    public Result list(String attributeFlag) {
-        List<BoxGoodsAttributeLabel> boxGoodsAttributeLabelList = boxGoodsAttributeLabelService.listGoodsAttributeLabel(attributeFlag);
+    public Result list(String attributeFlag, String nodeCategory) {
+        List<BoxGoodsAttributeLabel> boxGoodsAttributeLabelList = boxGoodsAttributeLabelService.listGoodsAttributeLabel(attributeFlag, nodeCategory);
         return Result.success().setData("boxGoodsAttributeLabelList", boxGoodsAttributeLabelList);
     }
 
@@ -209,6 +221,20 @@ public class BoxGoodsAttributeLabelController {
             List<BoxGoodsAttributeLabel> attributeLabels = boxGoodsAttributeLabelService.list(new QueryWrapper<BoxGoodsAttributeLabel>().eq("parent_id", boxGoodsAttributeLabel.getId()));
             remove(attributeLabels);
         }
+    }
+
+    @ApiOperation(value="获取属性的类别")
+    @GetMapping("/listNodeCategory")
+    public Result listNodeCategory() {
+        List<BoxGoodsAttributeLabel> labelCategoryList = boxGoodsAttributeLabelService.listNodeCategory();
+        Map<String,String> resultMap = new HashMap<>();
+        if (labelCategoryList != null && labelCategoryList.size() >= 1) {
+            for (BoxGoodsAttributeLabel attributeLabel : labelCategoryList) {
+                resultMap.put(attributeLabel.getHeadNodeCategory(), attributeLabel.getHeadNodeCategory());
+            }
+        }
+
+        return Result.success().setData("resultMap", resultMap);
     }
 }
 

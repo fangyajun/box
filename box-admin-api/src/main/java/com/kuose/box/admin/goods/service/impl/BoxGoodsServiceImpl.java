@@ -11,8 +11,10 @@ import com.kuose.box.admin.goods.dto.GoodsQueryParameter;
 import com.kuose.box.admin.goods.dto.GoodsSkuVo;
 import com.kuose.box.admin.goods.entity.BoxGoods;
 import com.kuose.box.admin.goods.entity.BoxGoodsAttribute;
+import com.kuose.box.admin.goods.entity.BoxGoodsCategory;
 import com.kuose.box.admin.goods.entity.BoxGoodsSku;
 import com.kuose.box.admin.goods.service.BoxGoodsAttributeService;
+import com.kuose.box.admin.goods.service.BoxGoodsCategoryService;
 import com.kuose.box.admin.goods.service.BoxGoodsService;
 import com.kuose.box.admin.goods.service.BoxGoodsSkuService;
 import com.kuose.box.admin.match.dto.GoodsMatchParameter;
@@ -20,6 +22,8 @@ import com.kuose.box.common.config.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * <p>
@@ -38,6 +42,8 @@ public class BoxGoodsServiceImpl extends ServiceImpl<BoxGoodsMapper, BoxGoods> i
     private BoxGoodsAttributeService boxGoodsAttributeService;
     @Autowired
     private BoxGoodsSkuService boxGoodsSkuService;
+    @Autowired
+    private BoxGoodsCategoryService boxGoodsCategoryService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -149,14 +155,56 @@ public class BoxGoodsServiceImpl extends ServiceImpl<BoxGoodsMapper, BoxGoods> i
 
     @Override
     public IPage<GoodsSkuVo> listGoodsAndSku(Page<BoxGoods> boxGoodsPage, GoodsQueryParameter goodsQueryParameter) {
-        return boxGoodsMapper.listGoodsAndSku(boxGoodsPage, goodsQueryParameter.getCategoryCode(), goodsQueryParameter.getGoodsNo(), goodsQueryParameter.getGoodsName(),
+        String[] categoryCodes = null;
+        // 如果传进来是大类别，就找出大类别下的子类别并加入数组
+        if ("SZ".equals(goodsQueryParameter.getCategoryCode()) || "QZ".equals(goodsQueryParameter.getCategoryCode()) ||
+                "XZ".equals(goodsQueryParameter.getCategoryCode()) || "PS".equals(goodsQueryParameter.getCategoryCode())) {
+            BoxGoodsCategory boxGoodsCategory = boxGoodsCategoryService.getOne(new QueryWrapper<BoxGoodsCategory>().eq("category_code", goodsQueryParameter.getCategoryCode()));
+            List<BoxGoodsCategory> goodsCategories = boxGoodsCategoryService.list(new QueryWrapper<BoxGoodsCategory>().eq("parent_id", boxGoodsCategory.getId()).eq("deleted", 0));
+            if (goodsCategories != null && goodsCategories.size() >= 1) {
+                // 数组初始化
+                categoryCodes = new String[goodsCategories.size()];
+                int i = 0;
+                for (BoxGoodsCategory goodsCategory : goodsCategories) {
+                    categoryCodes[i++] =   goodsCategory.getCategoryCode();
+                }
+            }
+        } else {
+            if (goodsQueryParameter.getCategoryCode() != null) {
+                categoryCodes = new String[1];
+                categoryCodes [0] = goodsQueryParameter.getCategoryCode();
+            }
+        }
+
+        return boxGoodsMapper.listGoodsAndSku(boxGoodsPage, categoryCodes, goodsQueryParameter.getGoodsNo(), goodsQueryParameter.getGoodsName(),
                 goodsQueryParameter.getQuarter(), goodsQueryParameter.getYear(), goodsQueryParameter.getLowPrice(), goodsQueryParameter.getHighPrice(), goodsQueryParameter.getGoodsAttributeCodes(),
                 goodsQueryParameter.getColorName(), goodsQueryParameter.getColorCode(), goodsQueryParameter.getSizeCode());
     }
 
     @Override
     public IPage<GoodsSkuVo> listMatchGoods(Page<BoxGoods> boxGoodsPage, GoodsMatchParameter goodsMatchParameter) {
-        return boxGoodsMapper.listMatchGoods(boxGoodsPage, goodsMatchParameter.getCategoryCode(), goodsMatchParameter.getGoodsNo(), goodsMatchParameter.getGoodsName(),
+        String[] categoryCodes = null;
+        // 如果传进来是大类别，就找出大类别下的子类别并加入数组
+        if ("SZ".equals(goodsMatchParameter.getCategoryCode()) || "QZ".equals(goodsMatchParameter.getCategoryCode()) ||
+                "XZ".equals(goodsMatchParameter.getCategoryCode()) || "PS".equals(goodsMatchParameter.getCategoryCode())) {
+            BoxGoodsCategory boxGoodsCategory = boxGoodsCategoryService.getOne(new QueryWrapper<BoxGoodsCategory>().eq("category_code", goodsMatchParameter.getCategoryCode()));
+            List<BoxGoodsCategory> goodsCategories = boxGoodsCategoryService.list(new QueryWrapper<BoxGoodsCategory>().eq("parent_id", boxGoodsCategory.getId()).eq("deleted", 0));
+            if (goodsCategories != null && goodsCategories.size() >= 1) {
+                // 数组初始化
+                categoryCodes = new String[goodsCategories.size()];
+                int i = 0;
+                for (BoxGoodsCategory goodsCategory : goodsCategories) {
+                    categoryCodes[i++] =   goodsCategory.getCategoryCode();
+                }
+            }
+        } else {
+            if (goodsMatchParameter.getCategoryCode() != null) {
+                categoryCodes = new String[1];
+                categoryCodes [0] = goodsMatchParameter.getCategoryCode();
+            }
+        }
+
+        return boxGoodsMapper.listMatchGoods(boxGoodsPage, categoryCodes, goodsMatchParameter.getGoodsNo(), goodsMatchParameter.getGoodsName(),
                 goodsMatchParameter.getQuarter(), goodsMatchParameter.getYear(), goodsMatchParameter.getLowPrice(), goodsMatchParameter.getHighPrice(),
                 goodsMatchParameter.getGoodsAttributeCodes(), goodsMatchParameter.getColorName(), goodsMatchParameter.getColorCode(), goodsMatchParameter.getSizeCode(),
                 goodsMatchParameter.getAvoidColor(), goodsMatchParameter.getAvoidTexture(), goodsMatchParameter.getAvoidCategory(), goodsMatchParameter.getAvoidFigure(),

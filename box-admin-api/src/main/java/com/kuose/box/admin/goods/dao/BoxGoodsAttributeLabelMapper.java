@@ -2,6 +2,7 @@ package com.kuose.box.admin.goods.dao;
 
 import com.kuose.box.admin.goods.entity.BoxGoodsAttributeLabel;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,5 +16,7 @@ import java.util.List;
  */
 public interface BoxGoodsAttributeLabelMapper extends BaseMapper<BoxGoodsAttributeLabel> {
 
-    List<BoxGoodsAttributeLabel> listGoodsAttributeLabel(String type);
+    List<BoxGoodsAttributeLabel> listGoodsAttributeLabel(@Param("type")String type, @Param("nodeCategory")String nodeCategory);
+
+    List<BoxGoodsAttributeLabel> listNodeCategory();
 }

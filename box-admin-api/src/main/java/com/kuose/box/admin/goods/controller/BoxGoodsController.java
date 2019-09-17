@@ -95,7 +95,8 @@ public class BoxGoodsController {
                 continue;
             }
 
-            String listGoodsAttibutesUrl = "http://localhost:10303/attributeController/getGoodsAttibutes?id=" + goods.getSourceGoodsId();
+//             String listGoodsAttibutesUrl = "http://localhost:10303/attributeController/getGoodsAttibutes?id=" + goods.getSourceGoodsId();
+            String listGoodsAttibutesUrl = "http://192.168.5.177:10303/ripreportProductinformation/getGoodsAttibutes?id=" + goods.getSourceGoodsId();
             HttpHeaders requestHeaders = new HttpHeaders();
             HttpEntity<String> httpEntity = new HttpEntity<>(null, requestHeaders);
 
@@ -109,13 +110,14 @@ public class BoxGoodsController {
 
             List<AttributeSource> attributeSourceList = jsonArray.toJavaList(AttributeSource.class);
             for (AttributeSource attributeSource : attributeSourceList) {
-                String attributeGroupname = attributeSource.getAttributeGroupname();
+                String attributeGroupname = attributeSource.getAttributeGroupName();
+                String attributeGroupType = attributeSource.getAttributeGroupType();
                 String attributeName = attributeSource.getAttributeName();
-                String attributeData = attributeSource.getAttributeData();
+                String attributeData = attributeSource.getAttributeValueName();
 
                 // 查询商品属性对应的属性编码
                 QueryWrapper<BoxGoodsAttributeLabel> queryFirstAttribute = new QueryWrapper<BoxGoodsAttributeLabel>().eq("parent_id", 0).
-                        eq("attribute_name", attributeGroupname).eq("deleted", 0).eq("attribute_flag", "sync");
+                        eq("attribute_name", attributeGroupname).eq("head_node_category", attributeGroupType).eq("deleted", 0).eq("attribute_flag", "sync");
                 BoxGoodsAttributeLabel firstAttribute = boxGoodsAttributeLabelService.getOne(queryFirstAttribute);
                 if (firstAttribute == null) {
                     continue;
@@ -123,13 +125,13 @@ public class BoxGoodsController {
                 QueryWrapper<BoxGoodsAttributeLabel> querySecondAttribute = new QueryWrapper<BoxGoodsAttributeLabel>().eq("parent_id", firstAttribute.getId()).
                         eq("attribute_name", attributeName).eq("deleted", 0).eq("attribute_flag", "sync");
                 BoxGoodsAttributeLabel secondAttribute = boxGoodsAttributeLabelService.getOne(querySecondAttribute);
-                if (firstAttribute == null) {
+                if (secondAttribute == null) {
                     continue;
                 }
                 QueryWrapper<BoxGoodsAttributeLabel> queryThirdAttribute = new QueryWrapper<BoxGoodsAttributeLabel>().eq("parent_id", secondAttribute.getId()).
                         eq("attribute_name", attributeData).eq("deleted", 0).eq("attribute_flag", "sync");
                 BoxGoodsAttributeLabel thirdAttribute = boxGoodsAttributeLabelService.getOne(queryThirdAttribute);
-                if (firstAttribute == null) {
+                if (thirdAttribute == null) {
                     continue;
                 }
 
