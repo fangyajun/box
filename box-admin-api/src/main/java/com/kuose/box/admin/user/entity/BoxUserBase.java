@@ -37,37 +37,37 @@ private static final long serialVersionUID=1L;
     /**
      * 身高
      */
-    @ApiModelProperty(value="身高")
+    @ApiModelProperty(value="身高",example = "165")
     private String height;
 
     /**
      * 体重
      */
-    @ApiModelProperty(value="体重")
+    @ApiModelProperty(value="体重",example = "50")
     private String weight;
 
     /**
      * 上装尺寸
      */
-    @ApiModelProperty(value="上装尺寸,传编号")
+    @ApiModelProperty(value="上装尺寸,传编号",example = "102")
     private String topSize;
 
     /**
      * 连衣裙尺寸
      */
-    @ApiModelProperty(value="连衣裙尺寸,传编号")
+    @ApiModelProperty(value="连衣裙尺寸,传编号",example = "102")
     private String dressSize;
 
     /**
      * 下装尺寸
      */
-    @ApiModelProperty(value="下装尺寸,传编号")
+    @ApiModelProperty(value="下装尺寸,传编号",example = "102")
     private String bottomsSize;
 
     /**
      * 牛仔裤尺寸
      */
-    @ApiModelProperty(value="牛仔裤尺寸,传编号")
+    @ApiModelProperty(value="牛仔裤尺寸,传编号",example = "102")
     private String jeansSize;
 
     /**
@@ -85,19 +85,19 @@ private static final long serialVersionUID=1L;
     /**
      * 可接受上装价格区间,用-连接，如:50-300,价格不限用-1表示
      */
-    @ApiModelProperty(value="可接受上装价格区间,用-连接，如:50-300,价格不限用-1表示")
+    @ApiModelProperty(value="可接受上装价格区间,用-连接，如:50-300,价格不限用-1表示",example = "50-200")
     private String topPrice;
 
     /**
      * 可接受连衣裙价格区间,用-连接，如:50-300,价格不限用-1表示
      */
-    @ApiModelProperty(value="可接受连衣裙价格区间,用-连接，如:50-300,价格不限用-1表示")
+    @ApiModelProperty(value="可接受连衣裙价格区间,用-连接，如:50-300,价格不限用-1表示",example = "100-200")
     private String dressPrice;
 
     /**
      * 可接受下装价格区间,用-连接，如:50-300,价格不限用-1表示
      */
-    @ApiModelProperty(value="可接受下装价格区间,用-连接，如:50-300,价格不限用-1表示")
+    @ApiModelProperty(value="可接受下装价格区间,用-连接，如:50-300,价格不限用-1表示",example = "50-150")
     private String bottomsPrice;
 
     /**
@@ -109,7 +109,7 @@ private static final long serialVersionUID=1L;
     /**
      * 可接受外套价格区间,用-连接，如:50-300,价格不限用-1表示
      */
-    @ApiModelProperty(value="可接受外套价格区间,用-连接，如:50-300,价格不限用-1表示")
+    @ApiModelProperty(value="可接受外套价格区间,用-连接，如:50-300,价格不限用-1表示",example = "150-300")
     private String overcoatPrice;
 
     /**
@@ -121,7 +121,7 @@ private static final long serialVersionUID=1L;
     /**
      * 避免的颜色，多个用数组表示
      */
-    @ApiModelProperty(value="避免的颜色，多个用数组表示")
+    @ApiModelProperty(value="避免的颜色，多个用数组表示",example = "['101','131']")
     @TableField(el = "avoidColor,jdbcType=VARCHAR,typeHandler=com.kuose.box.admin.mybatis.JsonStringArrayTypeHandler")
     private String[] avoidColor;
 

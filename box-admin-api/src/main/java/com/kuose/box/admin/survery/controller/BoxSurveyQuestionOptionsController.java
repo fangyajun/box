@@ -79,6 +79,5 @@ public class BoxSurveyQuestionOptionsController {
         return Result.success();
     }
 
-
 }
 

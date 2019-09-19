@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * <p>
  * 问题表
@@ -94,4 +96,7 @@ private static final long serialVersionUID=1L;
     @ApiModelProperty(value = "逻辑删除", hidden = true)
     @TableField("is_deleted")
     private Integer deleted;
+
+    @TableField(exist = false)
+    private List<BoxSurveyQuestionOptions> optionsList;
 }

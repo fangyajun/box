@@ -3,7 +3,6 @@ package com.kuose.box.admin.storage.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.kuose.box.admin.annotation.RequiresPermissionsDesc;
 import com.kuose.box.admin.storage.entity.BoxStorage;
 import com.kuose.box.admin.storage.service.BoxStorageService;
 import com.kuose.box.admin.storage.service.StorageService;
@@ -12,7 +11,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -38,8 +36,8 @@ public class AdminStorageController {
     private BoxStorageService boxStorageService;
 
     @ApiOperation(value="查询对象存储列表")
-    @RequiresPermissions("admin:storage:list")
-    @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "查询")
+//    @RequiresPermissions("admin:storage:list")
+//    @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "查询")
     @GetMapping("/list")
     public Object list(String key, String name, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         Page<BoxStorage> boxStoragePage = new Page<>();
@@ -52,8 +50,8 @@ public class AdminStorageController {
     }
 
     @ApiOperation(value="图片上传接口")
-    @RequiresPermissions("admin:storage:create")
-    @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "上传")
+//    @RequiresPermissions("admin:storage:create")
+//    @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "上传")
     @PostMapping("/create")
     public Result create(@RequestParam("file") MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
@@ -62,8 +60,8 @@ public class AdminStorageController {
     }
 
     @ApiOperation(value="对象存储详情")
-    @RequiresPermissions("admin:storage:read")
-    @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "详情")
+//    @RequiresPermissions("admin:storage:read")
+//    @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "详情")
     @PostMapping("/read")
     public Result read(@NotNull Integer id) {
         BoxStorage boxStorage = boxStorageService.getById(id);
@@ -74,8 +72,8 @@ public class AdminStorageController {
     }
 
     @ApiOperation(value="修改存储对象")
-    @RequiresPermissions("admin:storage:update")
-    @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "编辑")
+//    @RequiresPermissions("admin:storage:update")
+//    @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "编辑")
     @PostMapping("/update")
     public Result update(@RequestBody BoxStorage boxStorage) {
         if (boxStorage.getId() == null) {
@@ -88,8 +86,8 @@ public class AdminStorageController {
     }
 
     @ApiOperation(value="根据storageKey删除图片对象")
-    @RequiresPermissions("admin:storage:delete")
-    @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "删除")
+//    @RequiresPermissions("admin:storage:delete")
+//    @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "删除")
     @PostMapping("/delete")
     public Object delete(@RequestBody BoxStorage boxStorage) {
         String key = boxStorage.getStorageKey();

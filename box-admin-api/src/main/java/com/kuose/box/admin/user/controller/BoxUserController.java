@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
  * <p>
  * box_user 前端控制器
  * </p>
- *
  * @author fangyajun
  * @since 2019-09-04
  */
@@ -52,7 +51,6 @@ public class BoxUserController {
         boxUserPage.setCurrent(page);
 
         IPage<BoxUser> boxGoodsIPage = boxUserService.listUser(boxUserPage, boxUser);
-
         return Result.success().setData("boxGoodsIPage", boxGoodsIPage);
     }
 

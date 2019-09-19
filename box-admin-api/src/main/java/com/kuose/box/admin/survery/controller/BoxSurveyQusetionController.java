@@ -2,6 +2,7 @@ package com.kuose.box.admin.survery.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kuose.box.admin.survery.entity.BoxSurveyQuestionOptions;
@@ -14,6 +15,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -50,9 +53,7 @@ public class BoxSurveyQusetionController {
 
     @ApiOperation(value="问题列表")
     @GetMapping("list")
-    public Result list(Integer surveyId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit)
-
-    {
+    public Result list(Integer surveyId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         if (page == null || limit == null) {
             return Result.failure("缺少必传参数");
         }
@@ -64,6 +65,18 @@ public class BoxSurveyQusetionController {
 
         IPage<BoxSurveyQusetion> boxSurveyQusetionIPage = boxSurveyQusetionService.page(boxSurveyQusetionPage, new QueryWrapper<BoxSurveyQusetion>().
                 eq("is_deleted", 0).eq("survey_id", surveyId));
+        List<BoxSurveyQusetion> records = boxSurveyQusetionIPage.getRecords();
+        if (records != null && records.size() >= 1){
+            for (BoxSurveyQusetion qusetion : records) {
+                List<BoxSurveyQuestionOptions> questionOptionsList = boxSurveyQuestionOptionsService.list(new QueryWrapper<BoxSurveyQuestionOptions>().
+                        eq("question_id", qusetion.getId()).eq("is_deleted", 0));
+                if (questionOptionsList != null && questionOptionsList.size() >= 1) {
+                    qusetion.setOptionsList(questionOptionsList);
+                }
+            }
+            boxSurveyQusetionIPage.setRecords(records);
+        }
+
         return Result.success().setData("boxSurveyQusetionIPage", boxSurveyQusetionIPage);
     }
 
@@ -97,16 +110,36 @@ public class BoxSurveyQusetionController {
             return Result.failure("缺少必传参数");
         }
 
-        int count = boxSurveyQuestionOptionsService.count(new QueryWrapper<BoxSurveyQuestionOptions>().eq("question_id", boxSurveyQusetion.getId()));
-        if (count <= 0) {
-            return Result.failure(510, "请先删除问题的选项在删除问题");
-        }
-
+        // 删除问题的选项
+        boxSurveyQuestionOptionsService.update(new UpdateWrapper<BoxSurveyQuestionOptions>().
+                set("is_deleted", 1).eq("question_id", boxSurveyQusetion.getId()));
         // 逻辑删除
         boxSurveyQusetion.setDeleted(1);
         boxSurveyQusetionService.updateById(boxSurveyQusetion);
 
         return Result.success();
+    }
+
+    @ApiOperation(value="问题（包括问题选项）展示，用于用户答题")
+    @GetMapping("/listQuestionAndOptions")
+    public Result listQuestionAndOptions(Integer surveyId) {
+        QueryWrapper<BoxSurveyQusetion> qusetionQueryWrapper = new QueryWrapper<BoxSurveyQusetion>().eq("is_deleted", 0).orderByDesc("sort");
+        if (surveyId != null) {
+            qusetionQueryWrapper.eq("survey_id", surveyId);
+        }
+
+        List<BoxSurveyQusetion> qusetions = boxSurveyQusetionService.list(qusetionQueryWrapper);
+        if (qusetions == null || qusetions.size() < 1) {
+            return Result.failure("暂无数据");
+        }
+        for (BoxSurveyQusetion qusetion : qusetions) {
+            List<BoxSurveyQuestionOptions> questionOptionsList = boxSurveyQuestionOptionsService.list(new QueryWrapper<BoxSurveyQuestionOptions>().
+                    eq("question_id", qusetion.getId()).eq("is_deleted", 0));
+            if (questionOptionsList != null && questionOptionsList.size() >= 1) {
+                qusetion.setOptionsList(questionOptionsList);
+            }
+        }
+        return Result.success().setData("qusetions", qusetions);
     }
 }
 

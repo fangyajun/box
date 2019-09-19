@@ -55,6 +55,9 @@ private static final long serialVersionUID=1L;
     @ApiModelProperty(value = "修改时间", hidden = true)
     private Long updateTime;
 
+    /**
+     * 逻辑删除
+     */
     @ApiModelProperty(value = "逻辑删除", hidden = true)
     private Integer deleted;
 

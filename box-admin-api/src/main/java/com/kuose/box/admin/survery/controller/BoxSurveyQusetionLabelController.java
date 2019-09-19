@@ -36,9 +36,11 @@ public class BoxSurveyQusetionLabelController {
             return Result.failure("缺少必传参数");
         }
 
-        int count = boxSurveyQusetionLabelService.count(new QueryWrapper<BoxSurveyQusetionLabel>().eq("deleted", 0).
-                eq("label_code", boxSurveyQusetionLabel.getLabelCode()).or().eq("label_name", boxSurveyQusetionLabel.getLabelName()));
-        if (count >= 1) {
+        int count1 = boxSurveyQusetionLabelService.count(new QueryWrapper<BoxSurveyQusetionLabel>().eq("deleted", 0).
+                    eq("label_code", boxSurveyQusetionLabel.getLabelCode()));
+        int count2 = boxSurveyQusetionLabelService.count(new QueryWrapper<BoxSurveyQusetionLabel>().eq("deleted", 0).
+                    eq("label_name", boxSurveyQusetionLabel.getLabelName()));
+        if (count1 >= 1 || count2 >= 1) {
             return Result.failure("已存在标签名称或者标签编码！");
         }
 

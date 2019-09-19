@@ -26,8 +26,6 @@
     <sql id="Base_Column_List">
         id, username, password, gender, birthday, last_login_time, last_login_ip, nickname, mobile, userpic, weixin_openid, session_key, status, create_time, update_time, deleted
     </sql>
-
-
     <select id="listUser" parameterType="com.kuose.box.admin.goods.dto.GoodsSkuVo" resultMap="BaseResultMap">
         SELECT id, gender, birthday, last_login_time, last_login_ip, nickname, mobile, userpic, weixin_openid, session_key, status, create_time, update_time
         FROM box_user
@@ -41,7 +39,4 @@
             </if>
         </where>
     </select>
-
-
-
 </mapper>
