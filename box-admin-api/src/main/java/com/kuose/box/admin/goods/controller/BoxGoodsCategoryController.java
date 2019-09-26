@@ -85,10 +85,10 @@ public class BoxGoodsCategoryController {
 
 
 
-    @ApiOperation(value="获取头分类列表")
+    @ApiOperation(value="获取分类列表")
     @GetMapping("/list")
-    public Result listHeadCategory(String categoryName) {
-        QueryWrapper<BoxGoodsCategory> queryWrapper = new QueryWrapper<BoxGoodsCategory>().eq("parent_id", 0).eq("deleted", 0);
+    public Result list(String categoryName) {
+        QueryWrapper<BoxGoodsCategory> queryWrapper = new QueryWrapper<BoxGoodsCategory>().ne("parent_id", 0).eq("deleted", 0);
         if (!StringUtil.isBlank(categoryName)) {
             queryWrapper.like("category_name", categoryName).or().like("pinyin", categoryName);
         }
@@ -103,6 +103,26 @@ public class BoxGoodsCategoryController {
             category.put(boxGoodsCategory.getCategoryCode(), boxGoodsCategory.getCategoryName());
         }
         return Result.success().setData("category", category);
+    }
+
+    @ApiOperation(value="获取头分类列表")
+    @GetMapping("/listHeadCategory")
+    public Result listHeadCategory(String categoryName) {
+        QueryWrapper<BoxGoodsCategory> queryWrapper = new QueryWrapper<BoxGoodsCategory>().eq("parent_id", 0).eq("deleted", 0);
+        if (!StringUtil.isBlank(categoryName)) {
+            queryWrapper.like("category_name", categoryName).or().like("pinyin", categoryName);
+        }
+
+        List<BoxGoodsCategory> goodsCategoryList = boxGoodsCategoryService.list(queryWrapper);
+        if (goodsCategoryList == null || goodsCategoryList.size() == 0) {
+            return Result.failure("暂无数据");
+        }
+
+//        Map<String, String> category = new HashMap<>();
+//        for (BoxGoodsCategory boxGoodsCategory : goodsCategoryList) {
+//            category.put(boxGoodsCategory.getCategoryCode(), boxGoodsCategory.getCategoryName());
+//        }
+        return Result.success().setData("goodsCategoryList", goodsCategoryList);
     }
 
     @ApiOperation(value="获取子分类列表")

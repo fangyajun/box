@@ -55,8 +55,23 @@ public class BoxSurveyUserAnswerController {
         }
 
         List<BoxSurveyQusetionLabel> surveyQusetionLabels = boxSurveyQusetionLabelService.list(new QueryWrapper<BoxSurveyQusetionLabel>().eq("deleted", 0));
+        if (surveyQusetionLabels == null || surveyQusetionLabels.size() < 1) {
+            return Result.success().setData("surveyQusetionLabels", surveyQusetionLabels);
+        }
+
         List<BoxSurveyUserAnswer> surveyUserAnswers = boxSurveyUserAnswerService.list(new QueryWrapper<BoxSurveyUserAnswer>().eq("user_id", userId));
-        return Result.success().setData("surveyQusetionLabels", surveyQusetionLabels).setData("surveyUserAnswers", surveyUserAnswers);
+        for (BoxSurveyQusetionLabel surveyQusetionLabel : surveyQusetionLabels) {
+            String labelCode = surveyQusetionLabel.getLabelCode();
+            if (surveyUserAnswers != null && surveyUserAnswers.size() >= 1) {
+                for (BoxSurveyUserAnswer boxSurveyUserAnswer : surveyUserAnswers) {
+                    if (labelCode.equals(boxSurveyUserAnswer.getLabelCode())) {
+                        surveyQusetionLabel.setLabelValue(boxSurveyUserAnswer.getOptionValues());
+                    }
+                }
+            }
+        }
+
+        return Result.success().setData("surveyQusetionLabels", surveyQusetionLabels);
     }
 }
 

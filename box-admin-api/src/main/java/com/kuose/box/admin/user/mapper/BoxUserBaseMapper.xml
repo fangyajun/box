@@ -29,6 +29,7 @@
         <result column="user_img" property="userImg" />
         <result column="leave_word" property="leaveWord" />
         <result column="frequency" property="frequency" />
+        <result column="expect_time" property="expectTime" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="deleted" property="deleted" />
@@ -36,7 +37,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, height, weight, top_size, dress_size, bottoms_size, jeans_size, chest_size, sneaker_size, top_price, dress_price, bottoms_price, accessory_price, overcoat_price, sneaker_price, avoid_color, avoid_texture, avoid_category, avoid_figure, profession, formal_wear, user_img, leave_word, frequency, create_time, update_time, deleted
+        id, user_id, height, weight, top_size, dress_size, bottoms_size, jeans_size, chest_size, sneaker_size, top_price, dress_price, bottoms_price, accessory_price, overcoat_price, sneaker_price, avoid_color, avoid_texture, avoid_category, avoid_figure, profession, formal_wear, user_img, leave_word, frequency,expect_time, create_time, update_time, deleted
     </sql>
 
 </mapper>

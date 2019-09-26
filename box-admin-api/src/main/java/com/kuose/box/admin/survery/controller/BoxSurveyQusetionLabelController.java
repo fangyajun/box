@@ -2,8 +2,10 @@ package com.kuose.box.admin.survery.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.kuose.box.admin.survery.entity.BoxSurveyQusetion;
 import com.kuose.box.admin.survery.entity.BoxSurveyQusetionLabel;
 import com.kuose.box.admin.survery.service.BoxSurveyQusetionLabelService;
+import com.kuose.box.admin.survery.service.BoxSurveyQusetionService;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.StringUtil;
 import io.swagger.annotations.Api;
@@ -28,6 +30,8 @@ public class BoxSurveyQusetionLabelController {
 
     @Autowired
     private BoxSurveyQusetionLabelService boxSurveyQusetionLabelService;
+    @Autowired
+    private BoxSurveyQusetionService boxSurveyQusetionService;
 
     @ApiOperation(value="新增问题标签")
     @PostMapping("/add")
@@ -69,14 +73,29 @@ public class BoxSurveyQusetionLabelController {
 
     @ApiOperation(value="问题标签列表")
     @GetMapping("/list")
-    public Result list(String labelName) {
+    public Result list(String labelName, Integer lableType) {
         QueryWrapper<BoxSurveyQusetionLabel> labelQueryWrapper = new QueryWrapper<BoxSurveyQusetionLabel>().eq("deleted", 0);
-        List<BoxSurveyQusetionLabel> qusetionLabelList = null;
         if (!StringUtil.isBlank(labelName)) {
-            qusetionLabelList = boxSurveyQusetionLabelService.list(labelQueryWrapper.like("label_name", labelName));
-        } else {
-            qusetionLabelList = boxSurveyQusetionLabelService.list(labelQueryWrapper);
+            labelQueryWrapper.like("label_name", labelName);
         }
+        if (lableType != null) {
+            labelQueryWrapper.eq("label_type", lableType);
+        }
+
+        List<BoxSurveyQusetionLabel> qusetionLabelList = boxSurveyQusetionLabelService.list(labelQueryWrapper);
+        // 判断标签是否已被问题添加
+        if (qusetionLabelList != null && qusetionLabelList.size() >= 1) {
+            for (BoxSurveyQusetionLabel boxSurveyQusetionLabel : qusetionLabelList) {
+                int count = boxSurveyQusetionService.count(new QueryWrapper<BoxSurveyQusetion>().eq("is_deleted", 0).
+                        eq("label_code", boxSurveyQusetionLabel.getLabelCode()));
+                if (count >= 1) {
+                    boxSurveyQusetionLabel.setStatus(1);
+                }else {
+                    boxSurveyQusetionLabel.setStatus(0);
+                }
+            }
+        }
+
         return Result.success().setData("qusetionLabelList", qusetionLabelList);
     }
 

@@ -39,6 +39,7 @@ public class BoxUserController {
             return Result.failure("缺少必传参数");
         }
         BoxUser boxUser = boxUserService.getOne(new QueryWrapper<BoxUser>().eq("deleted", 0 ).eq("id", userId));
+        boxUser.setPassword(null);
         BoxUserBase boxUserBase = boxUserBaseService.getOne(new QueryWrapper<BoxUserBase>().eq("deleted", 0).eq("user_id", userId));
         return Result.success().setData("boxUser",boxUser).setData("boxUserBase",boxUserBase);
     }
@@ -50,8 +51,8 @@ public class BoxUserController {
         boxUserPage.setSize(limit);
         boxUserPage.setCurrent(page);
 
-        IPage<BoxUser> boxGoodsIPage = boxUserService.listUser(boxUserPage, boxUser);
-        return Result.success().setData("boxGoodsIPage", boxGoodsIPage);
+        IPage<BoxUser> boxUserIPage = boxUserService.listUser(boxUserPage, boxUser);
+        return Result.success().setData("boxUserIPage", boxUserIPage);
     }
 
     @ApiOperation(value="修改用户信息")

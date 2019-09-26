@@ -1,6 +1,7 @@
 package com.kuose.box.admin.survery.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModelProperty;
@@ -49,6 +50,10 @@ private static final long serialVersionUID=1L;
     @ApiModelProperty(value = "填写时间", hidden = true)
     private Long createTime;
 
+    @ApiModelProperty(value = "标签状态，0,未被添加，1，已被添加")
+    @TableField(exist = false)
+    private Integer status;
+
     /**
      * 修改时间
      */
@@ -60,5 +65,11 @@ private static final long serialVersionUID=1L;
      */
     @ApiModelProperty(value = "逻辑删除", hidden = true)
     private Integer deleted;
+
+    /**
+     * 标签的值
+     */
+    @TableField(exist = false)
+    private String[] labelValue;
 
 }

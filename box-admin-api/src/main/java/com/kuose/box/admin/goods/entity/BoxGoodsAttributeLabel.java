@@ -58,6 +58,7 @@ private static final long serialVersionUID=1L;
 
     /**
      * 属性类别
+     *
      */
     @ApiModelProperty(value="属性的类别，-1:无选择，如叶子节点，0:单选，1:多选，2:填空", example = "属性的类别，-1:无选择，如叶子节点，0:单选，1:多选，2:填空")
     private Integer type;

@@ -1,4 +1,4 @@
-package com.kuose.box.admin.survery.entity;
+package com.kuose.box.wx.survey.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -14,13 +14,13 @@ import lombok.Data;
  * </p>
  *
  * @author fangyajun
- * @since 2019-07-31
+ * @since 2019-09-24
  */
 @Data
 @TableName(value = "box_survey_user_answer", resultMap = "BaseResultMap")
 public class BoxSurveyUserAnswer extends Model<BoxSurveyUserAnswer> {
 
-private static final long serialVersionUID=1L;
+    private static final long serialVersionUID=1L;
 
     /**
      * 主键id
@@ -45,7 +45,7 @@ private static final long serialVersionUID=1L;
      * 选项id数组，
      */
     @ApiModelProperty(value = "选项id数组", example = "[2,3,4]")
-    @TableField(el = "optionIds,jdbcType=VARCHAR,typeHandler=com.kuose.box.admin.mybatis.JsonIntegerArrayTypeHandler")
+    @TableField(el = "optionIds,jdbcType=VARCHAR,typeHandler=com.kuose.box.wx.mybatis.JsonIntegerArrayTypeHandler")
     private Integer[] optionIds;
 
     /**
@@ -58,13 +58,13 @@ private static final long serialVersionUID=1L;
      * 问题答案值,数组
      */
     @ApiModelProperty(value = "问题答案值,数组", example = "[\"贴身裁剪\",\"合身裁剪\",\"直筒裁剪\"]")
-    @TableField(value = "option_values", el = "optionValues,jdbcType=VARCHAR,typeHandler=com.kuose.box.admin.mybatis.JsonStringArrayTypeHandler")
+    @TableField(value = "option_values", el = "optionValues,jdbcType=VARCHAR,typeHandler=com.kuose.box.wx.mybatis.JsonStringArrayTypeHandler")
     private String[] optionValues;
 
     /**
      * 选项内容,填空填写
      */
-    @ApiModelProperty(value = "选项内容,填空填写", example = "50kg")
+    @ApiModelProperty(value = "选项内容,填空填写,", example = "50kg")
     private String optionContent;
 
     /**
@@ -78,4 +78,5 @@ private static final long serialVersionUID=1L;
      */
     @ApiModelProperty(value = "修改时间", hidden = true)
     private Long updateTime;
+
 }

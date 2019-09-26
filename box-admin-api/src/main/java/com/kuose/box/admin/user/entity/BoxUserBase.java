@@ -134,6 +134,7 @@ private static final long serialVersionUID=1L;
 
     /**
      * 避免的类别，多个用数组表示
+     *
      */
     @ApiModelProperty(value="避免的类别，多个用数组表示")
     @TableField(el = "avoidCategory,jdbcType=VARCHAR,typeHandler=com.kuose.box.admin.mybatis.JsonStringArrayTypeHandler")
@@ -177,7 +178,13 @@ private static final long serialVersionUID=1L;
     private Integer frequency;
 
     /**
-     * 创建时间 
+     * 创建时间
+     */
+    @ApiModelProperty(value="用户设定的收盒实际", hidden = true)
+    private Long expectTime;
+
+    /**
+     * 创建时间
      */
     @ApiModelProperty(value="创建时间", hidden = true)
     private Long createTime;

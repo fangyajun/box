@@ -44,6 +44,12 @@ public class BoxSurveyQusetionController {
             return Result.failure("缺少必传参数");
         }
 
+        int count = boxSurveyQusetionService.count(new QueryWrapper<BoxSurveyQusetion>().eq("is_deleted", 0).
+                eq("label_code", boxSurveyQusetion.getLabelCode()));
+        if (count >= 1) {
+            return Result.failure("问题标签已被添加！");
+        }
+
         boxSurveyQusetion.setCreateTime(System.currentTimeMillis());
         boxSurveyQusetion.setUpdateTime(System.currentTimeMillis());
 
@@ -61,6 +67,7 @@ public class BoxSurveyQusetionController {
         Page<BoxSurveyQusetion> boxSurveyQusetionPage = new Page<>();
         boxSurveyQusetionPage.setSize(limit);
         boxSurveyQusetionPage.setCurrent(page);
+
         boxSurveyQusetionPage.setDesc("create_time");
 
         IPage<BoxSurveyQusetion> boxSurveyQusetionIPage = boxSurveyQusetionService.page(boxSurveyQusetionPage, new QueryWrapper<BoxSurveyQusetion>().
