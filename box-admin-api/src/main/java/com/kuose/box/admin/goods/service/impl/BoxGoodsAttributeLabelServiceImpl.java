@@ -1,9 +1,9 @@
 package com.kuose.box.admin.goods.service.impl;
 
-import com.kuose.box.admin.goods.entity.BoxGoodsAttributeLabel;
-import com.kuose.box.admin.goods.dao.BoxGoodsAttributeLabelMapper;
-import com.kuose.box.admin.goods.service.BoxGoodsAttributeLabelService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.kuose.box.admin.goods.service.BoxGoodsAttributeLabelService;
+import com.kuose.box.db.goods.dao.BoxGoodsAttributeLabelMapper;
+import com.kuose.box.db.goods.entity.BoxGoodsAttributeLabel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

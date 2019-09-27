@@ -1,9 +1,9 @@
 package com.kuose.box.wx.survey.service.impl;
 
-import com.kuose.box.wx.survey.entity.BoxSurveyQuestionOptions;
-import com.kuose.box.wx.survey.dao.BoxSurveyQuestionOptionsMapper;
-import com.kuose.box.wx.survey.service.BoxSurveyQuestionOptionsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.kuose.box.db.survery.dao.BoxSurveyQuestionOptionsMapper;
+import com.kuose.box.db.survery.entity.BoxSurveyQuestionOptions;
+import com.kuose.box.wx.survey.service.BoxSurveyQuestionOptionsService;
 import org.springframework.stereotype.Service;
 
 /**

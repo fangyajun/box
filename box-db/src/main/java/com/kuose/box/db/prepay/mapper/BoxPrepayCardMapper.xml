@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuose.box.db.prepay.dao.BoxPrepayCardMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kuose.box.db.prepay.entity.BoxPrepayCard">
+        <id column="id" property="id" />
+        <result column="prepay_name" property="prepayName" />
+        <result column="description" property="description" />
+        <result column="retail_price" property="retailPrice" />
+        <result column="tag_price" property="tagPrice" />
+        <result column="category" property="category" />
+        <result column="service_times" property="serviceTimes" />
+        <result column="is_restrict" property="isRestrict" />
+        <result column="user_label_code" property="userLabelCode" jdbcType="VARCHAR" typeHandler="com.kuose.box.db.mybatis.JsonStringArrayTypeHandler" />
+        <result column="prepay_card_img" property="prepayCardImg" />
+        <result column="status" property="status" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, prepay_name, description, retail_price, tag_price, category, service_times, is_restrict, user_label_code, prepay_card_img, status, add_time, update_time, deleted
+    </sql>
+
+</mapper>

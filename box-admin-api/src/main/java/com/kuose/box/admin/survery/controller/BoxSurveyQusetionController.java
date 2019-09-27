@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.kuose.box.admin.survery.entity.BoxSurveyQuestionOptions;
-import com.kuose.box.admin.survery.entity.BoxSurveyQusetion;
 import com.kuose.box.admin.survery.service.BoxSurveyQuestionOptionsService;
 import com.kuose.box.admin.survery.service.BoxSurveyQusetionService;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.StringUtil;
+import com.kuose.box.db.survery.entity.BoxSurveyQuestionOptions;
+import com.kuose.box.db.survery.entity.BoxSurveyQusetion;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class BoxSurveyQusetionController {
 
     @ApiOperation(value="新增问题")
     @PostMapping("add")
-    public Result add(@RequestBody  BoxSurveyQusetion boxSurveyQusetion) {
+    public Result add(@RequestBody BoxSurveyQusetion boxSurveyQusetion) {
         if (StringUtil.isBlank(boxSurveyQusetion.getQuestionTopic()) || boxSurveyQusetion.getQuestionType() == null ||
                 boxSurveyQusetion.getSurveyId() == null || StringUtil.isBlank(boxSurveyQusetion.getLabelCode())) {
             return Result.failure("缺少必传参数");

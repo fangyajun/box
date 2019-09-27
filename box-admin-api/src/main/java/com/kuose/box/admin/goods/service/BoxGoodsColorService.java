@@ -1,7 +1,7 @@
 package com.kuose.box.admin.goods.service;
 
-import com.kuose.box.admin.goods.entity.BoxGoodsColor;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kuose.box.db.goods.entity.BoxGoodsColor;
 
 /**
  * <p>

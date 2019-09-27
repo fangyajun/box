@@ -4,10 +4,10 @@ package com.kuose.box.admin.survery.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.kuose.box.admin.survery.entity.BoxSurvey;
 import com.kuose.box.admin.survery.service.BoxSurveyService;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.StringUtil;
+import com.kuose.box.db.survery.entity.BoxSurvey;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class BoxSurveyController {
 
     @ApiOperation(value="新增问券")
     @PostMapping("/add")
-    public Result add(@RequestBody  BoxSurvey boxSurvey) {
+    public Result add(@RequestBody BoxSurvey boxSurvey) {
         if (boxSurvey == null) {
             return Result.failure("缺少必传参数");
         }

@@ -3,12 +3,12 @@ package com.kuose.box.admin.goods.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.kuose.box.admin.goods.dto.GoodsAllinone;
-import com.kuose.box.admin.goods.dto.GoodsQueryParameter;
-import com.kuose.box.admin.goods.dto.GoodsSkuVo;
-import com.kuose.box.admin.goods.entity.BoxGoods;
 import com.kuose.box.admin.match.dto.GoodsMatchParameter;
 import com.kuose.box.common.config.Result;
+import com.kuose.box.db.goods.dto.GoodsAllinone;
+import com.kuose.box.db.goods.dto.GoodsQueryParameter;
+import com.kuose.box.db.goods.dto.GoodsSkuVo;
+import com.kuose.box.db.goods.entity.BoxGoods;
 
 /**
  * <p>

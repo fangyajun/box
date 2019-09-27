@@ -40,6 +40,11 @@
             <artifactId>box-common</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.kuose</groupId>
+            <artifactId>box-db</artifactId>
+        </dependency>
+
         <!--swagger -->
         <dependency>
             <groupId>io.springfox</groupId>

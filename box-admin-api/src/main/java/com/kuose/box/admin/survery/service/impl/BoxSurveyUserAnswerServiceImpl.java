@@ -1,9 +1,9 @@
 package com.kuose.box.admin.survery.service.impl;
 
-import com.kuose.box.admin.survery.entity.BoxSurveyUserAnswer;
-import com.kuose.box.admin.survery.dao.BoxSurveyUserAnswerMapper;
-import com.kuose.box.admin.survery.service.BoxSurveyUserAnswerService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.kuose.box.admin.survery.service.BoxSurveyUserAnswerService;
+import com.kuose.box.db.survery.dao.BoxSurveyUserAnswerMapper;
+import com.kuose.box.db.survery.entity.BoxSurveyUserAnswer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

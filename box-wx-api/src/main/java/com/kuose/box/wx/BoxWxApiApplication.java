@@ -8,7 +8,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @SpringBootApplication
-@MapperScan(basePackages = "com.kuose.box.wx.*.dao")
+@MapperScan(basePackages = "com.kuose.box.*.*.dao")
 public class BoxWxApiApplication {
 
     public static void main(String[] args) {

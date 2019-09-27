@@ -14,7 +14,7 @@ public class MpGenerator {
         new MpGenerator().generator("D:\\MpGenerator"
                 , "jdbc:mysql://192.168.5.176:3306/box?characterEncoding=utf8"
 //                , "com.kuose.box.admin.user"
-                , "com.kuose.box.wx.order"
+                , "com.kuose.box.wx.user"
                 , "root"
                 , "123456");
 
@@ -56,7 +56,7 @@ public class MpGenerator {
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         // 生成的表
         strategyConfig.setInclude("box_user_address");
-//        strategyConfig.setInclude("box_survey", "box_survey_qusetion", "box_survey_question_options", "box_survey_user_answer");
+//        strategyConfig.setInclude("box_prepay_card", "box_prepay_card_order");
 
         new AutoGenerator().setDataSource(dataSourceConfig)
                 .setGlobalConfig(gc)

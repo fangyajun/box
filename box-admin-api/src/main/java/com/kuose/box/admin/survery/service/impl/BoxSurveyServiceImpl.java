@@ -1,9 +1,9 @@
 package com.kuose.box.admin.survery.service.impl;
 
-import com.kuose.box.admin.survery.entity.BoxSurvey;
-import com.kuose.box.admin.survery.dao.BoxSurveyMapper;
-import com.kuose.box.admin.survery.service.BoxSurveyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.kuose.box.admin.survery.service.BoxSurveyService;
+import com.kuose.box.db.survery.dao.BoxSurveyMapper;
+import com.kuose.box.db.survery.entity.BoxSurvey;
 import org.springframework.stereotype.Service;
 
 /**

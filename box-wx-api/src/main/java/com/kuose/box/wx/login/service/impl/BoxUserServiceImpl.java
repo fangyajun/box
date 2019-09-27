@@ -1,9 +1,9 @@
 package com.kuose.box.wx.login.service.impl;
 
-import com.kuose.box.wx.login.entity.BoxUser;
-import com.kuose.box.wx.login.dao.BoxUserMapper;
-import com.kuose.box.wx.login.service.BoxUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.kuose.box.db.user.dao.BoxUserMapper;
+import com.kuose.box.db.user.entity.BoxUser;
+import com.kuose.box.wx.login.service.BoxUserService;
 import org.springframework.stereotype.Service;
 
 /**

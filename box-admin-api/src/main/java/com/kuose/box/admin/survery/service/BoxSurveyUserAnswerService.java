@@ -1,7 +1,7 @@
 package com.kuose.box.admin.survery.service;
 
-import com.kuose.box.admin.survery.entity.BoxSurveyUserAnswer;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kuose.box.db.survery.entity.BoxSurveyUserAnswer;
 
 import java.util.List;
 import java.util.Map;

@@ -32,8 +32,9 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(basePackage("com.kuose.box.wx.login.controller"
-                        +splitor+
+                .apis(basePackage("com.kuose.box.wx.login.controller" +splitor+
+                        "com.kuose.box.wx.order.controller" +splitor+
+                        "com.kuose.box.wx.user.controller" +splitor+
                         "com.kuose.box.wx.survey.controller"
                 ))
                 .paths(PathSelectors.any())

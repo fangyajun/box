@@ -80,7 +80,7 @@ private static final long serialVersionUID=1L;
     /**
      * 角色列表
      */
-    @TableField(el = "roleIds,jdbcType=VARCHAR,typeHandler=com.kuose.box.admin.mybatis.JsonIntegerArrayTypeHandler")
+    @TableField(el = "roleIds,jdbcType=VARCHAR,typeHandler=com.kuose.box.db.mybatis.JsonIntegerArrayTypeHandler")
     @ApiModelProperty(hidden = true)
     private Integer[] roleIds;
 

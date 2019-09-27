@@ -1,9 +1,9 @@
 package com.kuose.box.admin.goods.service.impl;
 
-import com.kuose.box.admin.goods.entity.BoxGoodsColor;
-import com.kuose.box.admin.goods.dao.BoxGoodsColorMapper;
-import com.kuose.box.admin.goods.service.BoxGoodsColorService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.kuose.box.admin.goods.service.BoxGoodsColorService;
+import com.kuose.box.db.goods.dao.BoxGoodsColorMapper;
+import com.kuose.box.db.goods.entity.BoxGoodsColor;
 import org.springframework.stereotype.Service;
 
 /**

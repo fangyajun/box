@@ -1,7 +1,7 @@
 package com.kuose.box.admin.user.service;
 
-import com.kuose.box.admin.user.entity.BoxUserBase;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kuose.box.db.user.entity.BoxUserBase;
 
 /**
  * <p>

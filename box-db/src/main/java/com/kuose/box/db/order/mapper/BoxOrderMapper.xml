@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuose.box.db.order.dao.BoxOrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kuose.box.db.order.entity.BoxOrder">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="order_no" property="orderNo" />
+        <result column="order_status" property="orderStatus" />
+        <result column="audit_status" property="auditStatus" />
+        <result column="addr_id" property="addrId" />
+        <result column="nic_name" property="nicName" />
+        <result column="mobile" property="mobile" />
+        <result column="user_message" property="userMessage" />
+        <result column="coordinator_message" property="coordinatorMessage" />
+        <result column="message" property="message" />
+        <result column="goods_price" property="goodsPrice" />
+        <result column="coupon_price" property="couponPrice" />
+        <result column="integral_price" property="integralPrice" />
+        <result column="advance_price" property="advancePrice" />
+        <result column="order_price" property="orderPrice" />
+        <result column="actual_price" property="actualPrice" />
+        <result column="pay_id" property="payId" />
+        <result column="pay_time" property="payTime" />
+        <result column="ship_sn" property="shipSn" />
+        <result column="ship_channel" property="shipChannel" />
+        <result column="ship_time" property="shipTime" />
+        <result column="expect_time" property="expectTime" />
+        <result column="confirm_time" property="confirmTime" />
+        <result column="comments" property="comments" />
+        <result column="coordinator" property="coordinator" />
+        <result column="auditor" property="auditor" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, order_no, order_status, audit_status, addr_id, nic_name, mobile, user_message, coordinator_message, message, goods_price, coupon_price, integral_price, advance_price, order_price, actual_price, pay_id, pay_time, ship_sn, ship_channel, ship_time, expect_time, confirm_time, comments, coordinator, auditor, add_time, update_time, deleted
+    </sql>
+
+</mapper>

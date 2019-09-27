@@ -3,11 +3,12 @@ package com.kuose.box.wx.survey.controller;
 
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.StringUtil;
+import com.kuose.box.db.survery.entity.BoxSurveyUserAnswer;
 import com.kuose.box.wx.annotation.LoginUser;
-import com.kuose.box.wx.survey.entity.BoxSurveyUserAnswer;
 import com.kuose.box.wx.survey.service.BoxSurveyUserAnswerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,8 +32,8 @@ public class BoxSurveyUserAnswerController {
     private BoxSurveyUserAnswerService boxSurveyUserAnswerService;
 
     @ApiOperation(value="新增用户问券答案")
-    @PostMapping("/add")
-    public Result add(@RequestBody BoxSurveyUserAnswer boxSurveyUserAnswer,@LoginUser Integer userId) {
+    @PostMapping("/add") //
+    public Result add(@RequestBody BoxSurveyUserAnswer boxSurveyUserAnswer, @ApiParam(hidden = true) @LoginUser Integer userId) {
         if (userId == null) {
             return Result.failure(501, "请登录");
         }

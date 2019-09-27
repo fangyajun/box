@@ -3,12 +3,12 @@ package com.kuose.box.admin.order.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuose.box.admin.order.dto.OrderGoodsDto;
-import com.kuose.box.admin.order.entity.BoxOrder;
-import com.kuose.box.admin.order.entity.BoxOrderGoods;
 import com.kuose.box.admin.order.service.BoxOrderGoodsService;
 import com.kuose.box.admin.order.service.BoxOrderService;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.StringUtil;
+import com.kuose.box.db.order.entity.BoxOrder;
+import com.kuose.box.db.order.entity.BoxOrderGoods;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,11 @@ public class BoxOrderGoodsController {
 
         List<BoxOrderGoods> boxOrderGoodsList = boxOrderGoodsService.list(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("deleted", 0));
         BoxOrder boxOrder = boxOrderService.getById(orderId);
-        return Result.success().setData("boxOrderGoodsList", boxOrderGoodsList).setData("coordinatorMessage", boxOrder.getCoordinatorMessage());
+        String coordinatorMessage = "";
+        if (boxOrder != null) {
+            coordinatorMessage = boxOrder.getCoordinatorMessage();
+        }
+        return Result.success().setData("boxOrderGoodsList", boxOrderGoodsList).setData("coordinatorMessage", coordinatorMessage);
     }
 
 //    @ApiOperation(value="删除盒子商品，参数传订单id和skuId")

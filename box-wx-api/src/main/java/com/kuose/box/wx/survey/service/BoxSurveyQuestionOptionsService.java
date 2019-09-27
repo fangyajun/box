@@ -1,7 +1,7 @@
 package com.kuose.box.wx.survey.service;
 
-import com.kuose.box.wx.survey.entity.BoxSurveyQuestionOptions;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kuose.box.db.survery.entity.BoxSurveyQuestionOptions;
 
 /**
  * <p>

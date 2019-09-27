@@ -1,7 +1,7 @@
 package com.kuose.box.admin.order.service;
 
-import com.kuose.box.admin.order.entity.BoxOrder;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kuose.box.db.order.entity.BoxOrder;
 
 /**
  * <p>

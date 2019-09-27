@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@MapperScan(basePackages = "com.kuose.box.admin.*.dao")
+@MapperScan(basePackages = "com.kuose.box.*.*.dao")
 public class BoxAdminApiApplication {
 
     @Bean

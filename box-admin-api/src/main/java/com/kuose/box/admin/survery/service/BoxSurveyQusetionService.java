@@ -1,7 +1,7 @@
 package com.kuose.box.admin.survery.service;
 
-import com.kuose.box.admin.survery.entity.BoxSurveyQusetion;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kuose.box.db.survery.entity.BoxSurveyQusetion;
 
 /**
  * <p>

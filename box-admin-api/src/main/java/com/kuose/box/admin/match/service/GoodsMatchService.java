@@ -2,12 +2,12 @@ package com.kuose.box.admin.match.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.kuose.box.admin.goods.dto.GoodsSkuVo;
-import com.kuose.box.admin.goods.entity.BoxGoods;
 import com.kuose.box.admin.goods.service.BoxGoodsService;
 import com.kuose.box.admin.match.dto.GoodsMatchParameter;
-import com.kuose.box.admin.user.entity.BoxUserBase;
 import com.kuose.box.common.utils.StringUtil;
+import com.kuose.box.db.goods.dto.GoodsSkuVo;
+import com.kuose.box.db.goods.entity.BoxGoods;
+import com.kuose.box.db.user.entity.BoxUserBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

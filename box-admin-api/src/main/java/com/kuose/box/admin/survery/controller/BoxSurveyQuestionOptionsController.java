@@ -1,10 +1,10 @@
 package com.kuose.box.admin.survery.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.kuose.box.admin.survery.entity.BoxSurveyQuestionOptions;
 import com.kuose.box.admin.survery.service.BoxSurveyQuestionOptionsService;
 import com.kuose.box.admin.survery.service.BoxSurveyQusetionService;
 import com.kuose.box.common.config.Result;
+import com.kuose.box.db.survery.entity.BoxSurveyQuestionOptions;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

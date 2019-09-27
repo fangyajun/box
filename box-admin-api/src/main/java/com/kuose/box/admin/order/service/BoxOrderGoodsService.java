@@ -1,8 +1,8 @@
 package com.kuose.box.admin.order.service;
 
-import com.kuose.box.admin.order.dto.OrderGoodsDto;
-import com.kuose.box.admin.order.entity.BoxOrderGoods;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kuose.box.admin.order.dto.OrderGoodsDto;
+import com.kuose.box.db.order.entity.BoxOrderGoods;
 
 /**
  * <p>

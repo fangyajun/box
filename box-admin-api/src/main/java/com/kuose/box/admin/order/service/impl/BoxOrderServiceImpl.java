@@ -1,9 +1,9 @@
 package com.kuose.box.admin.order.service.impl;
 
-import com.kuose.box.admin.order.entity.BoxOrder;
-import com.kuose.box.admin.order.dao.BoxOrderMapper;
-import com.kuose.box.admin.order.service.BoxOrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.kuose.box.admin.order.service.BoxOrderService;
+import com.kuose.box.db.order.dao.BoxOrderMapper;
+import com.kuose.box.db.order.entity.BoxOrder;
 import org.springframework.stereotype.Service;
 
 /**

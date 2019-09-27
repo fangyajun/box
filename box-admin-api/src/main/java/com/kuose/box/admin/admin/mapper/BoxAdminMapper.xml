@@ -13,7 +13,7 @@
         <result column="add_time" property="addTime" />
         <result column="update_time" property="updateTime" />
         <result column="deleted" property="deleted" />
-        <result column="role_ids" jdbcType="VARCHAR" property="roleIds" typeHandler="com.kuose.box.admin.mybatis.JsonIntegerArrayTypeHandler" />
+        <result column="role_ids" jdbcType="VARCHAR" property="roleIds" typeHandler="com.kuose.box.db.mybatis.JsonIntegerArrayTypeHandler" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -75,7 +75,7 @@
                 deleted = #{deleted,jdbcType=BIT},
             </if>
             <if test="roleIds != null">
-                role_ids = #{roleIds,jdbcType=VARCHAR,typeHandler=com.kuose.box.admin.mybatis.JsonIntegerArrayTypeHandler},
+                role_ids = #{roleIds,jdbcType=VARCHAR,typeHandler=com.kuose.box.db.mybatis.JsonIntegerArrayTypeHandler},
             </if>
         </set>
         where deleted != 1 and id = #{id,jdbcType=INTEGER}
@@ -90,7 +90,7 @@
         )
         values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{lastLoginIp,jdbcType=VARCHAR},
         #{lastLoginTime,jdbcType=BIGINT}, #{avatar,jdbcType=VARCHAR}, #{addTime,jdbcType=BIGINT},
-        #{updateTime,jdbcType=BIGINT}, #{deleted,jdbcType=BIT}, #{roleIds,jdbcType=VARCHAR,typeHandler=com.kuose.box.admin.mybatis.JsonIntegerArrayTypeHandler}
+        #{updateTime,jdbcType=BIGINT}, #{deleted,jdbcType=BIT}, #{roleIds,jdbcType=VARCHAR,typeHandler=com.kuose.box.db.mybatis.JsonIntegerArrayTypeHandler}
         )
     </insert>
 

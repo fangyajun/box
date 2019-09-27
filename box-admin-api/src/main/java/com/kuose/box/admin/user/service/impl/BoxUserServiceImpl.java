@@ -3,9 +3,9 @@ package com.kuose.box.admin.user.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.kuose.box.admin.user.dao.BoxUserMapper;
-import com.kuose.box.admin.user.entity.BoxUser;
 import com.kuose.box.admin.user.service.BoxUserService;
+import com.kuose.box.db.user.dao.BoxUserMapper;
+import com.kuose.box.db.user.entity.BoxUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

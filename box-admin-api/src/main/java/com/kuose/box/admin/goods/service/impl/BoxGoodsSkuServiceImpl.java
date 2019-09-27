@@ -1,9 +1,9 @@
 package com.kuose.box.admin.goods.service.impl;
 
-import com.kuose.box.admin.goods.entity.BoxGoodsSku;
-import com.kuose.box.admin.goods.dao.BoxGoodsSkuMapper;
-import com.kuose.box.admin.goods.service.BoxGoodsSkuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.kuose.box.admin.goods.service.BoxGoodsSkuService;
+import com.kuose.box.db.goods.dao.BoxGoodsSkuMapper;
+import com.kuose.box.db.goods.entity.BoxGoodsSku;
 import org.springframework.stereotype.Service;
 
 /**

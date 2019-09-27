@@ -3,15 +3,16 @@ package com.kuose.box.wx.survey.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuose.box.common.config.Result;
+import com.kuose.box.db.survery.entity.BoxSurveyQuestionOptions;
+import com.kuose.box.db.survery.entity.BoxSurveyQusetion;
+import com.kuose.box.db.survery.entity.BoxSurveyUserAnswer;
 import com.kuose.box.wx.annotation.LoginUser;
-import com.kuose.box.wx.survey.entity.BoxSurveyQuestionOptions;
-import com.kuose.box.wx.survey.entity.BoxSurveyQusetion;
-import com.kuose.box.wx.survey.entity.BoxSurveyUserAnswer;
 import com.kuose.box.wx.survey.service.BoxSurveyQuestionOptionsService;
 import com.kuose.box.wx.survey.service.BoxSurveyQusetionService;
 import com.kuose.box.wx.survey.service.BoxSurveyUserAnswerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +42,7 @@ public class BoxSurveyQusetionController {
 
     @ApiOperation(value="获取问题列表")
     @GetMapping("/list")
-    public Result list(@LoginUser Integer userId, Integer surveyId) {
+    public Result list(@ApiParam(hidden = true) @LoginUser Integer userId, Integer surveyId) {
         if (userId == null) {
             return Result.failure(501, "请登录");
         }

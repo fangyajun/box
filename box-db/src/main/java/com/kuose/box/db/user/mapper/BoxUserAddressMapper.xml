@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuose.box.db.user.dao.BoxUserAddressMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kuose.box.db.user.entity.BoxUserAddress">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="user_id" property="userId" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="county" property="county" />
+        <result column="address_detail" property="addressDetail" />
+        <result column="area_code" property="areaCode" />
+        <result column="postal_code" property="postalCode" />
+        <result column="phone" property="phone" />
+        <result column="is_default" property="isDefault" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, user_id, province, city, county, address_detail, area_code, postal_code, phone, is_default, add_time, update_time, deleted
+    </sql>
+
+</mapper>

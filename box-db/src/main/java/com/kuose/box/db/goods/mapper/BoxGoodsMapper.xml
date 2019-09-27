@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuose.box.db.goods.dao.BoxGoodsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kuose.box.db.goods.entity.BoxGoods">
+        <id column="id" property="id" />
+        <id column="source_goods_id" property="sourceGoodsId" />
+        <result column="goods_no" property="goodsNo" />
+        <result column="name" property="name" />
+        <result column="brand" property="brand" />
+        <result column="category_code" property="categoryCode" />
+        <result column="img" property="img" />
+        <result column="tmall_url" property="tmallUrl" />
+        <result column="is_on_sale" property="isOnSale" />
+        <result column="quarter" property="quarter" />
+        <result column="year" property="year" />
+        <result column="features_style_nos" property="featuresStyleNos" />
+        <result column="match_style_nos" property="matchStyleNos" />
+        <result column="counter_price" property="counterPrice" />
+        <result column="tag price" property="tag price" />
+        <result column="retail_price" property="retailPrice" />
+        <result column="remark" property="remark" />
+        <result column="register_date" property="registerDate" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, goods_no, `name`, brand, category_code, img, tmall_url, is_on_sale, quarter, `year`, features_style_nos, match_style_nos, counter_price, tag price, retail_price, remark, register_date, create_time, update_time, deleted
+    </sql>
+
+    <select id="listGoodsPage" resultMap="BaseResultMap">
+        SELECT bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
+        FROM box_goods bg
+        left JOIN box_goods_attribute bga ON bg.id = bga.goods_id
+        <where>
+            bg.deleted = 0
+            <if test="categoryCode != null">
+                and bg.category_code = #{categoryCode,jdbcType=VARCHAR}
+            </if>
+            <if test="goodsNo != null" >
+                and bg.goods_no like CONCAT('%',#{goodsNo},'%')
+            </if>
+            <if test="goodsName != null" >
+                and bg.name like CONCAT('%',#{goodsName},'%')
+            </if>
+            <if test="quarter != null" >
+                and bg.quarter like CONCAT('%',#{quarter},'%')
+            </if>
+            <if test="year != null">
+                and bg.year = #{year,jdbcType=INTEGER}
+            </if>
+            <if test="lowPrice != null">
+                and bg.retail_price &gt;= #{lowPrice,jdbcType=DOUBLE}
+            </if>
+            <if test="highPrice != null">
+                and bg.retail_price &lt;= #{highPrice,jdbcType=DOUBLE}
+            </if>
+            <if test="goodsAttributeCodes != null">
+                and bga.attribute_code in
+                <foreach collection="goodsAttributeCodes" index="index" item="goodsAttributeCodes" open="(" separator="," close=")">
+                    #{goodsAttributeCodes}
+                </foreach>
+            </if>
+
+        </where>
+        GROUP BY bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
+        order by add_time desc
+    </select>
+
+    <resultMap id="goodsSkuResultMap" type="java.util.Map" >
+        <id column="id" property="id" />
+        <result column="goods_no" property="goodsNo" />
+        <result column="name" property="name" />
+        <result column="brand" property="brand" />
+        <result column="category_code" property="categoryCode" />
+        <result column="img" property="img" />
+        <result column="tmall_url" property="tmallUrl" />
+        <result column="quarter" property="quarter" />
+        <result column="year" property="year" />
+        <result column="retail_price" property="retailPrice" />
+        <collection property="boxGoodsSkuList" ofType = "java.util.Map" select="com.kuose.box.db.goods.dao.BoxGoodsSkuMapper.listSkuByGoodsId" column="id" />
+    </resultMap>
+
+    <select id="listGoodsAndSku" parameterType="com.kuose.box.db.goods.dto.GoodsSkuVo" resultMap="goodsMatchSkuResultMap">
+        SELECT bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price,GROUP_CONCAT(bgs.id) AS sku_ids
+        FROM box_goods bg
+        left JOIN box_goods_attribute bga ON bg.id = bga.goods_id
+        left JOIN box_goods_sku bgs ON bg.id = bgs.goods_id
+        <where>
+            bg.id is not NULL
+            and bg.deleted = 0
+            <if test="categoryCode != null and categoryCode.length >= 1">
+                and bg.category_code in
+                <foreach collection="categoryCode" index="index" item="categoryCode" open="(" separator="," close=")">
+                    #{categoryCode}
+                </foreach>
+            </if>
+            <if test="goodsNo != null" >
+                and bg.goods_no like CONCAT('%',#{goodsNo},'%')
+            </if>
+            <if test="goodsName != null" >
+                and bg.name like CONCAT('%',#{goodsName},'%')
+            </if>
+            <if test="quarter != null" >
+                and bg.quarter like CONCAT('%',#{quarter},'%')
+            </if>
+            <if test="year != null">
+                and bg.year = #{year,jdbcType=VARCHAR}
+            </if>
+            <if test="lowPrice != null">
+                and bg.retail_price &gt;= #{lowPrice,jdbcType=DOUBLE}
+            </if>
+            <if test="highPrice != null">
+                and bg.retail_price &lt;= #{highPrice,jdbcType=DOUBLE}
+            </if>
+            <if test="goodsAttributeCodes != null">
+                and bga.attribute_code in
+                <foreach collection="goodsAttributeCodes" index="index" item="goodsAttributeCodes" open="(" separator="," close=")">
+                    #{goodsAttributeCodes}
+                </foreach>
+            </if>
+            <if test="colorName != null">
+                and bgs.color_name like CONCAT('%',#{colorName},'%')
+            </if>
+            <if test="colorCode != null">
+                and bgs.color_code = #{year,jdbcType=VARCHAR}
+            </if>
+            <if test="sizeCode != null">
+                and bgs.size_code = #{sizeCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+        GROUP BY bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
+        order by bg.year desc
+    </select>
+
+    <resultMap id="goodsMatchSkuResultMap" type="java.util.Map" >
+        <id column="id" property="id" />
+        <result column="goods_no" property="goodsNo" />
+        <result column="name" property="name" />
+        <result column="brand" property="brand" />
+        <result column="category_code" property="categoryCode" />
+        <result column="img" property="img" />
+        <result column="tmall_url" property="tmallUrl" />
+        <result column="quarter" property="quarter" />
+        <result column="year" property="year" />
+        <result column="retail_price" property="retailPrice" />
+        <!--<result column="sku_ids" property="skuIds" />-->
+        <collection property="boxGoodsSkuList" ofType = "java.util.Map" select="com.kuose.box.db.goods.dao.BoxGoodsSkuMapper.listSkuById" column="sku_ids" />
+    </resultMap>
+
+    <select id="listMatchGoods" parameterType="com.kuose.box.db.goods.dto.GoodsSkuVo" resultMap="goodsMatchSkuResultMap" >
+        select bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price,GROUP_CONCAT(bgs.id) AS sku_ids
+        from (
+        SELECT bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
+        FROM box_goods bg
+        LEFT JOIN box_goods_attribute bga ON bg.id = bga.goods_id
+        <where>
+            and bg.deleted = 0
+            <if test="categoryCode != null and categoryCode.length >= 1">
+                and bg.category_code in
+                <foreach collection="categoryCode" index="index" item="categoryCode" open="(" separator="," close=")">
+                    #{categoryCode}
+                </foreach>
+            </if>
+            <if test="goodsNo != null" >
+                and bg.goods_no like CONCAT('%',#{goodsNo},'%')
+            </if>
+            <if test="goodsName != null" >
+                and bg.name like CONCAT('%',#{goodsName},'%')
+            </if>
+            <if test="quarter != null" >
+                and bg.quarter like CONCAT('%',#{quarter},'%')
+            </if>
+            <if test="year != null">
+                and bg.year = #{year,jdbcType=INTEGER}
+            </if>
+            <if test="lowPrice != null">
+                and bg.retail_price &gt;= #{lowPrice,jdbcType=DOUBLE}
+            </if>
+            <if test="highPrice != null">
+                and bg.retail_price &lt;= #{highPrice,jdbcType=DOUBLE}
+            </if>
+            <if test="goodsAttributeCodes != null and goodsAttributeCodes.length >= 1">
+                and bga.attribute_code in
+                <foreach collection="goodsAttributeCodes" index="index" item="goodsAttributeCodes" open="(" separator="," close=")">
+                    #{goodsAttributeCodes}
+                </foreach>
+            </if>
+            <if test="avoidCategory != null and avoidCategory.length >= 1">
+                and bg.category_code not in
+                <foreach collection="avoidCategory" index="index" item="avoidCategory" open="(" separator="," close=")">
+                    #{avoidCategory}
+                </foreach>
+            </if>
+            <if test="avoidTexture != null and avoidTexture.length >= 1 ">
+                and bga.attribute_code not in
+                <foreach collection="avoidTexture" index="index" item="avoidTexture" open="(" separator="," close=")">
+                    #{avoidTexture}
+                </foreach>
+            </if>
+            <if test="avoidFigure != null and avoidFigure.length >= 1 ">
+                and bga.attribute_code not in
+                <foreach collection="avoidFigure" index="index" item="avoidFigure" open="(" separator="," close=")">
+                    #{avoidFigure}
+                </foreach>
+            </if>
+        </where>
+        GROUP BY bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
+        ) bg
+        LEFT JOIN box_goods_sku bgs ON bg.id = bgs.goods_id
+        <where>
+            <if test="colorName != null">
+                and bgs.color_name like CONCAT('%',#{colorName},'%')
+            </if>
+            <if test="colorCode != null">
+                and bgs.color_code = #{year,jdbcType=VARCHAR}
+            </if>
+            <if test="sizeCode != null">
+                and bgs.size_code = #{sizeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="avoidColor != null and avoidColor.length >= 1">
+                and bgs.color_code not in
+                <foreach collection="avoidColor" index="index" item="avoidColor" open="(" separator="," close=")">
+                    #{avoidColor}
+                </foreach>
+            </if>
+            /*衣服的尺寸，和价格区间过滤*/
+            <if test="topSize != null">
+                and(
+
+                   (bg.category_code in ('A','C','D','H','J','L','M','O','P','Q','U','V','W')   -- 上装
+                    <if test="topSize != null and topSize != '' ">
+                        and bgs.size_code = #{topSize,jdbcType=VARCHAR}
+                    </if>
+                    <if test="topLowPrice != null and topLowPrice != ''">
+                        and bg.retail_price &gt;= #{topLowPrice}
+                        AND bg.retail_price &lt;= #{topHighPrice}
+                    </if>
+                    )
+                    or (bg.category_code in ('R','F')   -- 下装
+                    <if test="bottomsSize != null and bottomsSize != ''">
+                        and bgs.size_code = #{bottomsSize,jdbcType=VARCHAR}
+                    </if>
+                    <if test="bottomsLowPrice != null and bottomsLowPrice != ''">
+                        and bg.retail_price &gt;= #{bottomsLowPrice}
+                        AND bg.retail_price &lt;= #{bottomsHighPrice}
+                    </if>
+                    )
+
+                    or (bg.category_code in ('B')   -- 连衣裙
+                    <if test="dressSize != null and dressSize != ''">
+                        and bgs.size_code = #{dressSize,jdbcType=VARCHAR}
+                    </if>
+                    <if test="bottomsLowPrice != null and bottomsLowPrice != ''">
+                        and bg.retail_price &gt;= #{dressLowPrice}
+                        AND bg.retail_price &lt;= #{dressHighPrice}
+                    </if>
+                    )
+
+                    or (bg.category_code in ('N')   -- 牛仔裤
+                    <if test="jeansSize != null and jeansSize != ''">
+                        and bgs.size_code = #{jeansSize,jdbcType=VARCHAR}
+                    </if>
+                    )
+
+                    or (bg.category_code in ('S','E','T','Y','X') -- 外套
+                    <if test="overcoatLowPrice != null and overcoatLowPrice != ''">
+                        and bg.retail_price &gt;= #{overcoatLowPrice}
+                        AND bg.retail_price &lt;= #{overcoatHighPrice}
+                    </if>
+                    )
+                    or bg.category_code in ('G','K','I','V') -- 其他类别
+                )
+            </if>
+        </where>
+        GROUP BY bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
+        order by bg.year desc
+    </select>
+</mapper>

@@ -2,10 +2,10 @@ package com.kuose.box.admin.goods.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.kuose.box.admin.goods.entity.BoxGoodsCategory;
 import com.kuose.box.admin.goods.service.BoxGoodsCategoryService;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.StringUtil;
+import com.kuose.box.db.goods.entity.BoxGoodsCategory;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

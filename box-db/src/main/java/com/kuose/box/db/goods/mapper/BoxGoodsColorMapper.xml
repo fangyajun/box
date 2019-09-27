@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuose.box.db.goods.dao.BoxGoodsColorMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kuose.box.db.goods.entity.BoxGoodsColor">
+        <id column="id" property="id" />
+        <result column="color_name" property="colorName" />
+        <result column="color_code" property="colorCode" />
+        <result column="color_status" property="colorStatus" />
+        <result column="alias_name" property="aliasName" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, color_name, color_code, color_status,alias_name add_time, update_time, deleted
+    </sql>
+
+</mapper>

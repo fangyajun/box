@@ -3,11 +3,12 @@ package com.kuose.box.wx.survey.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuose.box.common.config.Result;
+import com.kuose.box.db.survery.entity.BoxSurvey;
 import com.kuose.box.wx.annotation.LoginUser;
-import com.kuose.box.wx.survey.entity.BoxSurvey;
 import com.kuose.box.wx.survey.service.BoxSurveyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ public class BoxSurveyController {
 
     @ApiOperation(value="获取问卷列表")
     @GetMapping("/list")
-    public Result list(@LoginUser Integer userId) {
+    public Result list(@ApiParam(hidden = true) @LoginUser Integer userId) {
         if (userId == null) {
             return Result.failure(501, "请登录");
         }

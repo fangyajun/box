@@ -6,12 +6,11 @@ import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.*;
-import com.kuose.box.wx.annotation.LoginUser;
+import com.kuose.box.db.user.entity.BoxUser;
 import com.kuose.box.wx.common.notify.NotifyService;
 import com.kuose.box.wx.common.notify.NotifyType;
 import com.kuose.box.wx.common.service.CaptchaCodeManager;
 import com.kuose.box.wx.common.service.UserTokenManager;
-import com.kuose.box.wx.login.entity.BoxUser;
 import com.kuose.box.wx.login.service.BoxUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -19,8 +18,10 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;

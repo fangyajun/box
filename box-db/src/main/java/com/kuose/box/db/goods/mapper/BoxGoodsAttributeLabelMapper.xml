@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuose.box.db.goods.dao.BoxGoodsAttributeLabelMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kuose.box.db.goods.entity.BoxGoodsAttributeLabel">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="attribute_name" property="attributeName" />
+        <result column="attribute_code" property="attributeCode" />
+        <result column="head_node_category" property="headNodeCategory" />
+        <result column="attribute_flag" property="attributeFlag" />
+        <result column="attribute_sort" property="attributeSort" />
+        <result column="type" property="type" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, parent_id, attribute_name, attribute_code, type, add_time, update_time, deleted
+    </sql>
+
+    <resultMap id="goodsAttributeLabelResultMap" type="java.util.Map" >
+        <id column="id" property="id" />
+        <result property="parent_id" column="parentId" />
+        <result property="attribute_name" column="attributeName" />
+        <result property="attribute_code" column="attributeCode" />
+        <result column="head_node_category" property="headNodeCategory" />
+        <result property="attribute_flag" column="attributeFlag" />
+        <result property="type" column="type" />
+        <result property="add_time" column="addTime" />
+        <result property="update_time" column="updateTime" />
+        <collection property="children" ofType = "java.util.Map" select="com.kuose.box.db.goods.dao.BoxGoodsAttributeLabelMapper.listGoodsAttributeLabelByParentId" column="id" />
+    </resultMap>
+
+    <select id="listGoodsAttributeLabel" parameterType="com.kuose.box.db.goods.entity.BoxGoodsAttributeLabel" resultMap="goodsAttributeLabelResultMap">
+        select
+        id, parent_id, attribute_name, attribute_code,attribute_flag,head_node_category, `type`, add_time, update_time
+        from box_goods_attribute_label
+        <where>
+            parent_id = 0
+            <if test="type != null" >
+                and attribute_flag = #{type}
+            </if>
+            <if test="nodeCategory != null" >
+                and head_node_category = #{nodeCategory}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="listGoodsAttributeLabelByParentId" parameterType="java.lang.String" resultMap="goodsAttributeLabelResultMap">
+        select
+        id, parent_id, attribute_name, attribute_code,attribute_flag,head_node_category,`type`, add_time, update_time
+        from box_goods_attribute_label
+        where parent_id = #{id}
+    </select>
+
+    <select id="listNodeCategory" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT head_node_category
+        FROM box_goods_attribute_label
+        WHERE parent_id = 0
+        GROUP BY head_node_category
+    </select>
+
+
+</mapper>

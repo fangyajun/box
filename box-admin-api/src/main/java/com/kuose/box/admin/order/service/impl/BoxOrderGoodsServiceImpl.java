@@ -2,14 +2,14 @@ package com.kuose.box.admin.order.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.kuose.box.admin.goods.entity.BoxGoods;
-import com.kuose.box.admin.goods.entity.BoxGoodsSku;
 import com.kuose.box.admin.goods.service.BoxGoodsService;
 import com.kuose.box.admin.goods.service.BoxGoodsSkuService;
-import com.kuose.box.admin.order.dao.BoxOrderGoodsMapper;
 import com.kuose.box.admin.order.dto.OrderGoodsDto;
-import com.kuose.box.admin.order.entity.BoxOrderGoods;
 import com.kuose.box.admin.order.service.BoxOrderGoodsService;
+import com.kuose.box.db.goods.entity.BoxGoods;
+import com.kuose.box.db.goods.entity.BoxGoodsSku;
+import com.kuose.box.db.order.dao.BoxOrderGoodsMapper;
+import com.kuose.box.db.order.entity.BoxOrderGoods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

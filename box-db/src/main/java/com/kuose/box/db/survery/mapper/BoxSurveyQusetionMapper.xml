@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuose.box.db.survery.dao.BoxSurveyQusetionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kuose.box.db.survery.entity.BoxSurveyQusetion">
+        <id column="id" property="id" />
+        <result column="question_type" property="questionType" />
+        <result column="question_topic" property="questionTopic" />
+        <result column="question_pic" property="questionPic" />
+        <result column="label_code" property="labelCode" />
+        <result column="survey_id" property="surveyId" />
+        <result column="sort" property="sort" />
+        <result column="is_qequired" property="qequired" />
+        <result column="description" property="description" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, question_type, question_topic,label_code, question_pic, survey_id, sort, is_qequired, description, create_time, update_time, is_deleted
+    </sql>
+
+</mapper>

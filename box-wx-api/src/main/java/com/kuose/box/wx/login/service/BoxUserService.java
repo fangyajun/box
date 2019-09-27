@@ -1,7 +1,7 @@
 package com.kuose.box.wx.login.service;
 
-import com.kuose.box.wx.login.entity.BoxUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kuose.box.db.user.entity.BoxUser;
 
 /**
  * <p>
