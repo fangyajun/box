@@ -14,7 +14,6 @@
         <result column="mobile" property="mobile" />
         <result column="user_message" property="userMessage" />
         <result column="coordinator_message" property="coordinatorMessage" />
-        <result column="message" property="message" />
         <result column="goods_price" property="goodsPrice" />
         <result column="coupon_price" property="couponPrice" />
         <result column="integral_price" property="integralPrice" />
@@ -38,7 +37,43 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, order_no, order_status, audit_status, addr_id, nic_name, mobile, user_message, coordinator_message, message, goods_price, coupon_price, integral_price, advance_price, order_price, actual_price, pay_id, pay_time, ship_sn, ship_channel, ship_time, expect_time, confirm_time, comments, coordinator, auditor, add_time, update_time, deleted
+        id, user_id, order_no, order_status, audit_status, addr_id, nic_name, mobile, user_message, coordinator_message, goods_price, coupon_price, integral_price, advance_price, order_price, actual_price, pay_id, pay_time, ship_sn, ship_channel, ship_time, expect_time, confirm_time, comments, coordinator, auditor, add_time, update_time, deleted
     </sql>
+
+
+    <select id="listOrderPage" resultMap="BaseResultMap">
+        SELECT id, user_id, order_no, order_status, audit_status, addr_id, nic_name, mobile, user_message, coordinator_message, goods_price, coupon_price,
+                integral_price, advance_price, order_price, actual_price, pay_id, pay_time, ship_sn, ship_channel,
+                ship_time, expect_time, confirm_time, comments, coordinator, auditor, add_time, update_time
+        FROM box_order
+        <where>
+            deleted = 0
+            <if test="orderNo != null">
+                and order_no like CONCAT('%',#{orderNo},'%')
+            </if>
+            <if test="minExpectTime != null">
+                and expect_time &gt;= #{minExpectTime,jdbcType=DOUBLE}
+            </if>
+            <if test="maxExpectTime != null">
+                and expect_time &lt;= #{maxExpectTime,jdbcType=DOUBLE}
+            </if>
+
+            <if test="mobile != null" >
+                and mobile like CONCAT('%',#{goodsNo},'%')
+            </if>
+
+            <if test="orderStatus != null">
+                and order_status = #{orderStatus,jdbcType=INTEGER}
+            </if>
+            <if test="auditStatus != null">
+                and audit_status = #{auditStatus,jdbcType=INTEGER}
+            </if>
+
+        </where>
+        order by add_time desc
+    </select>
+
+
+
 
 </mapper>

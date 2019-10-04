@@ -1,6 +1,9 @@
 package com.kuose.box.admin.order.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kuose.box.admin.order.dto.OrderDto;
 import com.kuose.box.db.order.entity.BoxOrder;
 
 /**
@@ -13,4 +16,5 @@ import com.kuose.box.db.order.entity.BoxOrder;
  */
 public interface BoxOrderService extends IService<BoxOrder> {
 
+    IPage<BoxOrder> listOrderPage(Page<BoxOrder> boxOrderPage, OrderDto orderDto);
 }
