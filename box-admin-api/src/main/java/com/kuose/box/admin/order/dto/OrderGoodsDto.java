@@ -14,6 +14,9 @@ public class OrderGoodsDto {
     @ApiModelProperty(value="订单id")
     private Integer orderId;
 
+    @ApiModelProperty(value="搭配师名称")
+    private String username;
+
     @ApiModelProperty(value="搭配师给用户留言")
     private String coordinatorMessage;
 

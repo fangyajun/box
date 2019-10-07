@@ -90,8 +90,8 @@ public class BoxOrderController {
         }
 
         BoxOrder order = boxOrderService.getById(boxOrder.getId());
-        if (order.getOrderStatus() != 0) {
-            return Result.failure(507, "订单无法取消，订单已被搭配");
+        if (order.getOrderStatus() != 0 && order.getOrderStatus() != 1) {
+            return Result.failure(507, "订单无法取消，订单已发货");
         }
 
         boxOrderService.removeById(boxOrder.getId());

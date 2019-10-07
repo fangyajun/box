@@ -2,6 +2,7 @@ package com.kuose.box.admin.order.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.kuose.box.admin.order.dto.OrderAuditDto;
 import com.kuose.box.admin.order.dto.OrderGoodsDto;
 import com.kuose.box.admin.order.service.BoxOrderGoodsService;
 import com.kuose.box.admin.order.service.BoxOrderService;
@@ -34,7 +35,7 @@ public class BoxOrderGoodsController {
     @Autowired
     private BoxOrderService boxOrderService;
 
-    @ApiOperation(value="添加商品到盒子")
+    @ApiOperation(value="添加或修改商品到盒子")
     @PostMapping("/addOrderGoods")
     public Result addOrderGoods(@RequestBody OrderGoodsDto orderGoodsDto) {
         if (orderGoodsDto.getOrderId() == null || orderGoodsDto.getSkuIds() == null) {
@@ -53,9 +54,9 @@ public class BoxOrderGoodsController {
             boxOrderService.updateById(boxOrder);
         }
 
-        boxOrderGoodsService.save(orderGoodsDto);
-        return Result.success();
+        return boxOrderGoodsService.save(orderGoodsDto);
     }
+
 
     @ApiOperation(value="盒子详情")
     @GetMapping("/boxDetail")
@@ -73,26 +74,26 @@ public class BoxOrderGoodsController {
         return Result.success().setData("boxOrderGoodsList", boxOrderGoodsList).setData("coordinatorMessage", coordinatorMessage);
     }
 
-//    @ApiOperation(value="删除盒子商品，参数传订单id和skuId")
-//    @PostMapping("/delete")
-//    public Result delete(@RequestBody BoxOrderGoods boxOrderGoods) {
-//        if (boxOrderGoods.getOrderId() == null || boxOrderGoods.getSkuId() == null) {
-//            return Result.failure("缺少必传参数");
-//        }
-//
-//        BoxOrder boxOrder = boxOrderService.getById(boxOrderGoods.getOrderId());
-//        if (boxOrder == null) {
-//            return Result.failure("数据异常,该盒子订单不存在");
-//        }
-//        if (boxOrder.getAuditStatus() == 1) {
-//            return Result.failure("该盒子已搭配审核，无法操作！");
-//        }
-//
-//        boolean b = boxOrderGoodsService.remove(new QueryWrapper<BoxOrderGoods>().eq("order_id", boxOrderGoods.getOrderId()).eq("sku_id", boxOrderGoods.getSkuId()));
-//        if (!b) {
-//            return Result.failure(500,"删除数据异常");
-//        }
-//        return Result.success();
-//    }
+    @ApiOperation(value="搭配审核")
+    @PostMapping("/audit")
+    public Result audit(@RequestBody OrderAuditDto orderAuditDto) {
+        if (orderAuditDto.getOrderId() == null || StringUtil.isBlank(orderAuditDto.getUsername())) {
+            return Result.failure("缺少必传参数");
+        }
+
+        BoxOrder boxOrder = boxOrderService.getById(orderAuditDto.getOrderId());
+        if (boxOrder.getAuditStatus() == 1) {
+            return Result.failure("该订单已审核");
+        }
+
+        boxOrder.setOrderStatus(1);
+        boxOrder.setAuditStatus(orderAuditDto.getStatus());
+        boxOrder.setAuditor(orderAuditDto.getUsername());
+
+        boxOrderService.updateById(boxOrder);
+        return Result.success();
+    }
+
+
 }
 

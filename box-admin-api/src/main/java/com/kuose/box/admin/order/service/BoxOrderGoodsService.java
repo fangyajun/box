@@ -2,6 +2,7 @@ package com.kuose.box.admin.order.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.kuose.box.admin.order.dto.OrderGoodsDto;
+import com.kuose.box.common.config.Result;
 import com.kuose.box.db.order.entity.BoxOrderGoods;
 
 /**
@@ -14,5 +15,5 @@ import com.kuose.box.db.order.entity.BoxOrderGoods;
  */
 public interface BoxOrderGoodsService extends IService<BoxOrderGoods> {
 
-    void save(OrderGoodsDto orderGoodsDto);
+    Result save(OrderGoodsDto orderGoodsDto);
 }

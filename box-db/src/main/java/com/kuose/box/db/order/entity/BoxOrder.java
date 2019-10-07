@@ -34,7 +34,7 @@ private static final long serialVersionUID=1L;
     private String orderNo;
 
     /**
-     * 订单状态,0-待搭配状态，1-已搭配未发货，2-已发货未签收，3-已签收未确认收货，4-已签收确认收货，5-支付, 7-已关闭
+     * 订单状态,0-待搭配状态，1-已搭配待发货，2-已发货待收货，3-已确认收货，待付款，4-，5-支付, 7-已关闭
      */
     private Integer orderStatus;
 

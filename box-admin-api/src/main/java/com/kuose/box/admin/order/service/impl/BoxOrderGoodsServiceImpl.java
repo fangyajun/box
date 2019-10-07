@@ -6,6 +6,7 @@ import com.kuose.box.admin.goods.service.BoxGoodsService;
 import com.kuose.box.admin.goods.service.BoxGoodsSkuService;
 import com.kuose.box.admin.order.dto.OrderGoodsDto;
 import com.kuose.box.admin.order.service.BoxOrderGoodsService;
+import com.kuose.box.common.config.Result;
 import com.kuose.box.db.goods.entity.BoxGoods;
 import com.kuose.box.db.goods.entity.BoxGoodsSku;
 import com.kuose.box.db.order.dao.BoxOrderGoodsMapper;
@@ -13,6 +14,8 @@ import com.kuose.box.db.order.entity.BoxOrderGoods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * <p>
@@ -34,16 +37,28 @@ public class BoxOrderGoodsServiceImpl extends ServiceImpl<BoxOrderGoodsMapper, B
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(OrderGoodsDto orderGoodsDto) {
+    public Result save(OrderGoodsDto orderGoodsDto) {
         Integer orderId = orderGoodsDto.getOrderId();
         Integer[] skuIds = orderGoodsDto.getSkuIds();
         // 先删除
-        for (Integer skuId : skuIds) {
-            boxOrderGoodsMapper.delete(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("sku_id", skuId));
+        List<BoxOrderGoods> goodsList = boxOrderGoodsMapper.selectList(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("deleted", 0));
+        if (goodsList != null && !goodsList.isEmpty()) {
+            for (BoxOrderGoods boxOrderGoods : goodsList) {
+                // 先删除，在更新对应sku的库存数量
+                boxOrderGoodsMapper.delete(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("sku_id", boxOrderGoods.getSkuId()));
+
+                BoxGoodsSku goodsSku = boxGoodsSkuService.getById(boxOrderGoods.getSkuId());
+                goodsSku.setNumber(goodsSku.getNumber() + 1);
+                boxGoodsSkuService.updateById(goodsSku);
+            }
         }
+
         // 在添加
         for (Integer skuId : skuIds) {
             BoxGoodsSku goodsSku = boxGoodsSkuService.getById(skuId);
+            if (goodsSku.getNumber() < 1) {
+                return Result.failure(506, "sku编号" + goodsSku.getSkuCode() + "库存不足");
+            }
             BoxGoods goods = boxGoodsService.getById(goodsSku.getGoodsId());
 
             BoxOrderGoods boxOrderGoods = new BoxOrderGoods();
@@ -63,6 +78,11 @@ public class BoxOrderGoodsServiceImpl extends ServiceImpl<BoxOrderGoodsMapper, B
             boxOrderGoods.setUpdateTime(System.currentTimeMillis());
 
             boxOrderGoodsMapper.insert(boxOrderGoods);
+
+            // 减掉对应sku的库存
+            goodsSku.setNumber(goodsSku.getNumber() - 1);
+            boxGoodsSkuService.updateById(goodsSku);
         }
+        return Result.success();
     }
 }
