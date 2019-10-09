@@ -13,8 +13,6 @@ import com.kuose.box.common.utils.RegexUtil;
 import com.kuose.box.common.utils.StringUtil;
 import com.kuose.box.common.utils.bcrypt.BCryptPasswordEncoder;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -43,11 +41,7 @@ public class BoxAdminController {
     private LogHelper logHelper;
 
     @ApiOperation(value="查询管理员列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "username", value = "用户名", required = false, dataType = "String", paramType = "path", example = "admin123"),
-            @ApiImplicitParam(name = "page", value = "起始页", required = true, dataType = "Integer", paramType = "path", example = "1"),
-            @ApiImplicitParam(name = "limit", value = "每页条数", required = true, dataType = "Integer", paramType = "path", example = "10")
-    })
+
     @RequiresPermissions("admin:admin:list")
     @RequiresPermissionsDesc(menu = {"系统管理", "管理员管理"}, button = "查询")
     @GetMapping("/list")

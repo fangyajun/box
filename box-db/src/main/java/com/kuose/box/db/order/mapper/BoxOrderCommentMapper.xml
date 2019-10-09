@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuose.box.db.order.dao.BoxOrderCommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kuose.box.db.order.entity.BoxOrderComment">
+        <id column="id" property="id" />
+        <result column="order_id" property="orderId" />
+        <result column="user_id" property="userId" />
+        <result column="customize" property="customize" />
+        <result column="style" property="style" />
+        <result column="serve" property="serve" />
+        <result column="next_box" property="nextBox" />
+        <result column="coordinator" property="coordinator" />
+        <result column="content" property="content" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_id, user_id, customize, style, serve, next_box, coordinator, content, add_time, update_time, deleted
+    </sql>
+
+</mapper>

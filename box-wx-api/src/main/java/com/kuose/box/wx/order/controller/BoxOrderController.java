@@ -4,6 +4,7 @@ package com.kuose.box.wx.order.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.db.order.entity.BoxOrder;
+import com.kuose.box.db.order.entity.BoxOrderComment;
 import com.kuose.box.db.prepay.entity.BoxPrepayCardOrder;
 import com.kuose.box.wx.annotation.LoginUser;
 import com.kuose.box.wx.order.service.BoxOrderService;
@@ -12,10 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -25,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author fangyajun
  * @since 2019-09-05
  */
-@Api(tags = {"订单"})
+@Api(tags = {"用户订单管理"})
 @RestController
 @RequestMapping("/boxOrder")
 public class BoxOrderController {
@@ -34,6 +32,7 @@ public class BoxOrderController {
     private BoxOrderService boxOrderService;
     @Autowired
     private BoxPrepayCardOrderService boxPrepayCardOrderService;
+
 
     @ApiOperation(value="创建用户订单，要盒子的时候可以调用")
     @PostMapping("/create")
@@ -97,6 +96,61 @@ public class BoxOrderController {
         boxOrderService.removeById(boxOrder.getId());
         return Result.success();
     }
+
+    @ApiOperation(value="用户确认收货")
+    @PostMapping("/confirm")
+    public Result confirm(@RequestBody BoxOrder boxOrder, @ApiParam(hidden = true) @LoginUser Integer userId) {
+        if (userId == null) {
+            return Result.failure(501, "请登录");
+        }
+
+        if (boxOrder.getId() == null) {
+            return Result.failure("缺少必传参数");
+        }
+
+        BoxOrder order = boxOrderService.getById(boxOrder.getId());
+        if (order.getOrderStatus() != 2) {
+            return Result.failure(506, "订单状态不是待收货状态，无法进行此操作！");
+        }
+
+        order.setOrderStatus(3);
+        boxOrderService.updateById(order);
+        return Result.success();
+    }
+
+    @ApiOperation(value="订单评价")
+    @PostMapping("/orderAppraisement")
+    public Result orderAppraisement(@RequestBody BoxOrderComment boxOrderComment, @ApiParam(hidden = true) @LoginUser Integer userId ) {
+        if (userId == null) {
+            return Result.failure(501, "请登录");
+        }
+        if (boxOrderComment.getOrderId() == null ) {
+            return Result.failure("缺少必传参数");
+        }
+
+        boxOrderService.orderAppraisement(boxOrderComment);
+        return Result.success();
+    }
+
+    @ApiOperation(value="订单结算，订单结算页面")
+    @GetMapping("/orderSettlement")
+    public Result orderSettlement(Integer orderId) {
+        if (orderId == null) {
+            return Result.failure("缺少必传参数");
+        }
+
+        BoxOrder boxOrder = boxOrderService.getById(orderId);
+        if (boxOrder.getOrderStatus() != 3) {
+            return Result.failure(506, "请先确认收货，在进行订单结算");
+        }
+
+        return boxOrderService.orderSettlement(orderId);
+
+
+
+    }
+
+
 
 }
 

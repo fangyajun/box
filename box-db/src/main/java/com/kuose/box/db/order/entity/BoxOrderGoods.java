@@ -49,7 +49,7 @@ private static final long serialVersionUID=1L;
     private String goodsNo;
 
     /**
-     * 商品编号
+     * sku编号
      */
     private String skuNo;
 

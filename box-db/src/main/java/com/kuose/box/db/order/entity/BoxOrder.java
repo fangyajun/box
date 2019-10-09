@@ -80,9 +80,9 @@ private static final long serialVersionUID=1L;
     private BigDecimal couponPrice;
 
     /**
-     * 用户积分减免
+     * 折扣减免
      */
-    private BigDecimal integralPrice;
+    private BigDecimal discountPrice;
 
     /**
      * 预付款

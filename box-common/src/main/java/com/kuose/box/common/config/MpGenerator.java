@@ -14,7 +14,7 @@ public class MpGenerator {
         new MpGenerator().generator("D:\\MpGenerator"
                 , "jdbc:mysql://192.168.5.176:3306/box?characterEncoding=utf8"
 //                , "com.kuose.box.admin.user"
-                , "com.kuose.box.wx.user"
+                , "com.kuose.box.db.discount"
                 , "root"
                 , "123456");
 
@@ -34,7 +34,7 @@ public class MpGenerator {
                 .setEnableCache(false)
                 .setBaseResultMap(true)
                 .setBaseColumnList(true)
-                .setAuthor("fangyajun")
+                .setAuthor("魔舞清华")
                 .setMapperName("%sMapper")
                 .setXmlName("%sMapper")
                 .setServiceName("%sService")
@@ -55,8 +55,8 @@ public class MpGenerator {
         StrategyConfig strategyConfig = new StrategyConfig();
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         // 生成的表
-        strategyConfig.setInclude("box_user_address");
-//        strategyConfig.setInclude("box_prepay_card", "box_prepay_card_order");
+        strategyConfig.setInclude("box_discount");
+//        strategyConfig.setInclude("box_order_goods_comment", "box_order_comment");
 
         new AutoGenerator().setDataSource(dataSourceConfig)
                 .setGlobalConfig(gc)

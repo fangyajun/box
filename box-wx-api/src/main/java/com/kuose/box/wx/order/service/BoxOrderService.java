@@ -3,6 +3,7 @@ package com.kuose.box.wx.order.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.db.order.entity.BoxOrder;
+import com.kuose.box.db.order.entity.BoxOrderComment;
 
 /**
  * <p>
@@ -15,4 +16,8 @@ import com.kuose.box.db.order.entity.BoxOrder;
 public interface BoxOrderService extends IService<BoxOrder> {
 
     Result create(BoxOrder boxOrder);
+
+    void orderAppraisement(BoxOrderComment boxOrderComment);
+
+    Result orderSettlement(Integer orderId);
 }
