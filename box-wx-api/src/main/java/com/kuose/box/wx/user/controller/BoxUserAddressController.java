@@ -61,9 +61,9 @@ public class BoxUserAddressController {
     @ApiOperation(value="收货地址列表")
     @GetMapping("/list")
     public Result list(Integer userId) {
-        if (userId == null) {
-            return Result.failure(501, "请登录");
-        }
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
 
         List<BoxUserAddress> userAddressList = boxUserAddressService.list(new QueryWrapper<BoxUserAddress>().
                 eq("deleted", 0).eq("user_id", userId).orderByDesc("is_default"));

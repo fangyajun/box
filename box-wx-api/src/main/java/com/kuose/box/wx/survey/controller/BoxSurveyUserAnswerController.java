@@ -34,9 +34,9 @@ public class BoxSurveyUserAnswerController {
     @ApiOperation(value="新增用户问券答案")
     @PostMapping("/add") //
     public Result add(@RequestBody BoxSurveyUserAnswer boxSurveyUserAnswer, @ApiParam(hidden = true) @LoginUser Integer userId) {
-        if (userId == null) {
-            return Result.failure(501, "请登录");
-        }
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
         if (StringUtil.isBlank(boxSurveyUserAnswer.getLabelCode()) || boxSurveyUserAnswer.getOptionValues() == null ||
                 boxSurveyUserAnswer.getUserId() == null) {
             return Result.failure("缺少必传参数");

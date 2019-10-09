@@ -35,9 +35,9 @@ public class BoxSurveyController {
     @ApiOperation(value="获取问卷列表")
     @GetMapping("/list")
     public Result list(@ApiParam(hidden = true) @LoginUser Integer userId) {
-        if (userId == null) {
-            return Result.failure(501, "请登录");
-        }
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
 
         List<BoxSurvey> surveyList = boxSurveyService.list(new QueryWrapper<BoxSurvey>().eq("is_deleted", 0).orderByDesc("sort"));
         return Result.success().setData("surveyList", surveyList);

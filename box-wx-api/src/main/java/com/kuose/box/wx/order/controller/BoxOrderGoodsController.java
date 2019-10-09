@@ -42,9 +42,9 @@ public class BoxOrderGoodsController {
     @ApiOperation(value="盒子商品列表")
     @GetMapping("/boxDetail")
     public Result boxDetail(Integer orderId, @ApiParam(hidden = true) @LoginUser Integer userId) {
-        if (userId == null) {
-            return Result.failure(501, "请登录");
-        }
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
         if (orderId == null) {
             return Result.failure("缺少必传参数");
         }
@@ -75,9 +75,9 @@ public class BoxOrderGoodsController {
     @ApiOperation(value="盒子商品评价")
     @PostMapping("/goodsAppraisement")
     public Result goodsAppraisement(@RequestBody BoxOrderGoodsComment boxOrderGoodsComment, @ApiParam(hidden = true) @LoginUser Integer userId ) {
-        if (userId == null) {
-            return Result.failure(501, "请登录");
-        }
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
         if (boxOrderGoodsComment.getOrderId() == null || boxOrderGoodsComment.getSkuId() == null) {
             return Result.failure("缺少必传参数");
         }

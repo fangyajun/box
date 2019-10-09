@@ -79,6 +79,13 @@ private static final long serialVersionUID=1L;
     private String description;
 
     /**
+     * 说明，描述
+     */
+    @ApiModelProperty(value = "说明，描述")
+    private String viewTypeId;
+
+
+    /**
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间", hidden = true)
@@ -102,4 +109,7 @@ private static final long serialVersionUID=1L;
 
     @TableField(exist = false)
     private List<BoxSurveyUserAnswer> userAnswerList;
+
+    @TableField(exist = false)
+    private BoxSurveyQuestionViewType boxSurveyQuestionViewType;
 }

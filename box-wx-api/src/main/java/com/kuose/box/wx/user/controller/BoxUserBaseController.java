@@ -29,9 +29,9 @@ public class BoxUserBaseController {
     @ApiOperation(value="填写用户基本信息，设置期望收盒时间")
     @PostMapping("/add")
     public Result add(@RequestBody BoxUserBase boxUserBase, @ApiParam(hidden = true) @LoginUser Integer userId) {
-        if (userId == null) {
-            return Result.failure(501, "请登录");
-        }
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
 
         boxUserBase.setCreateTime(System.currentTimeMillis());
         boxUserBase.setUpdateTime(System.currentTimeMillis());
@@ -42,9 +42,9 @@ public class BoxUserBaseController {
     @ApiOperation(value="用户信息更新")
     @PostMapping("/update")
     public Result update(@RequestBody BoxUserBase boxUserBase, @ApiParam(hidden = true) @LoginUser Integer userId) {
-        if (userId == null) {
-            return Result.failure(501, "请登录");
-        }
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
         if (boxUserBase.getId() == null) {
             return Result.failure("缺少必传参数");
         }

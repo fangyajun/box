@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kuose.box.admin.survery.service.BoxSurveyQuestionOptionsService;
+import com.kuose.box.admin.survery.service.BoxSurveyQuestionViewTypeService;
 import com.kuose.box.admin.survery.service.BoxSurveyQusetionService;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.StringUtil;
@@ -35,6 +36,8 @@ public class BoxSurveyQusetionController {
     private BoxSurveyQusetionService boxSurveyQusetionService;
     @Autowired
     private BoxSurveyQuestionOptionsService boxSurveyQuestionOptionsService;
+    @Autowired
+    private BoxSurveyQuestionViewTypeService boxSurveyQuestionViewTypeService;
 
     @ApiOperation(value="新增问题")
     @PostMapping("add")

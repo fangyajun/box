@@ -37,9 +37,9 @@ public class BoxOrderController {
     @ApiOperation(value="创建用户订单，要盒子的时候可以调用")
     @PostMapping("/create")
     public Result create(@RequestBody BoxOrder boxOrder, @ApiParam(hidden = true) @LoginUser Integer userId) {
-        if (userId == null) {
-            return Result.failure(501, "请登录");
-        }
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
 
         // 判断用户是否有订单在搭配中或者未完成
         QueryWrapper<BoxOrder> orderQueryWrapper = new QueryWrapper<BoxOrder>().eq("deleted", 0).eq("user_id", userId).ne("order_status", 7);
@@ -65,9 +65,9 @@ public class BoxOrderController {
     @ApiOperation(value="修改订单的收货地址")
     @PostMapping("/update")
     public Result update(@RequestBody BoxOrder boxOrder, @ApiParam(hidden = true) @LoginUser Integer userId) {
-        if (userId == null) {
-            return Result.failure(501, "请登录");
-        }
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
 
         if (boxOrder.getId() == null) {
             return Result.failure("参数订单id必传");
@@ -84,9 +84,9 @@ public class BoxOrderController {
     @ApiOperation(value="用户取消订单")
     @PostMapping("/cancel")
     public Result cancel(@RequestBody BoxOrder boxOrder, @ApiParam(hidden = true) @LoginUser Integer userId) {
-        if (userId == null) {
-            return Result.failure(501, "请登录");
-        }
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
 
         BoxOrder order = boxOrderService.getById(boxOrder.getId());
         if (order.getOrderStatus() != 0 && order.getOrderStatus() != 1) {
@@ -100,9 +100,9 @@ public class BoxOrderController {
     @ApiOperation(value="用户确认收货")
     @PostMapping("/confirm")
     public Result confirm(@RequestBody BoxOrder boxOrder, @ApiParam(hidden = true) @LoginUser Integer userId) {
-        if (userId == null) {
-            return Result.failure(501, "请登录");
-        }
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
 
         if (boxOrder.getId() == null) {
             return Result.failure("缺少必传参数");
@@ -121,9 +121,9 @@ public class BoxOrderController {
     @ApiOperation(value="订单评价")
     @PostMapping("/orderAppraisement")
     public Result orderAppraisement(@RequestBody BoxOrderComment boxOrderComment, @ApiParam(hidden = true) @LoginUser Integer userId ) {
-        if (userId == null) {
-            return Result.failure(501, "请登录");
-        }
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
         if (boxOrderComment.getOrderId() == null ) {
             return Result.failure("缺少必传参数");
         }

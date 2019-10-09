@@ -33,9 +33,9 @@ public class BoxPrepayCardOrderController {
     @ApiOperation(value="创建预付金或服务卡订单")
     @PostMapping("/creat")
     public Result creat(@RequestBody BoxPrepayCardOrder boxPrepayCardOrder, @ApiParam(hidden = true) @LoginUser Integer userId) {
-        if (userId == null) {
-            return Result.failure(501, "请登录");
-        }
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
 
         if (boxPrepayCardOrder.getPrepayCardId() == null) {
             return Result.failure(503, "缺少必传参数");
