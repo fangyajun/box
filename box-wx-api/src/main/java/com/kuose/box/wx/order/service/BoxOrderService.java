@@ -15,9 +15,15 @@ import com.kuose.box.db.order.entity.BoxOrderComment;
  */
 public interface BoxOrderService extends IService<BoxOrder> {
 
-    Result create(BoxOrder boxOrder);
+    Result create(Integer userId, Integer addrId, Integer prepayCardOrderId);
 
     void orderAppraisement(BoxOrderComment boxOrderComment);
 
     Result orderSettlement(Integer orderId);
+
+    Result cancel(Integer orderId);
+
+    int updateWithOptimisticLocker(BoxOrder order);
+
+    int deleteWithOptimisticLocker(BoxOrder order);
 }

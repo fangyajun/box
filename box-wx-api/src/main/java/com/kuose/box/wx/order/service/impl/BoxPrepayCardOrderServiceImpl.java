@@ -33,33 +33,29 @@ public class BoxPrepayCardOrderServiceImpl extends ServiceImpl<BoxPrepayCardOrde
 
     @Override
     @Transactional
-    public Result creat(BoxPrepayCardOrder boxPrepayCardOrder) {
+    public Result creat(Integer userId, Integer prepayCardId) {
         // 1.判断预付金或服务卡是否正常
-        BoxPrepayCard boxPrepayCard = boxPrepayCardService.getById(boxPrepayCardOrder.getPrepayCardId());
+        BoxPrepayCard boxPrepayCard = boxPrepayCardService.getById(prepayCardId);
         if (boxPrepayCard == null || boxPrepayCard.getStatus() == 0) {
-            return Result.failure(503, "数据异常,查无此预付金服务卡或预付金服务卡未启用");
+            return Result.failure(506, "数据异常,查无此预付金服务卡或预付金服务卡未启用");
         }
 
         // 2.用户是否已有未关闭预付金或者服务卡订单
         QueryWrapper<BoxPrepayCardOrder> queryWrapper = new QueryWrapper<BoxPrepayCardOrder>().eq("deleted", 0).
-                eq("user_id", boxPrepayCardOrder.getUserId());
-        Integer cardCount = boxPrepayCardOrderMapper.selectCount(queryWrapper.ge("service_times", 0));
-        Integer prepayCount = boxPrepayCardOrderMapper.selectCount(queryWrapper.gt("vailable_amount", 0));
-        if (cardCount >= 1 || prepayCount >= 1) {
-            return Result.failure(505, "您有预付金或者服务卡未用完，不能再次申请！");
+                eq("user_id", userId);
+        BoxPrepayCardOrder prepayCardOrder = boxPrepayCardOrderMapper.selectOne(queryWrapper.in("order_status", 2, 3));
+        if (prepayCardOrder != null) {
+            return Result.failure(506, "您有预付金或者服务卡未用完，不能再次申请！");
         }
 
         // 3.创建订单
+        BoxPrepayCardOrder boxPrepayCardOrder = new BoxPrepayCardOrder();
+        boxPrepayCardOrder.setUserId(userId);
+        boxPrepayCardOrder.setPrepayCardId(prepayCardId);
         boxPrepayCardOrder.setOrderNo(CodeGeneratorUtil.getOrderCode());
         boxPrepayCardOrder.setCategory(boxPrepayCard.getCategory());
         boxPrepayCardOrder.setOrderStatus(0);
-        if (boxPrepayCard.getCategory() == 0) {
-            // 预付金
-            boxPrepayCardOrder.setServiceTimes(-2);
-        }else {
-            // 服务卡
-            boxPrepayCardOrder.setServiceTimes(-1);
-        }
+        boxPrepayCardOrder.setServiceTimes(boxPrepayCard.getServiceTimes());
         boxPrepayCardOrder.setVailableAmount(new BigDecimal(0));
         boxPrepayCardOrder.setPrepayPrice(boxPrepayCard.getRetailPrice());
         boxPrepayCardOrder.setCouponPrice(new BigDecimal(0));

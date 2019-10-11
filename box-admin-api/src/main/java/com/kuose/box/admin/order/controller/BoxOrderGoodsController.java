@@ -51,6 +51,7 @@ public class BoxOrderGoodsController {
 
         if (!StringUtil.isBlank(orderGoodsDto.getCoordinatorMessage())) {
             boxOrder.setCoordinatorMessage(orderGoodsDto.getCoordinatorMessage());
+            boxOrder.setUpdateTime(System.currentTimeMillis());
             boxOrderService.updateById(boxOrder);
         }
 
@@ -83,14 +84,21 @@ public class BoxOrderGoodsController {
 
         BoxOrder boxOrder = boxOrderService.getById(orderAuditDto.getOrderId());
         if (boxOrder.getAuditStatus() == 1) {
-            return Result.failure("该订单已审核");
+            return Result.failure("该订单已审核通过");
         }
 
-        boxOrder.setOrderStatus(1);
+        // 审核状态，1：审核通过，2：审核未通过 ,审核通过才把订单状态改为已搭配状态
+        if (orderAuditDto.getStatus() == 1) {
+            boxOrder.setOrderStatus(1);
+        }
         boxOrder.setAuditStatus(orderAuditDto.getStatus());
         boxOrder.setAuditor(orderAuditDto.getUsername());
 
-        boxOrderService.updateById(boxOrder);
+        int update = boxOrderService.updateWithOptimisticLocker(boxOrder);
+        if (update == 0) {
+            throw new RuntimeException("数据更新已失效");
+        }
+
         return Result.success();
     }
 

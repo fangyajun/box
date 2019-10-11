@@ -1,5 +1,6 @@
 package com.kuose.box.admin.order.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -27,5 +28,13 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
     public IPage<BoxOrder> listOrderPage(Page<BoxOrder> boxOrderPage, OrderDto orderDto) {
         return boxOrderMapper.listOrderPage(boxOrderPage,orderDto.getOrderNo(), orderDto.getMinExpectTime(),
                 orderDto.getMaxExpectTime(),orderDto.getMobile(), orderDto.getOrderStatus(), orderDto.getAuditStatus());
+    }
+
+    @Override
+    public int updateWithOptimisticLocker(BoxOrder order) {
+        Long updateTime = order.getUpdateTime();
+        order.setUpdateTime(System.currentTimeMillis());
+        QueryWrapper<BoxOrder> queryWrapper = new QueryWrapper<BoxOrder>().eq("id", order.getId()).eq("update_time", updateTime);
+        return boxOrderMapper.update(order, queryWrapper);
     }
 }

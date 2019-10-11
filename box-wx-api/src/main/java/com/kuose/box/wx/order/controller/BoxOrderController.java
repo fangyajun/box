@@ -11,6 +11,8 @@ import com.kuose.box.db.prepay.entity.BoxPrepayCardOrder;
 import com.kuose.box.wx.annotation.LoginUser;
 import com.kuose.box.wx.express.entity.ExpressInfo;
 import com.kuose.box.wx.express.service.ExpressService;
+import com.kuose.box.wx.order.dto.CancelOrderTDO;
+import com.kuose.box.wx.order.dto.OrderTDO;
 import com.kuose.box.wx.order.service.BoxOrderGoodsService;
 import com.kuose.box.wx.order.service.BoxOrderService;
 import com.kuose.box.wx.order.service.BoxPrepayCardOrderService;
@@ -46,29 +48,30 @@ public class BoxOrderController {
 
     @ApiOperation(value="创建用户订单，要盒子的时候可以调用")
     @PostMapping("/create")
-    public Result create(@RequestBody BoxOrder boxOrder, @ApiParam(hidden = true) @LoginUser Integer userId) {
+    public Result create(@RequestBody OrderTDO orderTDO, @ApiParam(hidden = true) @LoginUser Integer userId) {
 //        if (userId == null) {
 //            return Result.failure(501, "请登录");
 //        }
 
-        // 判断用户是否有订单在搭配中或者未完成
-        QueryWrapper<BoxOrder> orderQueryWrapper = new QueryWrapper<BoxOrder>().eq("deleted", 0).eq("user_id", userId).notIn("order_status", 9,10);
-        if (boxOrderService.count(orderQueryWrapper) >= 1) {
-            return Result.failure(506, "您有一个订单未完成，暂时无法要盒子！");
+        if (orderTDO.getAddrId() == null) {
+            return Result.failure(506, "请先选择或填写一个收货地址");
         }
 
-        // 判断用户是否有预付金
-        // 2.用户是否已有未关闭预付金或者服务卡订单
+        // 判断用户是否有订单在搭配中或者未完成
+        QueryWrapper<BoxOrder> orderQueryWrapper = new QueryWrapper<BoxOrder>().eq("deleted", 0).eq("user_id", orderTDO.getUserId()).notIn("order_status", 9,10);
+        if (boxOrderService.count(orderQueryWrapper) >= 1) {
+            return Result.failure(506, "您有一个订单在进行中，暂时无法要盒子！");
+        }
+
+        // 2.用户是否已有已付款预付金或者服务卡订单
         QueryWrapper<BoxPrepayCardOrder> queryWrapper = new QueryWrapper<BoxPrepayCardOrder>().eq("deleted", 0).
-                eq("user_id", userId);
-        Integer cardCount = boxPrepayCardOrderService.count(queryWrapper.ge("service_times", 0));
-        Integer prepayCount = boxPrepayCardOrderService.count(queryWrapper.gt("vailable_amount", 0));
-        if (cardCount < 1 && prepayCount < 1) {
+                eq("user_id", orderTDO.getUserId());
+        BoxPrepayCardOrder prepayCardOrder = boxPrepayCardOrderService.getOne(queryWrapper.in("order_status", 2, 3));
+        if (prepayCardOrder == null) {
             return Result.failure(505, "您没有支付预付金服务卡，请前往支付预付金");
         }
 
-        boxOrder.setUserId(userId);
-        return boxOrderService.create(boxOrder);
+        return boxOrderService.create(orderTDO.getUserId(), orderTDO.getAddrId(), prepayCardOrder.getId());
     }
 
     @ApiOperation(value="获取进行中的订单")
@@ -171,18 +174,14 @@ public class BoxOrderController {
 
     @ApiOperation(value="用户取消订单")
     @PostMapping("/cancel")
-    public Result cancel(@RequestBody BoxOrder boxOrder, @ApiParam(hidden = true) @LoginUser Integer userId) {
+    public Result cancel(@RequestBody CancelOrderTDO cancelOrderTDO, @ApiParam(hidden = true) @LoginUser Integer userId) {
 //        if (userId == null) {
 //            return Result.failure(501, "请登录");
 //        }
+        return boxOrderService.cancel(cancelOrderTDO.getOrderId());
 
-        BoxOrder order = boxOrderService.getById(boxOrder.getId());
-        if (order.getOrderStatus() != 0 && order.getOrderStatus() != 1) {
-            return Result.failure(506, "订单无法取消，订单已发货");
-        }
 
-        boxOrderService.removeById(boxOrder.getId());
-        return Result.success();
+
     }
 
     @ApiOperation(value="用户确认收货")
@@ -191,7 +190,6 @@ public class BoxOrderController {
 //        if (userId == null) {
 //            return Result.failure(501, "请登录");
 //        }
-
         if (boxOrder.getId() == null) {
             return Result.failure("缺少必传参数");
         }
@@ -202,6 +200,7 @@ public class BoxOrderController {
         }
 
         order.setOrderStatus(3);
+        order.setUpdateTime(System.currentTimeMillis());
         boxOrderService.updateById(order);
         return Result.success();
     }

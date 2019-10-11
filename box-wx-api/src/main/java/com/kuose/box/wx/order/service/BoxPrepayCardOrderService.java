@@ -14,5 +14,5 @@ import com.kuose.box.db.prepay.entity.BoxPrepayCardOrder;
  */
 public interface BoxPrepayCardOrderService extends IService<BoxPrepayCardOrder> {
 
-    Result creat(BoxPrepayCardOrder boxPrepayCardOrder);
+    Result creat(Integer userId, Integer prepayCardId);
 }

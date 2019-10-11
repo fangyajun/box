@@ -69,18 +69,18 @@ public class BoxUserController {
             return Result.failure("参数为空");
         }
         if (!RegexUtil.isMobileExact(phoneNumber)) {
-            return Result.failure("请填写正确的手机号码");
+            return Result.failure(601,"请填写正确的手机号码");
         }
 
         if (!notifyService.isSmsEnable()) {
-            return Result.failure("小程序后台验证码服务不支持");
+            return Result.failure(602,"小程序后台验证码服务不支持");
         }
 
         String code = CharUtil.getRandomNum(6);
         notifyService.notifySmsTemplate(phoneNumber, NotifyType.CAPTCHA, new String[]{code,"1"});
         boolean successful = CaptchaCodeManager.addToCache(phoneNumber, code);
         if (!successful) {
-            return Result.failure("验证码未超时1分钟，不能发送");
+            return Result.failure(603,"验证码未超时1分钟，不能发送");
         }
         System.out.println();
         return Result.success();
@@ -108,7 +108,7 @@ public class BoxUserController {
 
         String cachedCaptcha = CaptchaCodeManager.getCachedCaptcha(phoneNumber);
         if (StringUtil.isBlank(cachedCaptcha) || !authCode.equals(cachedCaptcha)) {
-            return Result.failure("请填写正确的验证码");
+            return Result.failure(601,"请填写正确的验证码");
         }
 
         //
@@ -116,7 +116,7 @@ public class BoxUserController {
         List<BoxUser> boxUserList = boxUserService.list(boxUserQueryWrapper.eq("mobile", phoneNumber));
         BoxUser user = null;
         if (boxUserList.size() > 1) {
-            return Result.failure("系统内部错误");
+            return Result.failure(500,"系统内部错误");
         } else if (boxUserList.size() == 0) {
             // 新增用户
             user = new BoxUser();
@@ -129,7 +129,7 @@ public class BoxUserController {
             user.setStatus(0);
 
             if (!boxUserService.save(user)) {
-                return Result.failure("登录失败");
+                return Result.failure(501,"登录失败");
             }
 
             // TODO 新用户发送优惠券
@@ -139,7 +139,7 @@ public class BoxUserController {
             user.setLastLoginTime(System.currentTimeMillis());
             user.setLastLoginIp(IpUtil.getIpAddr(request));
             if (!boxUserService.updateById(user)) {
-                return Result.failure("更新数据失败");
+                return Result.failure(501,"更新数据失败");
             }
         }
         // token
@@ -182,7 +182,7 @@ public class BoxUserController {
 
         String cachedCaptcha = CaptchaCodeManager.getCachedCaptcha(phoneNumber);
         if (StringUtil.isBlank(cachedCaptcha) || !authCode.equals(cachedCaptcha)) {
-            return Result.failure("请填写正确的验证码");
+            return Result.failure(601,"请填写正确的验证码");
         }
 
         String sessionKey = null;
@@ -217,7 +217,7 @@ public class BoxUserController {
             boxUser.setWeixinOpenid(openId);
 
             if (!boxUserService.save(boxUser)) {
-                return Result.failure("绑定失败");
+                return Result.failure(501,"绑定失败");
             }
             // TODO 新用户发送优惠券
         } else {
@@ -232,7 +232,7 @@ public class BoxUserController {
             boxUser.setUpdateTime(System.currentTimeMillis());
 
             if (!boxUserService.updateById(boxUser)) {
-                return Result.failure("绑定失败");
+                return Result.failure(501,"绑定失败");
             }
         }
 
@@ -284,7 +284,7 @@ public class BoxUserController {
 
         BoxUser boxUser = boxUserService.getOne(new QueryWrapper<BoxUser>().eq("weixin_openid", openId));
         if (boxUser == null || StringUtil.isBlank(boxUser.getMobile())) {
-            return Result.failure("此微信号未绑定手机号，请先绑定");
+            return Result.failure(601,"此微信号未绑定手机号，请先绑定");
         }
 
         // token

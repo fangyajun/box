@@ -17,6 +17,7 @@
         <result column="goods_price" property="goodsPrice" />
         <result column="coupon_price" property="couponPrice" />
         <result column="discount_price" property="integralPrice" />
+        <result column="prepay_card_order_id" property="prepayCardOrderId" />
         <result column="advance_price" property="advancePrice" />
         <result column="order_price" property="orderPrice" />
         <result column="actual_price" property="actualPrice" />
@@ -37,13 +38,13 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, order_no, order_status, audit_status, addr_id, nic_name, mobile, user_message, coordinator_message, goods_price, coupon_price, discount_price, advance_price, order_price, actual_price, pay_id, pay_time, ship_sn, ship_channel, ship_time, expect_time, confirm_time, comments, coordinator, auditor, add_time, update_time, deleted
+        id, user_id, order_no, order_status, audit_status, addr_id, nic_name, mobile, user_message, coordinator_message, goods_price, coupon_price, discount_price,prepay_card_order_id, advance_price, order_price, actual_price, pay_id, pay_time, ship_sn, ship_channel, ship_time, expect_time, confirm_time, comments, coordinator, auditor, add_time, update_time, deleted
     </sql>
 
 
     <select id="listOrderPage" resultMap="BaseResultMap">
         SELECT id, user_id, order_no, order_status, audit_status, addr_id, nic_name, mobile, user_message, coordinator_message, goods_price, coupon_price,
-                discount_price, advance_price, order_price, actual_price, pay_id, pay_time, ship_sn, ship_channel,
+                discount_price, prepay_card_order_id, advance_price, order_price, actual_price, pay_id, pay_time, ship_sn, ship_channel,
                 ship_time, expect_time, confirm_time, comments, coordinator, auditor, add_time, update_time
         FROM box_order
         <where>

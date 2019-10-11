@@ -98,6 +98,12 @@ private static final long serialVersionUID=1L;
     private BigDecimal discountPrice;
 
     /**
+     * 预付金服务卡订单的ID
+     */
+    @ApiModelProperty(value="用户表的用户ID")
+    private Integer prepayCardOrderId;
+
+    /**
      * 预付款
      */
     @ApiModelProperty(value="预付款")

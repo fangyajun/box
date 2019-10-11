@@ -49,15 +49,15 @@ private static final long serialVersionUID=1L;
     private Integer category;
 
     /**
-     * 订单状态,0-已提交未支付，1-已调用微信支付但未支付，2-已支付但未服务，3-已支付正在服务，4，已退款，5-已完成，服务已用完
+     * 订单状态,0-已提交未支付，1-已调用微信支付但未支付，2-已支付但未服务，3-服务中，4-，5-已完成，服务次数已用完，预付金已用完
      */
-    @ApiModelProperty(value = "订单状态,0-已提交未支付，1-已调用微信支付但未支付，2-已支付但未服务，3-已支付正在服务，4，已退款，5-已完成，服务已用完", hidden = true)
+    @ApiModelProperty(value = "订单状态,订单状态,0-已提交未支付，1-已调用微信支付但未支付，2-已支付但未服务，3-服务中，4-，5-已完成，服务次数已用完，预付金已用完", hidden = true)
     private Integer orderStatus;
 
     /**
-     * 剩余服务次数，-2：预付金，-1：0次已用完，0：无限次，1:1次，2:2次，3:3次
+     * 服务次数，-1：表示预付金，-2：0次，0：无限次，1:1次，2:2次，3:3次'
      */
-    @ApiModelProperty(value = "剩余服务次数，-2：预付金，-1：0次已用完，0：无限次，1:1次，2:2次，3:3次", hidden = true)
+    @ApiModelProperty(value = "服务次数，-1：表示预付金，-2：0次，0：无限次，1:1次，2:2次，3:3次'", hidden = true)
     private Integer serviceTimes;
 
     /**

@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.CodeGeneratorUtil;
 import com.kuose.box.db.discount.entity.BoxDiscount;
+import com.kuose.box.db.goods.entity.BoxGoodsSku;
+import com.kuose.box.db.order.dao.BoxOrderGoodsMapper;
 import com.kuose.box.db.order.dao.BoxOrderMapper;
 import com.kuose.box.db.order.entity.BoxOrder;
 import com.kuose.box.db.order.entity.BoxOrderComment;
@@ -13,6 +15,7 @@ import com.kuose.box.db.prepay.entity.BoxPrepayCardOrder;
 import com.kuose.box.db.user.entity.BoxUser;
 import com.kuose.box.db.user.entity.BoxUserAddress;
 import com.kuose.box.db.user.entity.BoxUserBase;
+import com.kuose.box.wx.goods.service.BoxGoodsSkuService;
 import com.kuose.box.wx.login.service.BoxUserService;
 import com.kuose.box.wx.order.service.*;
 import com.kuose.box.wx.user.service.BoxUserAddressService;
@@ -51,47 +54,48 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
     private BoxDiscountService boxDiscountService;
     @Autowired
     private BoxOrderMapper boxOrderMapper;
+    @Autowired
+    private BoxOrderGoodsMapper boxOrderGoodsMapper;
+    @Autowired
+    private BoxGoodsSkuService boxGoodsSkuService;
 
     @Override
     @Transactional
-    public Result create(BoxOrder boxOrder) {
-        BoxUserAddress userAddress = boxUserAddressService.getOne(new QueryWrapper<BoxUserAddress>().eq("deleted", 0).
-                eq("user_id", 0).eq("is_default", 0));
+    public Result create(Integer userId, Integer addrId, Integer prepayCardOrderId) {
+        BoxUserAddress userAddress = boxUserAddressService.getById(addrId);
         if (userAddress == null) {
-            return Result.failure(507, "您没有设置默认收货地址，请先设置一个默认收货地址");
+            return Result.failure(506, "数据异常,查无此收货地址");
         }
 
-        BoxUser boxUser = boxUserService.getById(boxOrder.getUserId());
+        BoxUser boxUser = boxUserService.getById(userId);
+        if (boxUser == null) {
+            return Result.failure(506, "数据异常,查无此用户信息");
+        }
 
-        QueryWrapper<BoxPrepayCardOrder> queryWrapper = new QueryWrapper<BoxPrepayCardOrder>().eq("deleted", 0).
-                eq("user_id", boxOrder.getUserId());
-        BoxPrepayCardOrder prepayCardOrder = boxPrepayCardOrderService.getOne(queryWrapper.gt("vailable_amount", 0));
-
-        BoxUserBase userBase = boxUserBaseService.getOne(new QueryWrapper<BoxUserBase>().eq("deleted", 0).eq("user_id", boxOrder.getUserId()));
+        BoxUserBase userBase = boxUserBaseService.getOne(new QueryWrapper<BoxUserBase>().eq("deleted", 0).eq("user_id", userId));
         if (userBase == null) {
-            return Result.failure(507, "请先设置您期望的收货时间");
+            return Result.failure(506, "请先设置您期望的收货时间");
         }
 
+        BoxPrepayCardOrder prepayCardOrder = boxPrepayCardOrderService.getById(prepayCardOrderId);
+
+        BoxOrder boxOrder = new BoxOrder();
+        boxOrder.setUserId(userId);
+        boxOrder.setAddrId(addrId);
+        boxOrder.setUserMessage(userBase.getLeaveWord());
         boxOrder.setOrderNo(CodeGeneratorUtil.getOrderCode());
         boxOrder.setOrderStatus(0);
         boxOrder.setAuditStatus(0);
-        boxOrder.setAddrId(userAddress.getId());
         boxOrder.setNicName(boxUser.getNickname());
         boxOrder.setMobile(userAddress.getPhone());
         // TODO 优惠券待后期做 boxOrder.setCouponPrice();
-
-        if (prepayCardOrder == null) {
-            // 不是预付金
-            boxOrder.setAdvancePrice(new BigDecimal(0));
-        } else {
-            // 有预付金
-            boxOrder.setAdvancePrice(prepayCardOrder.getVailableAmount());
-        }
+        boxOrder.setPrepayCardOrderId(prepayCardOrderId);
+        boxOrder.setAdvancePrice(prepayCardOrder.getVailableAmount());
         boxOrder.setExpectTime(userBase.getExpectTime());
-
         boxOrder.setAddTime(System.currentTimeMillis());
         boxOrder.setUpdateTime(System.currentTimeMillis());
 
+        boxOrderMapper.insert(boxOrder);
         return Result.success().setData("boxOrder", boxOrder);
     }
 
@@ -165,5 +169,59 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
         boxOrderMapper.updateById(boxOrder);
 
         return Result.success().setData("boxOrderGoodsList", boxOrderGoodsList).setData("boxOrder",boxOrder);
+    }
+
+    @Override
+    public int updateWithOptimisticLocker(BoxOrder order) {
+        Long updateTime = order.getUpdateTime();
+        order.setUpdateTime(System.currentTimeMillis());
+        QueryWrapper<BoxOrder> queryWrapper = new QueryWrapper<BoxOrder>().eq("id", order.getId()).eq("update_time", updateTime);
+        return boxOrderMapper.update(order, queryWrapper);
+    }
+
+    @Override
+    public int deleteWithOptimisticLocker(BoxOrder order) {
+        Long updateTime = order.getUpdateTime();
+        QueryWrapper<BoxOrder> queryWrapper = new QueryWrapper<BoxOrder>().eq("id", order.getId()).eq("update_time", updateTime);
+        return boxOrderMapper.delete(queryWrapper);
+    }
+
+
+
+
+    @Override
+    @Transactional
+    public Result cancel(Integer orderId) {
+        BoxOrder order = boxOrderMapper.selectById(orderId);
+        if (order.getOrderStatus() != 0 && order.getOrderStatus() != 1) {
+            return Result.failure(506, "订单无法取消，订单已发货");
+        }
+
+        if (order.getOrderStatus() == 0) {
+            // 订单未搭配，可以直接删除
+            if (deleteWithOptimisticLocker(order) == 0){
+                throw new RuntimeException("取消订单异常");
+            }
+        } else {
+            // 订单已搭配 ,修改对应对应商品的库存在添加
+            // 先删除
+            List<BoxOrderGoods> goodsList = boxOrderGoodsMapper.selectList(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("deleted", 0));
+            if (goodsList != null && !goodsList.isEmpty()) {
+                for (BoxOrderGoods boxOrderGoods : goodsList) {
+                    // 更新对应sku的库存
+                    BoxGoodsSku goodsSku = boxGoodsSkuService.getById(boxOrderGoods.getSkuId());
+                    goodsSku.setNumber(goodsSku.getNumber() + 1);
+                    boxGoodsSkuService.updateById(goodsSku);
+
+                    // 删除订单商品
+                    deleteWithOptimisticLocker(order);
+                }
+            }
+            if (deleteWithOptimisticLocker(order) == 0){
+                throw new RuntimeException("取消订单异常");
+            }
+        }
+
+        return Result.success();
     }
 }

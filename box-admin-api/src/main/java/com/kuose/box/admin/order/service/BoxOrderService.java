@@ -17,4 +17,6 @@ import com.kuose.box.db.order.entity.BoxOrder;
 public interface BoxOrderService extends IService<BoxOrder> {
 
     IPage<BoxOrder> listOrderPage(Page<BoxOrder> boxOrderPage, OrderDto orderDto);
+
+    int updateWithOptimisticLocker(BoxOrder order);
 }
