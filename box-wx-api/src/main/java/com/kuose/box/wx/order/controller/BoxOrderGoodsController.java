@@ -26,7 +26,7 @@ import java.util.List;
  * @author fangyajun
  * @since 2019-09-05
  */
-@Api(tags = {"订单商品管理，盒子商品管理"})
+@Api(tags = {"订单，订单商品"})
 @RestController
 @RequestMapping("/boxOrderGoods")
 public class BoxOrderGoodsController {
@@ -89,9 +89,23 @@ public class BoxOrderGoodsController {
         return Result.success();
     }
 
+    @ApiOperation(value="需要退还的商品列表，预约取件列表调用")
+    @GetMapping("/listBackGoods")
+    public Result listBackGoods(Integer orderId, @ApiParam(hidden = true) @LoginUser Integer userId) {
+        if (orderId == null) {
+            return Result.failure("缺少必传参数");
+        }
 
+        BoxOrder boxOrder = boxOrderService.getById(orderId);
+        if (boxOrder.getOrderStatus() != 5) {
+            return Result.failure(506, "请先支付订单");
+        }
 
+        List<BoxOrderGoods> orderGoodsList = boxOrderGoodsService.list(new QueryWrapper<BoxOrderGoods>().eq("deleted", 0).
+                eq("order_id", orderId).ne("order_goods_status", 1));
 
+        return Result.success().setData("orderGoodsList", orderGoodsList);
+    }
 
 
 }

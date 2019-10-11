@@ -103,12 +103,14 @@ litemall:
 
   # 快鸟物流查询配置
   express:
-    enable: false
-    appId: "XXXXXXXXX"
-    appKey: "XXXXXXXXXXXXXXXXXXXXXXXXX"
+    enable: true
+    appId: "1588793"
+    appKey: "d345bf54-a163-4191-9527-7a3b31548927"
     vendors:
     - code: "ZTO"
       name: "中通快递"
+    - code: "SF"
+      name: "顺丰速运"
     - code: "YTO"
       name: "圆通速递"
     - code: "YD"

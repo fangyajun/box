@@ -64,7 +64,7 @@ public class MpGenerator {
                 .setPackageInfo(new PackageConfig()
                         .setParent(parentPackage)
                         .setEntity("entity")
-                        .setMapper("dao")
+                        .setMapper("entity")
                         .setXml("mapper")
                         .setService("service")
                         .setServiceImpl("service.impl")

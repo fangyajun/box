@@ -1,6 +1,7 @@
 package com.kuose.box.wx.order.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.db.prepay.entity.BoxPrepayCardOrder;
 import com.kuose.box.wx.annotation.LoginUser;
@@ -41,6 +42,8 @@ public class BoxPrepayCardOrderController {
             return Result.failure(503, "缺少必传参数");
         }
 
+        // 先删除未付款的预付金或服务卡订单，在创建订单
+        boxPrepayCardOrderService.remove(new QueryWrapper<BoxPrepayCardOrder>().eq("user_id",boxPrepayCardOrder.getUserId()).eq("order_status", 0));
         return boxPrepayCardOrderService.creat(boxPrepayCardOrder);
     }
 

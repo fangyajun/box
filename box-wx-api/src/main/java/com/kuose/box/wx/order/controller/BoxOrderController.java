@@ -3,10 +3,15 @@ package com.kuose.box.wx.order.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuose.box.common.config.Result;
+import com.kuose.box.common.utils.StringUtil;
 import com.kuose.box.db.order.entity.BoxOrder;
 import com.kuose.box.db.order.entity.BoxOrderComment;
+import com.kuose.box.db.order.entity.BoxOrderGoods;
 import com.kuose.box.db.prepay.entity.BoxPrepayCardOrder;
 import com.kuose.box.wx.annotation.LoginUser;
+import com.kuose.box.wx.express.entity.ExpressInfo;
+import com.kuose.box.wx.express.service.ExpressService;
+import com.kuose.box.wx.order.service.BoxOrderGoodsService;
 import com.kuose.box.wx.order.service.BoxOrderService;
 import com.kuose.box.wx.order.service.BoxPrepayCardOrderService;
 import io.swagger.annotations.Api;
@@ -14,6 +19,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -23,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
  * @author fangyajun
  * @since 2019-09-05
  */
-@Api(tags = {"用户订单管理"})
+@Api(tags = {"订单，用户订单"})
 @RestController
 @RequestMapping("/boxOrder")
 public class BoxOrderController {
@@ -32,7 +39,10 @@ public class BoxOrderController {
     private BoxOrderService boxOrderService;
     @Autowired
     private BoxPrepayCardOrderService boxPrepayCardOrderService;
-
+    @Autowired
+    private BoxOrderGoodsService boxOrderGoodsService;
+    @Autowired
+    private ExpressService expressService;
 
     @ApiOperation(value="创建用户订单，要盒子的时候可以调用")
     @PostMapping("/create")
@@ -42,7 +52,7 @@ public class BoxOrderController {
 //        }
 
         // 判断用户是否有订单在搭配中或者未完成
-        QueryWrapper<BoxOrder> orderQueryWrapper = new QueryWrapper<BoxOrder>().eq("deleted", 0).eq("user_id", userId).ne("order_status", 7);
+        QueryWrapper<BoxOrder> orderQueryWrapper = new QueryWrapper<BoxOrder>().eq("deleted", 0).eq("user_id", userId).notIn("order_status", 9,10);
         if (boxOrderService.count(orderQueryWrapper) >= 1) {
             return Result.failure(506, "您有一个订单未完成，暂时无法要盒子！");
         }
@@ -60,6 +70,84 @@ public class BoxOrderController {
         boxOrder.setUserId(userId);
         return boxOrderService.create(boxOrder);
     }
+
+    @ApiOperation(value="获取进行中的订单")
+    @GetMapping("/underwayOrder")
+    public Result underwayOrder(@LoginUser Integer userId) {
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
+        Result result = Result.success();
+
+        // 查询未关闭的订单
+        BoxOrder order = boxOrderService.getOne(new QueryWrapper<BoxOrder>().eq("user_id", userId).eq("deleted", 0).
+                notIn("order_status", 9,10));
+        if (order != null) {
+            // 订单是已发货状态，且物流信息不能为空，查询物流信息
+            if (order.getOrderStatus() != 0 && order.getOrderStatus() != 1) {
+                if (!StringUtil.isBlank(order.getShipChannel()) && !StringUtil.isBlank(order.getShipSn())) {
+                    ExpressInfo expressInfo = expressService.getExpressInfo(order.getShipChannel(), order.getShipSn());
+                    result.setData("expressInfo", expressInfo);
+                }
+            }
+        }
+
+        return result.setData("order", order);
+    }
+
+
+    @ApiOperation(value="用户订单列表")
+    @GetMapping("/list")
+    public Result list(@LoginUser Integer userId, Integer orderStatus) {
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
+        List<BoxOrder> boxOrderList = boxOrderService.list(new QueryWrapper<BoxOrder>().eq("user_id", userId).
+                eq("deleted", 0).eq("order_status", orderStatus));
+        return Result.success().setData("boxOrderList", boxOrderList);
+    }
+
+    @ApiOperation(value="用户订单详情")
+    @GetMapping("/detail")
+    public Result detail(Integer orderId, @LoginUser Integer userId) {
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
+
+        Result result = Result.success();
+
+        if (orderId == null) {
+            return Result.failure(506, "订单id不能为空");
+        }
+
+
+        BoxOrder boxOrder = boxOrderService.getById(orderId);
+        if (boxOrder == null) {
+            return Result.failure(506, "订单不存在");
+        }
+
+        if (!boxOrder.getUserId().equals(userId)) {
+            return Result.failure(506, "不是当前用户的订单");
+        }
+
+        // 订单是已发货状态，且物流信息不能为空，查询物流信息
+        if (boxOrder.getOrderStatus() != 0 && boxOrder.getOrderStatus() != 1) {
+            if (!StringUtil.isBlank(boxOrder.getShipChannel()) && !StringUtil.isBlank(boxOrder.getShipSn())) {
+                ExpressInfo expressInfo = expressService.getExpressInfo(boxOrder.getShipChannel(), boxOrder.getShipSn());
+                result.setData("expressInfo", expressInfo);
+            }
+        }
+
+        // 用户未确认收货，不能查看盒子商品详情
+        List<BoxOrderGoods> boxOrderGoodsList = null;
+        if (boxOrder.getOrderStatus() < 3) {
+            boxOrderGoodsList  = boxOrderGoodsService.list(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("deleted", 0));
+            result.setData("boxOrderGoodsList", boxOrderGoodsList);
+        }
+
+        return result.setData("boxOrder", boxOrder);
+    }
+
 
 
     @ApiOperation(value="修改订单的收货地址")
@@ -90,7 +178,7 @@ public class BoxOrderController {
 
         BoxOrder order = boxOrderService.getById(boxOrder.getId());
         if (order.getOrderStatus() != 0 && order.getOrderStatus() != 1) {
-            return Result.failure(507, "订单无法取消，订单已发货");
+            return Result.failure(506, "订单无法取消，订单已发货");
         }
 
         boxOrderService.removeById(boxOrder.getId());
@@ -145,12 +233,7 @@ public class BoxOrderController {
         }
 
         return boxOrderService.orderSettlement(orderId);
-
-
-
     }
-
-
 
 }
 

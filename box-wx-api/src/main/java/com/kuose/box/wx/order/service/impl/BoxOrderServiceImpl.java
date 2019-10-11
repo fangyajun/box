@@ -147,8 +147,11 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
         boxOrder.setGoodsPrice(goodsPrice);
         boxOrder.setDiscountPrice(discountPrice);
         // 订单费用 = 商品总费用 - 优惠券减免 - 折扣减免
-        boxOrder.setOrderPrice(goodsPrice.subtract(boxOrder.getCouponPrice()).subtract(discountPrice));
-
+        if (goodsPrice.compareTo(new BigDecimal("0")) == 1 && goodsPrice.compareTo(boxOrder.getCouponPrice().add(discountPrice)) == 1) {
+            boxOrder.setOrderPrice(goodsPrice.subtract(boxOrder.getCouponPrice()).subtract(discountPrice));
+        } else {
+            boxOrder.setOrderPrice(new BigDecimal("0"));
+        }
         // 当订单费用 > 预付款: 实付费用 = 订单费用 - 预付款
         if (boxOrder.getOrderPrice().compareTo(boxOrder.getAdvancePrice()) == 1) {
             boxOrder.setActualPrice(boxOrder.getOrderPrice().subtract(boxOrder.getAdvancePrice()));

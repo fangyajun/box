@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author 魔舞清华
  */
 @SpringBootApplication
-@MapperScan(basePackages = "com.kuose.source.*.dao")
+@MapperScan(basePackages = "com.kuose.source.*.entity")
 public class BoxGoodsSourceApplication {
 
     public static void main(String[] args) {
