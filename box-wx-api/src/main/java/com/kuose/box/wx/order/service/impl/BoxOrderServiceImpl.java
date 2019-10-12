@@ -186,9 +186,6 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
         return boxOrderMapper.delete(queryWrapper);
     }
 
-
-
-
     @Override
     @Transactional
     public Result cancel(Integer orderId) {
@@ -197,29 +194,22 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
             return Result.failure(506, "订单无法取消，订单已发货");
         }
 
-        if (order.getOrderStatus() == 0) {
-            // 订单未搭配，可以直接删除
-            if (deleteWithOptimisticLocker(order) == 0){
-                throw new RuntimeException("取消订单异常");
-            }
-        } else {
-            // 订单已搭配 ,修改对应对应商品的库存在添加
-            // 先删除
-            List<BoxOrderGoods> goodsList = boxOrderGoodsMapper.selectList(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("deleted", 0));
-            if (goodsList != null && !goodsList.isEmpty()) {
-                for (BoxOrderGoods boxOrderGoods : goodsList) {
-                    // 更新对应sku的库存
-                    BoxGoodsSku goodsSku = boxGoodsSkuService.getById(boxOrderGoods.getSkuId());
-                    goodsSku.setNumber(goodsSku.getNumber() + 1);
-                    boxGoodsSkuService.updateById(goodsSku);
+        // 如订单已搭配商品 ,修改对应对应商品的库存在添加
+        List<BoxOrderGoods> goodsList = boxOrderGoodsMapper.selectList(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("deleted", 0));
+        if (goodsList != null && !goodsList.isEmpty()) {
+            for (BoxOrderGoods boxOrderGoods : goodsList) {
+                // 更新对应sku的库存
+                BoxGoodsSku goodsSku = boxGoodsSkuService.getById(boxOrderGoods.getSkuId());
+                goodsSku.setNumber(goodsSku.getNumber() + 1);
+                boxGoodsSkuService.updateById(goodsSku);
 
-                    // 删除订单商品
-                    deleteWithOptimisticLocker(order);
-                }
+                // 删除订单商品
+                boxOrderGoodsMapper.deleteById(boxOrderGoods.getId());
             }
-            if (deleteWithOptimisticLocker(order) == 0){
-                throw new RuntimeException("取消订单异常");
-            }
+        }
+
+        if (deleteWithOptimisticLocker(order) == 0) {
+            throw new RuntimeException("取消订单异常");
         }
 
         return Result.success();

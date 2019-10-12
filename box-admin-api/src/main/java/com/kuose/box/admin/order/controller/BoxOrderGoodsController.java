@@ -25,7 +25,7 @@ import java.util.List;
  * @author fangyajun
  * @since 2019-09-05
  */
-@Api(tags = {"搭配管理，盒子商品管理"})
+@Api(tags = {"订单管理，盒子商品管理"})
 @RestController
 @RequestMapping("/boxOrderGoods")
 public class BoxOrderGoodsController {
@@ -83,11 +83,16 @@ public class BoxOrderGoodsController {
         }
 
         BoxOrder boxOrder = boxOrderService.getById(orderAuditDto.getOrderId());
+        int count = boxOrderGoodsService.count(new QueryWrapper<BoxOrderGoods>().eq("order_id", boxOrder.getId()).eq("deleted", 0));
+        if (count < 1) {
+            return Result.failure("该订单还未搭配任何商品");
+        }
+
         if (boxOrder.getAuditStatus() == 1) {
             return Result.failure("该订单已审核通过");
         }
 
-        // 审核状态，1：审核通过，2：审核未通过 ,审核通过才把订单状态改为已搭配状态
+        // 只有订单通过审核通过才把订单状态改为已搭配状态
         if (orderAuditDto.getStatus() == 1) {
             boxOrder.setOrderStatus(1);
         }

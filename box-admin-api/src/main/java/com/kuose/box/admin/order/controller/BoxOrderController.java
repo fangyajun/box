@@ -4,6 +4,7 @@ package com.kuose.box.admin.order.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kuose.box.admin.order.dto.OrderDto;
+import com.kuose.box.admin.order.dto.ShipDTO;
 import com.kuose.box.admin.order.service.BoxOrderService;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.StringUtil;
@@ -41,23 +42,27 @@ public class BoxOrderController {
     }
 
     @ApiOperation(value="订单发货")
-    @GetMapping("/ship")
-    public Result ship(@RequestBody BoxOrder boxOrder) {
-        if (boxOrder.getId() == null || StringUtil.isBlank(boxOrder.getShipSn()) || StringUtil.isBlank(boxOrder.getShipChannel())) {
+    @PostMapping("/ship")
+    public Result ship(@RequestBody ShipDTO shipDTO) {
+        if (shipDTO.getOrderId() == null || StringUtil.isBlank(shipDTO.getShipSn()) || StringUtil.isBlank(shipDTO.getShipChannel())) {
             return Result.failure("缺少必传参数");
         }
 
-        BoxOrder order = boxOrderService.getById(boxOrder.getId());
+        BoxOrder order = boxOrderService.getById(shipDTO.getOrderId());
         if (order.getOrderStatus() != 1) {
             return Result.failure("该订单状态不是待发货状态，请检查订单状态！");
         }
 
         order.setOrderStatus(2);
-        order.setShipSn(boxOrder.getShipSn());
-        order.setShipChannel(boxOrder.getShipChannel());
-        order.setShipTime(boxOrder.getShipTime());
+        order.setShipSn(shipDTO.getShipSn());
+        order.setShipChannel(shipDTO.getShipChannel());
+        order.setShipTime(shipDTO.getShipTime());
 
-        boxOrderService.updateById(order);
+        int update = boxOrderService.updateWithOptimisticLocker(order);
+        if (update == 0) {
+            throw new RuntimeException("数据更新已失效");
+        }
+
         return Result.success();
     }
 

@@ -151,8 +151,6 @@ public class BoxOrderController {
         return result.setData("boxOrder", boxOrder);
     }
 
-
-
     @ApiOperation(value="修改订单的收货地址")
     @PostMapping("/update")
     public Result update(@RequestBody BoxOrder boxOrder, @ApiParam(hidden = true) @LoginUser Integer userId) {
@@ -179,9 +177,6 @@ public class BoxOrderController {
 //            return Result.failure(501, "请登录");
 //        }
         return boxOrderService.cancel(cancelOrderTDO.getOrderId());
-
-
-
     }
 
     @ApiOperation(value="用户确认收货")
