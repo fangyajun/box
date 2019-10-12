@@ -3,10 +3,12 @@ package com.kuose.box.wx.pay.controller;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.StringUtil;
 import com.kuose.box.db.order.entity.BoxOrder;
+import com.kuose.box.db.prepay.entity.BoxPrepayCardOrder;
 import com.kuose.box.db.user.entity.BoxUser;
 import com.kuose.box.wx.annotation.LoginUser;
 import com.kuose.box.wx.login.service.BoxUserService;
 import com.kuose.box.wx.order.service.BoxOrderService;
+import com.kuose.box.wx.order.service.BoxPrepayCardOrderService;
 import com.kuose.box.wx.pay.dto.PrePayVO;
 import com.kuose.box.wx.pay.service.PayService;
 import io.swagger.annotations.Api;
@@ -32,8 +34,8 @@ public class PayController {
     private BoxOrderService boxOrderService;
     @Autowired
     private BoxUserService boxUserService;
-
-
+    @Autowired
+    private BoxPrepayCardOrderService boxPrepayCardOrderService;
 
 
     /**
@@ -47,8 +49,8 @@ public class PayController {
      * @param prePayVO   订单信息，{ orderId：xxx }
      * @return 支付订单ID
      */
-    @PostMapping("/prepay")
-    public Result prepay(@RequestBody PrePayVO prePayVO, @ApiParam(hidden = true)  @LoginUser Integer userId, HttpServletRequest request) {
+    @PostMapping("/prepayOrder")
+    public Result prepayOrder(@RequestBody PrePayVO prePayVO, @ApiParam(hidden = true)  @LoginUser Integer userId, HttpServletRequest request) {
 //        if (userId == null) {
 //            return Result.failure(501, "请登录");
 //        }
@@ -76,7 +78,54 @@ public class PayController {
             return Result.failure(506, "未能获取到用户openid，无法支付");
         }
 
-        return payService.prepay(prePayVO.getOrderId(), user.getWeixinOpenid(),  request);
-
+        return payService.prepayOrder(prePayVO.getOrderId(), user.getWeixinOpenid(),  request);
     }
+
+    /**
+     * 预付金订单的预支付会话标识
+     * <p>
+     * 1. 检测当前订单是否能够付款
+     * 2. 微信商户平台返回支付订单ID
+     * 3. 设置订单付款状态
+     *
+     * @param userId 用户ID
+     * @param prePayVO   订单信息，{ orderId：xxx }
+     * @return 支付订单ID
+     */
+    @PostMapping("/prepayCardOrder")
+    public Result prepayCardOrder(@RequestBody PrePayVO prePayVO, @ApiParam(hidden = true)  @LoginUser Integer userId, HttpServletRequest request) {
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
+        if (prePayVO.getOrderId() == null) {
+            return Result.failure(506, "参数不对");
+        }
+
+        BoxPrepayCardOrder prepayCardOrder = boxPrepayCardOrderService.getById(prePayVO.getOrderId());
+        if (prepayCardOrder == null) {
+            return Result.failure(506, "查无此订单，参数值错误");
+        }
+
+        if (!userId.equals(prepayCardOrder.getUserId())) {
+            return Result.failure(506, "当前登录的用户信息和订单的用户信息不一致");
+        }
+
+        // 验证订单是否能够付款
+        // 订单状态,0-已提交未支付，1-已调用微信支付但未支付，2-已支付但未服务，3-服务中，4-，5-已完成，服务次数已用完，预付金已用完
+        if (prepayCardOrder.getOrderStatus() != 0 && prepayCardOrder.getOrderStatus() != 1) {
+            return Result.failure(506, "该订单状态不是待付款状态，无法支付");
+        }
+
+        BoxUser user = boxUserService.getById(prepayCardOrder.getUserId());
+        if (StringUtil.isBlank(user.getWeixinOpenid())) {
+            return Result.failure(506, "未能获取到用户openid，无法支付");
+        }
+
+        return payService.prepayCardOrder(prePayVO.getOrderId(), user.getWeixinOpenid(),  request);
+    }
+
+
+
+
+
 }

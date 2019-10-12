@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 public class OrderTDO {
 
+    private Integer orderId;
     private Integer userId;
     private Integer addrId;
 }

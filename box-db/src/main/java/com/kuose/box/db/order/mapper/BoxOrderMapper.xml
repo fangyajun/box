@@ -16,7 +16,7 @@
         <result column="coordinator_message" property="coordinatorMessage" />
         <result column="goods_price" property="goodsPrice" />
         <result column="coupon_price" property="couponPrice" />
-        <result column="discount_price" property="integralPrice" />
+        <result column="discount_price" property="discountPrice" />
         <result column="prepay_card_order_id" property="prepayCardOrderId" />
         <result column="advance_price" property="advancePrice" />
         <result column="order_price" property="orderPrice" />

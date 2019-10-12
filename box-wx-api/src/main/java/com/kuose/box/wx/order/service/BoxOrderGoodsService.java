@@ -2,7 +2,7 @@ package com.kuose.box.wx.order.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.kuose.box.db.order.entity.BoxOrderGoods;
-import com.kuose.box.db.order.entity.BoxOrderGoodsComment;
+import com.kuose.box.wx.order.dto.OrderGoodsAppraisementDTO;
 
 /**
  * <p>
@@ -14,5 +14,5 @@ import com.kuose.box.db.order.entity.BoxOrderGoodsComment;
  */
 public interface BoxOrderGoodsService extends IService<BoxOrderGoods> {
 
-    void goodsAppraisement(BoxOrderGoodsComment boxOrderGoodsComment);
+    void goodsAppraisement(OrderGoodsAppraisementDTO orderGoodsAppraisementDTO);
 }

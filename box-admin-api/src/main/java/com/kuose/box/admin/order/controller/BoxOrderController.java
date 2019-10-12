@@ -66,5 +66,12 @@ public class BoxOrderController {
         return Result.success();
     }
 
+    @ApiOperation(value="订单表注释")
+    @PostMapping("/zhshi")
+    public Result zhshi(@RequestBody BoxOrder boxOrder) {
+
+        return Result.success();
+    }
+
 }
 

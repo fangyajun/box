@@ -2,6 +2,8 @@ package com.kuose.box.wx.order.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.StringUtil;
 import com.kuose.box.db.order.entity.BoxOrder;
@@ -76,14 +78,14 @@ public class BoxOrderController {
 
     @ApiOperation(value="获取进行中的订单")
     @GetMapping("/underwayOrder")
-    public Result underwayOrder(@LoginUser Integer userId) {
+    public Result underwayOrder(Integer useId, @ApiParam(hidden = true) @LoginUser Integer userId) {
 //        if (userId == null) {
 //            return Result.failure(501, "请登录");
 //        }
         Result result = Result.success();
 
         // 查询未关闭的订单
-        BoxOrder order = boxOrderService.getOne(new QueryWrapper<BoxOrder>().eq("user_id", userId).eq("deleted", 0).
+        BoxOrder order = boxOrderService.getOne(new QueryWrapper<BoxOrder>().eq("user_id", useId).eq("deleted", 0).
                 notIn("order_status", 9,10));
         if (order != null) {
             // 订单是已发货状态，且物流信息不能为空，查询物流信息
@@ -101,18 +103,27 @@ public class BoxOrderController {
 
     @ApiOperation(value="用户订单列表")
     @GetMapping("/list")
-    public Result list(@LoginUser Integer userId, Integer orderStatus) {
+    public Result list(Integer useId, Integer orderStatus, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10")  Integer limit, @ApiParam(hidden = true)@LoginUser Integer userId) {
 //        if (userId == null) {
 //            return Result.failure(501, "请登录");
 //        }
-        List<BoxOrder> boxOrderList = boxOrderService.list(new QueryWrapper<BoxOrder>().eq("user_id", userId).
-                eq("deleted", 0).eq("order_status", orderStatus));
-        return Result.success().setData("boxOrderList", boxOrderList);
+        Page<BoxOrder> boxOrderPage = new Page<>();
+        boxOrderPage.setSize(limit);
+        boxOrderPage.setCurrent(page);
+
+        QueryWrapper<BoxOrder> queryWrapper = new QueryWrapper<BoxOrder>().eq("user_id", useId).
+                eq("deleted", 0);
+        if (orderStatus != null) {
+            queryWrapper.eq("order_status", orderStatus);
+        }
+        IPage<BoxOrder> orderIPage = boxOrderService.page(boxOrderPage, queryWrapper);
+
+        return Result.success().setData("orderIPage", orderIPage);
     }
 
     @ApiOperation(value="用户订单详情")
     @GetMapping("/detail")
-    public Result detail(Integer orderId, @LoginUser Integer userId) {
+    public Result detail(Integer orderId, @ApiParam(hidden = true) @LoginUser Integer userId) {
 //        if (userId == null) {
 //            return Result.failure(501, "请登录");
 //        }
@@ -129,9 +140,9 @@ public class BoxOrderController {
             return Result.failure(506, "订单不存在");
         }
 
-        if (!boxOrder.getUserId().equals(userId)) {
-            return Result.failure(506, "不是当前用户的订单");
-        }
+//        if (!boxOrder.getUserId().equals(userId)) {
+//            return Result.failure(506, "不是当前用户的订单");
+//        }
 
         // 订单是已发货状态，且物流信息不能为空，查询物流信息
         if (boxOrder.getOrderStatus() != 0 && boxOrder.getOrderStatus() != 1) {
@@ -142,9 +153,8 @@ public class BoxOrderController {
         }
 
         // 用户未确认收货，不能查看盒子商品详情
-        List<BoxOrderGoods> boxOrderGoodsList = null;
-        if (boxOrder.getOrderStatus() < 3) {
-            boxOrderGoodsList  = boxOrderGoodsService.list(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("deleted", 0));
+        if (boxOrder.getOrderStatus() != 0 && boxOrder.getOrderStatus() != 1 && boxOrder.getOrderStatus() != 2) {
+            List<BoxOrderGoods> boxOrderGoodsList  = boxOrderGoodsService.list(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("deleted", 0));
             result.setData("boxOrderGoodsList", boxOrderGoodsList);
         }
 
@@ -152,21 +162,31 @@ public class BoxOrderController {
     }
 
     @ApiOperation(value="修改订单的收货地址")
-    @PostMapping("/update")
-    public Result update(@RequestBody BoxOrder boxOrder, @ApiParam(hidden = true) @LoginUser Integer userId) {
+    @PostMapping("/updateOrderAddr")
+    public Result updateOrderAddr(@RequestBody OrderTDO orderTDO, @ApiParam(hidden = true) @LoginUser Integer userId) {
 //        if (userId == null) {
 //            return Result.failure(501, "请登录");
 //        }
 
-        if (boxOrder.getId() == null) {
+        if (orderTDO.getOrderId() == null || orderTDO.getAddrId() == null) {
             return Result.failure("参数订单id必传");
         }
 
-        BoxOrder order = boxOrderService.getById(boxOrder.getId());
-        order.setAddrId(boxOrder.getAddrId());
-        order.setUpdateTime(System.currentTimeMillis());
+        BoxOrder order = boxOrderService.getById(orderTDO.getOrderId());
+        if (order == null) {
+            return Result.failure(507, "数据异常，查无此订单");
+        }
 
-        boxOrderService.updateById(boxOrder);
+        if (order.getOrderStatus() != 0 && order.getOrderStatus() != 1) {
+            return Result.failure(506, "订单已发货，无法更改收货地址");
+        }
+
+
+        order.setAddrId(orderTDO.getAddrId());
+
+        if (boxOrderService.updateWithOptimisticLocker(order) == 0) {
+            throw new RuntimeException("数据更新异常");
+        }
         return Result.success();
     }
 
@@ -181,22 +201,23 @@ public class BoxOrderController {
 
     @ApiOperation(value="用户确认收货")
     @PostMapping("/confirm")
-    public Result confirm(@RequestBody BoxOrder boxOrder, @ApiParam(hidden = true) @LoginUser Integer userId) {
+    public Result confirm(@RequestBody OrderTDO orderTDO, @ApiParam(hidden = true) @LoginUser Integer userId) {
 //        if (userId == null) {
 //            return Result.failure(501, "请登录");
 //        }
-        if (boxOrder.getId() == null) {
+        if (orderTDO.getOrderId() == null) {
             return Result.failure("缺少必传参数");
         }
 
-        BoxOrder order = boxOrderService.getById(boxOrder.getId());
+        BoxOrder order = boxOrderService.getById(orderTDO.getOrderId());
         if (order.getOrderStatus() != 2) {
             return Result.failure(506, "订单状态不是待收货状态，无法进行此操作！");
         }
 
         order.setOrderStatus(3);
-        order.setUpdateTime(System.currentTimeMillis());
-        boxOrderService.updateById(order);
+        if (boxOrderService.updateWithOptimisticLocker(order) == 0) {
+            throw new RuntimeException("数据更新异常");
+        }
         return Result.success();
     }
 

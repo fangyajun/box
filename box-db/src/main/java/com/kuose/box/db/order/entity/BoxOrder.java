@@ -142,7 +142,7 @@ private static final long serialVersionUID=1L;
     /**
      * 发货快递公司
      */
-    @ApiModelProperty(value="发货快递公司")
+    @ApiModelProperty(value="发货快递公司编号")
     private String shipChannel;
 
     /**

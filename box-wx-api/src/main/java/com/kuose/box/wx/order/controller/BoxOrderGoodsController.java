@@ -7,6 +7,7 @@ import com.kuose.box.db.order.entity.BoxOrder;
 import com.kuose.box.db.order.entity.BoxOrderGoods;
 import com.kuose.box.db.order.entity.BoxOrderGoodsComment;
 import com.kuose.box.wx.annotation.LoginUser;
+import com.kuose.box.wx.order.dto.OrderGoodsAppraisementDTO;
 import com.kuose.box.wx.order.service.BoxOrderGoodsCommentService;
 import com.kuose.box.wx.order.service.BoxOrderGoodsService;
 import com.kuose.box.wx.order.service.BoxOrderService;
@@ -66,6 +67,10 @@ public class BoxOrderGoodsController {
         }
 
         BoxOrderGoods orderGoods = boxOrderGoodsService.getById(orderGoodsId);
+        if (orderGoods == null) {
+            return Result.failure(507, "数据异常，查无次订单商品，请检查参数orderGoodsId是否正确");
+        }
+
         BoxOrderGoodsComment orderGoodsComment = boxOrderGoodsCommentService.getOne(new QueryWrapper<BoxOrderGoodsComment>().eq("order_id", orderGoodsId).
                 eq("sku_id", orderGoods.getSkuId()).eq("deleted", 0));
 
@@ -74,18 +79,18 @@ public class BoxOrderGoodsController {
 
     @ApiOperation(value="盒子商品评价")
     @PostMapping("/goodsAppraisement")
-    public Result goodsAppraisement(@RequestBody BoxOrderGoodsComment boxOrderGoodsComment, @ApiParam(hidden = true) @LoginUser Integer userId ) {
+    public Result goodsAppraisement(@RequestBody OrderGoodsAppraisementDTO orderGoodsAppraisementDTO, @ApiParam(hidden = true) @LoginUser Integer userId ) {
 //        if (userId == null) {
 //            return Result.failure(501, "请登录");
 //        }
-        if (boxOrderGoodsComment.getOrderId() == null || boxOrderGoodsComment.getSkuId() == null) {
+        if (orderGoodsAppraisementDTO.getOrderGoodsId() == null ) {
             return Result.failure("缺少必传参数");
         }
-        if (boxOrderGoodsComment.getOrderGoodsStatus() == null) {
+        if (orderGoodsAppraisementDTO.getOrderGoodsStatus() == null) {
             return Result.failure(506, "必须对商品做出保留，退货，换货选择");
         }
 
-        boxOrderGoodsService.goodsAppraisement(boxOrderGoodsComment);
+        boxOrderGoodsService.goodsAppraisement(orderGoodsAppraisementDTO);
         return Result.success();
     }
 

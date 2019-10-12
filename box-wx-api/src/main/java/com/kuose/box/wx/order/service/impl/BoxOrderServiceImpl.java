@@ -124,7 +124,6 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
     @Override
     @Transactional
     public Result orderSettlement(Integer orderId) {
-
         BoxOrder boxOrder = boxOrderMapper.selectById(orderId);
 
         QueryWrapper<BoxOrderGoods> orderGoodsQueryWrapper = new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("deleted", 0);
@@ -164,9 +163,10 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
         if (boxOrder.getOrderPrice().compareTo(boxOrder.getAdvancePrice()) == -1 || boxOrder.getOrderPrice().compareTo(boxOrder.getAdvancePrice()) == 0) {
             boxOrder.setOrderPrice(new BigDecimal("0"));
         }
-        boxOrder.setUpdateTime(System.currentTimeMillis());
 
-        boxOrderMapper.updateById(boxOrder);
+        if (updateWithOptimisticLocker(boxOrder) == 0) {
+            throw new RuntimeException("数据更新异常");
+        }
 
         return Result.success().setData("boxOrderGoodsList", boxOrderGoodsList).setData("boxOrder",boxOrder);
     }
