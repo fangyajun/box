@@ -60,7 +60,7 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
     private BoxGoodsSkuService boxGoodsSkuService;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result create(Integer userId, Integer addrId, Integer prepayCardOrderId) {
         BoxUserAddress userAddress = boxUserAddressService.getById(addrId);
         if (userAddress == null) {
@@ -101,7 +101,7 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void orderAppraisement(BoxOrderComment boxOrderComment) {
         BoxOrderComment getOne = boxOrderCommentService.getOne(new QueryWrapper<BoxOrderComment>().eq("order_id", boxOrderComment.getOrderId()));
         if (getOne == null) {
@@ -123,7 +123,7 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result orderSettlement(Integer orderId) {
         BoxOrder boxOrder = boxOrderMapper.selectById(orderId);
 
@@ -198,7 +198,7 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result cancel(Integer orderId) {
         BoxOrder order = boxOrderMapper.selectById(orderId);
         if (order.getOrderStatus() != 0 && order.getOrderStatus() != 1) {

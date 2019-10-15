@@ -48,7 +48,7 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result ship(ShipDTO shipDTO) {
         BoxOrder order = boxOrderMapper.selectById(shipDTO.getOrderId());
 

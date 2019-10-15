@@ -59,7 +59,7 @@ public class PayService {
      * @param openid
      * @return 支付订单ID
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result prepayOrder(Integer orderId, String openid, HttpServletRequest request) {
         WxPayMpOrderResult result = null;
         BoxOrder order = boxOrderService.getById(orderId);
@@ -102,7 +102,7 @@ public class PayService {
      * @param openid
      * @return 支付订单ID
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result prepayCardOrder(Integer orderId, String openid, HttpServletRequest request) {
         WxPayMpOrderResult result = null;
 
@@ -144,7 +144,7 @@ public class PayService {
      * @param response 响应内容
      * @return 操作结果
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Object payNotify(HttpServletRequest request, HttpServletResponse response) {
         String xmlResult = null;
         try {
@@ -232,7 +232,7 @@ public class PayService {
         return WxPayNotifyResponse.success("处理成功!");
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result refundPrePayCard(Integer prepayCardOrderId) {
         BoxPrepayCardOrder prepayCardOrder = boxPrepayCardOrderService.getById(prepayCardOrderId);
         if (prepayCardOrder == null) {

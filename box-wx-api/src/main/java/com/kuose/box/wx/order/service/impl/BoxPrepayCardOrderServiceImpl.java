@@ -32,7 +32,7 @@ public class BoxPrepayCardOrderServiceImpl extends ServiceImpl<BoxPrepayCardOrde
     private BoxPrepayCardOrderMapper boxPrepayCardOrderMapper;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result creat(Integer userId, Integer prepayCardId) {
         // 1.判断预付金或服务卡是否正常
         BoxPrepayCard boxPrepayCard = boxPrepayCardService.getById(prepayCardId);
