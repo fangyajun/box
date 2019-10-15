@@ -39,6 +39,10 @@ public class BoxUserController {
             return Result.failure("缺少必传参数");
         }
         BoxUser boxUser = boxUserService.getOne(new QueryWrapper<BoxUser>().eq("deleted", 0 ).eq("id", userId));
+        if (boxUser == null) {
+            return Result.failure("查无此用户，请确认参数是否正确");
+        }
+
         boxUser.setPassword(null);
         BoxUserBase boxUserBase = boxUserBaseService.getOne(new QueryWrapper<BoxUserBase>().eq("deleted", 0).eq("user_id", userId));
         return Result.success().setData("boxUser",boxUser).setData("boxUserBase",boxUserBase);

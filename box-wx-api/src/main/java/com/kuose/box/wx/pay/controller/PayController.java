@@ -12,13 +12,17 @@ import com.kuose.box.wx.order.service.BoxPrepayCardOrderService;
 import com.kuose.box.wx.pay.dto.PrePayVO;
 import com.kuose.box.wx.pay.service.PayService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 
 /**
  * @author fangyajun
@@ -28,6 +32,8 @@ import javax.servlet.http.HttpServletRequest;
 @Api(tags = {"支付，微信支付"})
 @RestController
 public class PayController {
+
+
     @Autowired
     private PayService payService;
     @Autowired
@@ -36,6 +42,47 @@ public class PayController {
     private BoxUserService boxUserService;
     @Autowired
     private BoxPrepayCardOrderService boxPrepayCardOrderService;
+
+
+
+    @ApiOperation(value="判断订单是否还需支付金额")
+    @GetMapping
+    public Result isToPay(Integer orderId, @ApiParam(hidden = true)  @LoginUser Integer userId) {
+        if (orderId == null) {
+            return Result.failure("缺少必传参数");
+        }
+        BoxOrder order = boxOrderService.getById(orderId);
+        if (order == null) {
+            return Result.failure(506, "查无此订单，请确认参数是否正确");
+        }
+
+        if (order.getOrderStatus() != 4) {
+            return Result.failure(506, "请先进行订单结算");
+        }
+
+        if (order.getActualPrice().compareTo(new BigDecimal("0")) == 1) {
+            // 需要支付金额
+            return Result.success().setData("isToPay", 1);
+        } else {
+            // 不需要支付金额
+            if (order.getRefundPrepayAmounts().compareTo(new BigDecimal("0")) == 1) {
+                // 预付金可退金额大于0，设置预付金订单可退金额
+                BoxPrepayCardOrder boxPrepayCardOrder = new BoxPrepayCardOrder();
+                boxPrepayCardOrder.setId(order.getPrepayCardOrderId());
+                boxPrepayCardOrder.setRefundPrepayAmounts(order.getRefundPrepayAmounts());
+                boxPrepayCardOrder.setUpdateTime(System.currentTimeMillis());
+                boxPrepayCardOrderService.updateById(boxPrepayCardOrder);
+            }
+
+            order.setOrderStatus(5);
+            int update = boxOrderService.updateWithOptimisticLocker(order);
+            if (update == 0) {
+                return Result.failure(507, "更新数据异常，请重试");
+            }
+            // 不需要支付金额
+            return Result.success().setData("isToPay", 0);
+        }
+    }
 
 
     /**
@@ -49,6 +96,7 @@ public class PayController {
      * @param prePayVO   订单信息，{ orderId：xxx }
      * @return 支付订单ID
      */
+    @ApiOperation(value="付款订单的预支付会话标识")
     @PostMapping("/prepayOrder")
     public Result prepayOrder(@RequestBody PrePayVO prePayVO, @ApiParam(hidden = true)  @LoginUser Integer userId, HttpServletRequest request) {
 //        if (userId == null) {
@@ -92,6 +140,7 @@ public class PayController {
      * @param prePayVO   订单信息，{ orderId：xxx }
      * @return 支付订单ID
      */
+    @ApiOperation(value="预付金订单的预支付会话标识")
     @PostMapping("/prepayCardOrder")
     public Result prepayCardOrder(@RequestBody PrePayVO prePayVO, @ApiParam(hidden = true)  @LoginUser Integer userId, HttpServletRequest request) {
 //        if (userId == null) {
@@ -122,6 +171,29 @@ public class PayController {
         }
 
         return payService.prepayCardOrder(prePayVO.getOrderId(), user.getWeixinOpenid(),  request);
+    }
+
+
+    /**
+     * 微信付款成功或失败回调接口
+     * <p>
+     * @param request 请求内容
+     * @param response 响应内容
+     * @return 操作结果
+     */
+    @PostMapping("payNotify")
+    public Object payNotify(HttpServletRequest request, HttpServletResponse response) {
+        return payService.payNotify(request, response);
+    }
+
+    @ApiOperation(value="预付金退款")
+    @PostMapping("/refundPrePayCard")
+    public Result refundPrePayCard(@RequestBody PrePayVO prePayVO, @ApiParam(hidden = true)  @LoginUser Integer userId) {
+        if (userId == null) {
+            return Result.failure(506, "请登录");
+        }
+
+        return  payService.refundPrePayCard(prePayVO.getPrepayCardOrderId());
     }
 
 

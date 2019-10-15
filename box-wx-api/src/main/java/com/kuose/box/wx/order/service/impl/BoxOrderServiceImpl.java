@@ -91,6 +91,7 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
         // TODO 优惠券待后期做 boxOrder.setCouponPrice();
         boxOrder.setPrepayCardOrderId(prepayCardOrderId);
         boxOrder.setAdvancePrice(prepayCardOrder.getVailableAmount());
+        boxOrder.setRefundPrepayAmounts(new BigDecimal("0"));
         boxOrder.setExpectTime(userBase.getExpectTime());
         boxOrder.setAddTime(System.currentTimeMillis());
         boxOrder.setUpdateTime(System.currentTimeMillis());
@@ -146,22 +147,32 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
             discountPrice = goodsPrice.subtract(goodsPrice.multiply(new BigDecimal(boxDiscount.getDiscount())));
         }
 
-        // 订单费用，实付费用
+
         boxOrder.setGoodsPrice(goodsPrice);
         boxOrder.setDiscountPrice(discountPrice);
+        // 设置订单状态为“4-已结算待支付”状态
+        boxOrder.setOrderStatus(4);
+        // 订单费用
         // 订单费用 = 商品总费用 - 优惠券减免 - 折扣减免
         if (goodsPrice.compareTo(new BigDecimal("0")) == 1 && goodsPrice.compareTo(boxOrder.getCouponPrice().add(discountPrice)) == 1) {
             boxOrder.setOrderPrice(goodsPrice.subtract(boxOrder.getCouponPrice()).subtract(discountPrice));
         } else {
             boxOrder.setOrderPrice(new BigDecimal("0"));
         }
-        // 当订单费用 > 预付款: 实付费用 = 订单费用 - 预付款
+
+        // 当订单费用 > 预付款
+        // 实付费用 = 订单费用 - 预付款
+        // 可退的预付金 = 0
         if (boxOrder.getOrderPrice().compareTo(boxOrder.getAdvancePrice()) == 1) {
             boxOrder.setActualPrice(boxOrder.getOrderPrice().subtract(boxOrder.getAdvancePrice()));
+            boxOrder.setRefundPrepayAmounts(new BigDecimal("0"));
         }
-        // 当订单费用 <= 预付款: 实付费用 = 0
+        // 当订单费用 <= 预付款:
+        // 实付费用 = 0
+        // 可退的预付金 = 预付金 - 订单费用
         if (boxOrder.getOrderPrice().compareTo(boxOrder.getAdvancePrice()) == -1 || boxOrder.getOrderPrice().compareTo(boxOrder.getAdvancePrice()) == 0) {
             boxOrder.setOrderPrice(new BigDecimal("0"));
+            boxOrder.setRefundPrepayAmounts(boxOrder.getAdvancePrice().subtract(boxOrder.getOrderPrice()));
         }
 
         if (updateWithOptimisticLocker(boxOrder) == 0) {

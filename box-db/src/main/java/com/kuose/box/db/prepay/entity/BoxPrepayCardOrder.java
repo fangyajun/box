@@ -1,6 +1,7 @@
 package com.kuose.box.db.prepay.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModelProperty;
@@ -85,6 +86,19 @@ private static final long serialVersionUID=1L;
     private BigDecimal orderPrice;
 
     /**
+     * 预付金是否可退 0：不可退，1：可退， 2:已退
+     */
+    @TableField("is_refund")
+    @ApiModelProperty(value = "预付金是否可退 0：不可退，1：可退, 2:已退")
+    private Integer refund;
+
+    /**
+     * 预付金可退款的金额
+     */
+    @ApiModelProperty(value="预付金退款的金额")
+    private BigDecimal refundPrepayAmounts;
+
+    /**
      * 微信付款编号
      */
     @ApiModelProperty(value = "微信付款编号", hidden = true)
@@ -112,6 +126,6 @@ private static final long serialVersionUID=1L;
      * 逻辑删除
      */
     @ApiModelProperty(value = "逻辑删除", hidden = true)
-    private Boolean deleted;
+    private Integer deleted;
 
 }

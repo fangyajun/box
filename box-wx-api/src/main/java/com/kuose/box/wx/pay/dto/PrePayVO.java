@@ -11,4 +11,5 @@ import lombok.Data;
 public class PrePayVO {
 
     private Integer orderId;
+    private Integer prepayCardOrderId;
 }

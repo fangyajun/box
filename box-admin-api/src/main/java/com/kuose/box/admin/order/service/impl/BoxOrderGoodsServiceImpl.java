@@ -40,6 +40,10 @@ public class BoxOrderGoodsServiceImpl extends ServiceImpl<BoxOrderGoodsMapper, B
     public Result save(OrderGoodsDto orderGoodsDto) {
         Integer orderId = orderGoodsDto.getOrderId();
         Integer[] skuIds = orderGoodsDto.getSkuIds();
+        //
+
+
+
         // 先删除
         List<BoxOrderGoods> goodsList = boxOrderGoodsMapper.selectList(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("deleted", 0));
         if (goodsList != null && !goodsList.isEmpty()) {

@@ -37,9 +37,9 @@ private static final long serialVersionUID=1L;
     private String orderNo;
 
     /**
-     * 订单状态,0-待搭配状态，1-已搭配待发货，2-已发货待收货，3-已确认收货待付款，4-，5-已支付待预约, 6-已预约待寄回, 7-寄回中 8-， 9-已完成，10-已关闭
+     * 订单状态,0-待搭配状态，1-已搭配待发货，2-已发货待收货，3-已确认收货，待结算评价，4-已结算待支付，5-已支付待预约, 6-已预约待寄回, 7-寄回中 8-， 9-已完成，10-已关闭,
      */
-    @ApiModelProperty(value="订单状态,0-待搭配状态，1-已搭配待发货，2-已发货待收货，3-已确认收货待付款，4-，5-已支付待预约, 6-已预约待寄回, 7-寄回中 8-， 9-已完成，10-已关闭")
+    @ApiModelProperty(value="订单状态,0-待搭配状态，1-已搭配待发货，2-已发货待收货，3-已确认收货，待结算评价，4-已结算待支付，5-已支付待预约, 6-已预约待寄回, 7-寄回中 8-， 9-已完成，10-已关闭,")
     private Integer orderStatus;
 
     /**
@@ -120,6 +120,12 @@ private static final long serialVersionUID=1L;
      */
     @ApiModelProperty(value="实付费用")
     private BigDecimal actualPrice;
+
+    /**
+     * 预付金退款的金额
+     */
+    @ApiModelProperty(value="预付金退款的金额")
+    private BigDecimal refundPrepayAmounts;
 
     /**
      * 微信付款编号

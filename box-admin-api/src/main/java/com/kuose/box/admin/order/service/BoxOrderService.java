@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.kuose.box.admin.order.dto.OrderDto;
+import com.kuose.box.admin.order.dto.ShipDTO;
+import com.kuose.box.common.config.Result;
 import com.kuose.box.db.order.entity.BoxOrder;
 
 /**
@@ -19,4 +21,6 @@ public interface BoxOrderService extends IService<BoxOrder> {
     IPage<BoxOrder> listOrderPage(Page<BoxOrder> boxOrderPage, OrderDto orderDto);
 
     int updateWithOptimisticLocker(BoxOrder order);
+
+    Result ship(ShipDTO shipDTO);
 }

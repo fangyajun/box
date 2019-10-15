@@ -48,22 +48,20 @@ public class BoxOrderController {
             return Result.failure("缺少必传参数");
         }
 
+
+
         BoxOrder order = boxOrderService.getById(shipDTO.getOrderId());
+        if (order == null) {
+            return Result.failure(506, "数据异常，查无此订单");
+        }
+
         if (order.getOrderStatus() != 1) {
             return Result.failure("该订单状态不是待发货状态，请检查订单状态！");
         }
 
-        order.setOrderStatus(2);
-        order.setShipSn(shipDTO.getShipSn());
-        order.setShipChannel(shipDTO.getShipChannel());
-        order.setShipTime(shipDTO.getShipTime());
+        return boxOrderService.ship(shipDTO);
 
-        int update = boxOrderService.updateWithOptimisticLocker(order);
-        if (update == 0) {
-            throw new RuntimeException("数据更新已失效");
-        }
 
-        return Result.success();
     }
 
     @ApiOperation(value="订单表注释")

@@ -2,12 +2,14 @@ package com.kuose.box.admin.order.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.kuose.box.admin.goods.service.BoxGoodsSkuService;
 import com.kuose.box.admin.order.dto.OrderAuditDto;
 import com.kuose.box.admin.order.dto.OrderGoodsDto;
 import com.kuose.box.admin.order.service.BoxOrderGoodsService;
 import com.kuose.box.admin.order.service.BoxOrderService;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.common.utils.StringUtil;
+import com.kuose.box.db.goods.entity.BoxGoodsSku;
 import com.kuose.box.db.order.entity.BoxOrder;
 import com.kuose.box.db.order.entity.BoxOrderGoods;
 import io.swagger.annotations.Api;
@@ -34,6 +36,8 @@ public class BoxOrderGoodsController {
     private BoxOrderGoodsService boxOrderGoodsService;
     @Autowired
     private BoxOrderService boxOrderService;
+    @Autowired
+    private BoxGoodsSkuService boxGoodsSkuService;
 
     @ApiOperation(value="添加或修改商品到盒子")
     @PostMapping("/addOrderGoods")
@@ -45,6 +49,15 @@ public class BoxOrderGoodsController {
         if (boxOrder == null) {
             return Result.failure("数据异常,该盒子订单不存在");
         }
+
+        Integer[] skuIds = orderGoodsDto.getSkuIds();
+        for (Integer skuId : skuIds) {
+            BoxGoodsSku goodsSku = boxGoodsSkuService.getById(skuId);
+            if (goodsSku == null) {
+                return Result.failure("数据异常，skuId:"+ skuId +"不存在，查无此sku信息");
+            }
+        }
+
         if (boxOrder.getAuditStatus() == 1) {
             return Result.failure("该盒子已搭配审核，无法操作！");
         }
@@ -72,7 +85,7 @@ public class BoxOrderGoodsController {
         if (boxOrder != null) {
             coordinatorMessage = boxOrder.getCoordinatorMessage();
         }
-        return Result.success().setData("boxOrderGoodsList", boxOrderGoodsList).setData("coordinatorMessage", coordinatorMessage);
+        return Result.success().setData("boxOrder", boxOrder).setData("boxOrderGoodsList", boxOrderGoodsList).setData("coordinatorMessage", coordinatorMessage);
     }
 
     @ApiOperation(value="搭配审核")

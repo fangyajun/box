@@ -56,14 +56,30 @@ public class BoxPrepayCardOrderServiceImpl extends ServiceImpl<BoxPrepayCardOrde
         boxPrepayCardOrder.setCategory(boxPrepayCard.getCategory());
         boxPrepayCardOrder.setOrderStatus(0);
         boxPrepayCardOrder.setServiceTimes(boxPrepayCard.getServiceTimes());
-        boxPrepayCardOrder.setVailableAmount(new BigDecimal(0));
         boxPrepayCardOrder.setPrepayPrice(boxPrepayCard.getRetailPrice());
+        if (boxPrepayCard.getCategory() == 0) {
+            // 是预付金，
+            boxPrepayCardOrder.setVailableAmount(boxPrepayCard.getRetailPrice());
+        } else {
+            // 服务卡，者可用的预付金是0
+            boxPrepayCardOrder.setVailableAmount(new BigDecimal(0));
+        }
         boxPrepayCardOrder.setCouponPrice(new BigDecimal(0));
         boxPrepayCardOrder.setOrderPrice(boxPrepayCard.getRetailPrice().subtract(boxPrepayCardOrder.getCouponPrice()));
+        boxPrepayCardOrder.setRefund(0);
+        boxPrepayCardOrder.setRefundPrepayAmounts(new BigDecimal(0));
         boxPrepayCardOrder.setAddTime(System.currentTimeMillis());
         boxPrepayCardOrder.setUpdateTime(System.currentTimeMillis());
         boxPrepayCardOrderMapper.insert(boxPrepayCardOrder);
 
         return Result.success().setData("boxPrepayCardOrder", boxPrepayCardOrder);
+    }
+
+    @Override
+    public int updateWithOptimisticLocker(BoxPrepayCardOrder boxPrepayCardOrder) {
+        Long updateTime = boxPrepayCardOrder.getUpdateTime();
+        boxPrepayCardOrder.setUpdateTime(System.currentTimeMillis());
+        QueryWrapper<BoxPrepayCardOrder> queryWrapper = new QueryWrapper<BoxPrepayCardOrder>().eq("id", boxPrepayCardOrder.getId()).eq("update_time", updateTime);
+        return boxPrepayCardOrderMapper.update(boxPrepayCardOrder, queryWrapper);
     }
 }
