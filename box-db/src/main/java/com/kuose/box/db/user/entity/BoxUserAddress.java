@@ -32,17 +32,17 @@ private static final long serialVersionUID=1L;
     private Integer userId;
 
     /**
-     * 行政区域表的省ID
+     * 行政区域表的省
      */
     private String province;
 
     /**
-     * 行政区域表的市ID
+     * 行政区域表的市
      */
     private String city;
 
     /**
-     * 行政区域表的区县ID
+     * 行政区域表的区县
      */
     private String county;
 

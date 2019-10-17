@@ -46,7 +46,7 @@ public class PayController {
 
 
     @ApiOperation(value="判断订单是否还需支付金额")
-    @GetMapping
+    @GetMapping("/isToPay")
     public Result isToPay(Integer orderId, @ApiParam(hidden = true)  @LoginUser Integer userId) {
         if (orderId == null) {
             return Result.failure("缺少必传参数");

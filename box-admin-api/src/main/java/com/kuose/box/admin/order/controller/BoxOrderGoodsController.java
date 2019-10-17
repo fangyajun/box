@@ -64,6 +64,7 @@ public class BoxOrderGoodsController {
 
         if (!StringUtil.isBlank(orderGoodsDto.getCoordinatorMessage())) {
             boxOrder.setCoordinatorMessage(orderGoodsDto.getCoordinatorMessage());
+            boxOrder.setCoordinator(orderGoodsDto.getUsername());
             boxOrder.setUpdateTime(System.currentTimeMillis());
             boxOrderService.updateById(boxOrder);
         }

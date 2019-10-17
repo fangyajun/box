@@ -18,7 +18,6 @@ import com.kuose.box.db.order.entity.BoxOrder;
 import com.kuose.box.db.prepay.entity.BoxPrepayCardOrder;
 import com.kuose.box.wx.order.service.BoxOrderService;
 import com.kuose.box.wx.order.service.BoxPrepayCardOrderService;
-import com.kuose.box.wx.pay.controller.PayController;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,7 +38,7 @@ import java.math.BigDecimal;
 @Service
 public class PayService {
 
-    private final Log logger = LogFactory.getLog(PayController.class);
+    private final Log logger = LogFactory.getLog(PayService.class);
 
     @Autowired
     private BoxOrderService boxOrderService;

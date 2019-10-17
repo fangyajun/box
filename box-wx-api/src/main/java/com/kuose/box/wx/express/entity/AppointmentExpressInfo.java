@@ -26,7 +26,7 @@ public class AppointmentExpressInfo {
     /**
      *邮费支付方式:1-现付，2-到付，3-月结，4-第三方支付
      */
-    private String PayType;
+    private Integer PayType;
     /**
      *快递类型：1-标准快件
      */
@@ -39,6 +39,7 @@ public class AppointmentExpressInfo {
      *收件zhe
      */
     private Receiver Receiver;
+
     /**
      * 上门取货开始时间:"yyyy-MM-dd HH:mm:ss"格式化，本文中所有时间格式相同
      */
@@ -51,7 +52,7 @@ public class AppointmentExpressInfo {
     /**
      *商品信息
      */
-    private List<Commodity> Commoditys;
+    private List<Commodity> Commodity;
 
     /**
      *备注

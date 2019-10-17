@@ -75,7 +75,6 @@ public class BoxOrderGoodsServiceImpl extends ServiceImpl<BoxOrderGoodsMapper, B
             boxOrderGoods.setPrice(goodsSku.getRetailPrice());
             boxOrderGoods.setColorName(goodsSku.getColorName());
             boxOrderGoods.setSizeName(goodsSku.getSizeName());
-            boxOrderGoods.setColorName(orderGoodsDto.getUsername());
             boxOrderGoods.setPicUrl(goods.getImg());
             // 默认保留'盒子商品状态，1：保留，2：退货，3：换货',
             boxOrderGoods.setOrderGoodsStatus(1);
