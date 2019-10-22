@@ -40,7 +40,7 @@ public class BoxPrepayCardOrderController {
 //        }
 
         if (prepayCardDTO.getPrepayCardId() == null) {
-            return Result.failure(503, "缺少必传参数");
+            return Result.failure("缺少必传参数");
         }
 
         // 先删除未付款的预付金或服务卡订单，在创建订单

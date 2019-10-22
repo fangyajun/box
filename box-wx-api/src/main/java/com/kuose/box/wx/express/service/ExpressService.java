@@ -29,9 +29,9 @@ public class ExpressService {
     private String ReqURL = "http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx";
 
     //测试请求url
-    private String orderOnline = "http://testapi.kdniao.com:8081/api/OOrderService";
+    private String orderOnline = "http://testapi.kdniao.com:8081/api/oorderService";
     //正式请求url
-    //private String orderOnline = "http://api.kdniao.com/api/OOrderService";
+//    private String orderOnline = "http://api.kdniao.com/api/OOrderService";
 
 
 
@@ -94,7 +94,8 @@ public class ExpressService {
 
 
         String requestData= "{'OrderCode': '0126577003123'," +
-                "'ShipperCode':'YTO'," +
+                "'ShipperCode':'SF'," +
+                "'MonthCode':'7553045845'" +
                 "'PayType':1," +
                 "'ExpType':1," +
                 "'Cost':1.0," +

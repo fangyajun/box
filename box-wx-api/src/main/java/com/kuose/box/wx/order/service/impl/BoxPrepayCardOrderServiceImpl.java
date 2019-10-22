@@ -37,7 +37,7 @@ public class BoxPrepayCardOrderServiceImpl extends ServiceImpl<BoxPrepayCardOrde
         // 1.判断预付金或服务卡是否正常
         BoxPrepayCard boxPrepayCard = boxPrepayCardService.getById(prepayCardId);
         if (boxPrepayCard == null || boxPrepayCard.getStatus() == 0) {
-            return Result.failure(506, "数据异常,查无此预付金服务卡或预付金服务卡未启用");
+            return Result.failure("数据异常,查无此预付金服务卡或预付金服务卡未启用");
         }
 
         // 2.用户是否已有未关闭预付金或者服务卡订单
@@ -45,7 +45,7 @@ public class BoxPrepayCardOrderServiceImpl extends ServiceImpl<BoxPrepayCardOrde
                 eq("user_id", userId);
         BoxPrepayCardOrder prepayCardOrder = boxPrepayCardOrderMapper.selectOne(queryWrapper.in("order_status", 2, 3));
         if (prepayCardOrder != null) {
-            return Result.failure(506, "您有预付金或者服务卡未用完，不能再次申请！");
+            return Result.failure("您有预付金或者服务卡未用完，不能再次申请！");
         }
 
         // 3.创建订单

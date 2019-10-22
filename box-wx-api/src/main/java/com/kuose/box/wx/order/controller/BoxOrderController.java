@@ -250,5 +250,65 @@ public class BoxOrderController {
         return boxOrderService.orderSettlement(orderId);
     }
 
+    @ApiOperation(value="订单是否有商品需要寄回, 返回结果，0：否，1：是,有商品寄回")
+    @GetMapping("/isToBackGoods")
+    public Result isToBackGoods(Integer orderId, @ApiParam(hidden = true) @LoginUser Integer userId) {
+        //        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
+        if (orderId == null) {
+            return Result.failure("缺少必传参数");
+        }
+
+        BoxOrder boxOrder = boxOrderService.getById(orderId);
+        if (boxOrder.getOrderStatus() != 5) {
+            return Result.failure("请先支付订单");
+        }
+
+        List<BoxOrderGoods> orderGoodsList = boxOrderGoodsService.list(new QueryWrapper<BoxOrderGoods>().eq("deleted", 0).
+                eq("order_id", orderId).ne("order_goods_status", 1));
+
+        if (orderGoodsList == null || orderGoodsList.isEmpty()) {
+            return Result.success().setData("isToBackGoods", 0);
+        }
+
+        return Result.success().setData("isToBackGoods", 1);
+    }
+
+    @ApiOperation(value="订单没有商品寄回，更新订单得状态为已完成")
+    @PostMapping("/updateOrderStatusToFinish")
+    public Result updateOrderStatusToFinish(@RequestBody OrderTDO orderTDO, @ApiParam(hidden = true) @LoginUser Integer userId) {
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
+        if (orderTDO.getOrderId() == null) {
+            return Result.failure("缺少必传参数");
+        }
+        BoxOrder boxOrder = boxOrderService.getById(orderTDO.getOrderId());
+        if (boxOrder.getOrderStatus() != 5) {
+            return Result.failure("请先支付订单");
+        }
+        List<BoxOrderGoods> orderGoodsList = boxOrderGoodsService.list(new QueryWrapper<BoxOrderGoods>().eq("deleted", 0).
+                eq("order_id", orderTDO.getOrderId()).ne("order_goods_status", 1));
+
+        if (orderGoodsList != null && !orderGoodsList.isEmpty()) {
+            return Result.failure("订单有商品待寄回，改变订单状态");
+        }
+
+        // 预付金订单状态
+        BoxPrepayCardOrder prepayCardOrder = boxPrepayCardOrderService.getById(boxOrder.getPrepayCardOrderId());
+        prepayCardOrder.setRefund(1);
+        boxPrepayCardOrderService.updateById(prepayCardOrder);
+
+        boxOrder.setOrderStatus(9);
+        int update = boxOrderService.updateWithOptimisticLocker(boxOrder);
+        if (update == 0) {
+            return Result.failure("更新失败");
+        }
+
+        // todo 如有预付金就退回预付金
+
+        return Result.success();
+    }
 }
 

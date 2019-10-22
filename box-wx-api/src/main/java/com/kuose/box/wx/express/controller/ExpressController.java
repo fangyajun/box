@@ -97,8 +97,8 @@ public class ExpressController {
         commodityList.add(commodity);
 
         appointmentExpressInfo.setCommodity(commodityList);
-        appointmentExpressInfo.setStartDate("2019-10-16 13:00:00");
-        appointmentExpressDTO.setEndDate("2019-10-16 17:00:00");
+        appointmentExpressInfo.setStartDate("2019-10-23 13:00:00");
+        appointmentExpressDTO.setEndDate("2019-10-23 17:00:00");
 
         String json = expressService.orderOnlineByJson(appointmentExpressInfo);
 

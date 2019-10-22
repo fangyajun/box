@@ -43,7 +43,7 @@ public class PayController {
 
 
 
-    @ApiOperation(value="判断订单是否还需支付金额")
+    @ApiOperation(value="判断订单是否还需支付金额，0：不需要支付，1：需要支付")
     @GetMapping("/isToPay")
     public Result isToPay(Integer orderId, @ApiParam(hidden = true)  @LoginUser Integer userId) {
         if (orderId == null) {

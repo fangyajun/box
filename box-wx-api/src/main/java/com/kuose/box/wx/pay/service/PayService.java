@@ -217,9 +217,17 @@ public class PayService {
                 return WxPayNotifyResponse.fail(prepayCardOrder.getOrderNo() + " : 支付金额不符合 totalFee=" + totalFee);
             }
 
+            // 更新预付金订单可退款金额
+            BoxPrepayCardOrder cardOrder = boxPrepayCardOrderService.getById(boxOrder.getPrepayCardOrderId());
+            cardOrder.setRefundPrepayAmounts(boxOrder.getRefundPrepayAmounts());
+            boxPrepayCardOrderService.updateById(cardOrder);
+
             boxOrder.setPayId(payId);
             boxOrder.setPayTime(System.currentTimeMillis());
             boxOrder.setOrderStatus(5);
+
+
+
 
             int update = boxOrderService.updateWithOptimisticLocker(boxOrder);
             if (update == 0) {
