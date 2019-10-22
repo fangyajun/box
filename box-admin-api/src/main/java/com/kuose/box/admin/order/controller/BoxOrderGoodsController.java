@@ -2,6 +2,8 @@ package com.kuose.box.admin.order.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.kuose.box.admin.express.entity.ExpressInfo;
+import com.kuose.box.admin.express.service.ExpressService;
 import com.kuose.box.admin.goods.service.BoxGoodsSkuService;
 import com.kuose.box.admin.order.dto.OrderAuditDto;
 import com.kuose.box.admin.order.dto.OrderGoodsDto;
@@ -38,6 +40,8 @@ public class BoxOrderGoodsController {
     private BoxOrderService boxOrderService;
     @Autowired
     private BoxGoodsSkuService boxGoodsSkuService;
+    @Autowired
+    private ExpressService expressService;
 
     @ApiOperation(value="添加或修改商品到盒子")
     @PostMapping("/addOrderGoods")
@@ -72,21 +76,27 @@ public class BoxOrderGoodsController {
         return boxOrderGoodsService.save(orderGoodsDto);
     }
 
-
     @ApiOperation(value="盒子详情")
     @GetMapping("/boxDetail")
     public Result boxDetail(Integer orderId) {
         if (orderId == null) {
             return Result.failure("缺少必传参数");
         }
+        Result result = Result.success();
 
         List<BoxOrderGoods> boxOrderGoodsList = boxOrderGoodsService.list(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("deleted", 0));
         BoxOrder boxOrder = boxOrderService.getById(orderId);
+        if (boxOrder.getOrderStatus() != 0 && boxOrder.getOrderStatus() != 1) {
+            if (!StringUtil.isBlank(boxOrder.getShipChannel()) && !StringUtil.isBlank(boxOrder.getShipSn())) {
+                ExpressInfo expressInfo = expressService.getExpressDetail(boxOrder.getShipChannel(), boxOrder.getShipSn());
+                result.setData("expressInfo", expressInfo);
+            }
+        }
         String coordinatorMessage = "";
         if (boxOrder != null) {
             coordinatorMessage = boxOrder.getCoordinatorMessage();
         }
-        return Result.success().setData("boxOrder", boxOrder).setData("boxOrderGoodsList", boxOrderGoodsList).setData("coordinatorMessage", coordinatorMessage);
+        return result.setData("boxOrder", boxOrder).setData("boxOrderGoodsList", boxOrderGoodsList).setData("coordinatorMessage", coordinatorMessage);
     }
 
     @ApiOperation(value="搭配审核")
@@ -121,6 +131,38 @@ public class BoxOrderGoodsController {
         return Result.success();
     }
 
+    @ApiOperation(value="取消审核")
+    @PostMapping("/cancelAudit")
+    public Result cancelAudit(@RequestBody OrderAuditDto orderAuditDto) {
+        if (orderAuditDto.getOrderId() == null || StringUtil.isBlank(orderAuditDto.getUsername())) {
+            return Result.failure("缺少必传参数");
+        }
 
+        if (orderAuditDto.getStatus() != 0) {
+            return Result.failure("取消审核的状态必须为0");
+        }
+
+        BoxOrder boxOrder = boxOrderService.getById(orderAuditDto.getOrderId());
+
+        if (boxOrder.getOrderStatus() != 0 && boxOrder.getOrderStatus() != 1) {
+            return Result.failure("该订单已发货，无法取消审核");
+        }
+
+        if (boxOrder.getAuditStatus() == 0) {
+            return Result.failure("该订单没有审核，无法取消审核");
+        }
+
+        // 只有订单通过审核通过才把订单状态改为已搭配状态
+        boxOrder.setOrderStatus(0);
+        boxOrder.setAuditStatus(0);
+        boxOrder.setAuditor(orderAuditDto.getUsername());
+
+        int update = boxOrderService.updateWithOptimisticLocker(boxOrder);
+        if (update == 0) {
+            throw new RuntimeException("数据更新已失效");
+        }
+
+        return Result.success();
+    }
 }
 

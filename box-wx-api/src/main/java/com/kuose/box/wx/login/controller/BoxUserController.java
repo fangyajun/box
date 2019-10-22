@@ -76,13 +76,13 @@ public class BoxUserController {
             return Result.failure(602,"小程序后台验证码服务不支持");
         }
 
-        String code = CharUtil.getRandomNum(6);
-        notifyService.notifySmsTemplate(phoneNumber, NotifyType.CAPTCHA, new String[]{code,"1"});
+        String code = CharUtil.getRandomNum(4);
         boolean successful = CaptchaCodeManager.addToCache(phoneNumber, code);
         if (!successful) {
-            return Result.failure(603,"验证码未超时1分钟，不能发送");
+            return Result.failure("验证码未超时1分钟，不能发送");
         }
-        System.out.println();
+
+        notifyService.notifySmsTemplate(phoneNumber, NotifyType.CAPTCHA, new String[]{code,"1"});
         return Result.success();
     }
 
@@ -182,7 +182,7 @@ public class BoxUserController {
 
         String cachedCaptcha = CaptchaCodeManager.getCachedCaptcha(phoneNumber);
         if (StringUtil.isBlank(cachedCaptcha) || !authCode.equals(cachedCaptcha)) {
-            return Result.failure(601,"请填写正确的验证码");
+            return Result.failure("请填写正确的验证码");
         }
 
         String sessionKey = null;

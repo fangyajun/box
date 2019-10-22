@@ -55,7 +55,6 @@ public class SwaggerConfig {
                 .title("阔色盒子接口文档")
                 .description("一个盒子系统接口文档的API")
                 .version("1.0")
-                .contact("方亚军")
                 .termsOfServiceUrl("")
                 .build();
     }

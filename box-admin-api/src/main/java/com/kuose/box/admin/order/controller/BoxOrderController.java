@@ -3,6 +3,8 @@ package com.kuose.box.admin.order.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.kuose.box.admin.express.entity.ExpressInfo;
+import com.kuose.box.admin.express.service.ExpressService;
 import com.kuose.box.admin.order.dto.OrderDto;
 import com.kuose.box.admin.order.dto.ShipDTO;
 import com.kuose.box.admin.order.service.BoxOrderService;
@@ -29,6 +31,8 @@ public class BoxOrderController {
 
     @Autowired
     private BoxOrderService boxOrderService;
+    @Autowired
+    private ExpressService expressService;
 
     @ApiOperation(value="订单列表")
     @GetMapping("/list")
@@ -47,9 +51,6 @@ public class BoxOrderController {
         if (shipDTO.getOrderId() == null || StringUtil.isBlank(shipDTO.getShipSn()) || StringUtil.isBlank(shipDTO.getShipChannel())) {
             return Result.failure("缺少必传参数");
         }
-
-
-
         BoxOrder order = boxOrderService.getById(shipDTO.getOrderId());
         if (order == null) {
             return Result.failure(506, "数据异常，查无此订单");
@@ -60,15 +61,19 @@ public class BoxOrderController {
         }
 
         return boxOrderService.ship(shipDTO);
-
-
     }
 
     @ApiOperation(value="订单表注释")
-    @PostMapping("/zhshi")
+    @PostMapping("/zhushi")
     public Result zhshi(@RequestBody BoxOrder boxOrder) {
-
         return Result.success();
+    }
+
+    @ApiOperation(value="获取物流信息详情")
+    @GetMapping("/getExpressDetail")
+    public Result getExpressDetail(String expCode, String expNo) {
+        ExpressInfo expressInfo = expressService.getExpressDetail(expCode, expNo);
+        return Result.success().setData("expressInfo", expressInfo);
     }
 
 }

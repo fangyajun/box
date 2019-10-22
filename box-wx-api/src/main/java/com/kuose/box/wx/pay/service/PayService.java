@@ -287,6 +287,4 @@ public class PayService {
 
         return Result.success();
     }
-
-
 }

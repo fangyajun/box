@@ -53,11 +53,11 @@ logging:
 litemall:
   # 开发者应该设置成自己的wx相关信息
   wx:
-    app-id: wx82794a3bb64be941
-    app-secret: e634ecdb5c1edcd51c800ff24471aa4f
-    mch-id: 111111
-    mch-key: xxxxxx
-    notify-url: http://www.example.com/wx/order/pay-notify
+    app-id: wxfdd2c2229d9b92ff
+    app-secret: 279b37c610d6a6a89806377fd42dc7fa
+    mch-id: 1559358691
+    mch-key: 47rc84she486htnv925rhen4b7g9ewj4
+    notify-url: https://kuose.mynatapp.cc/payController/payNotify
     # 商户证书文件路径
     # 请参考“商户证书”一节 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_3
     key-path: xxxxx

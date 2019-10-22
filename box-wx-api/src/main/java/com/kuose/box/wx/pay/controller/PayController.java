@@ -15,10 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +27,7 @@ import java.math.BigDecimal;
  * @since 2019/10/11
  */
 @Api(tags = {"支付，微信支付"})
+@RequestMapping("/payController")
 @RestController
 public class PayController {
 
@@ -111,9 +109,9 @@ public class PayController {
             return Result.failure(506, "查无此订单，参数值错误");
         }
 
-        if (!userId.equals(order.getUserId())) {
-            return Result.failure(506, "当前登录的用户信息和订单的用户信息不一致");
-        }
+//        if (!userId.equals(order.getUserId())) {
+//            return Result.failure(506, "当前登录的用户信息和订单的用户信息不一致");
+//        }
 
         // 验证订单是否能够付款
         // 订单状态,0-待搭配状态，1-已搭配待发货，2-已发货待收货，3-已确认收货待付款，4-，5-已支付待预约, 6-已预约待寄回, 7-寄回中 8-， 9-已完成，10-已关闭
@@ -155,9 +153,9 @@ public class PayController {
             return Result.failure(506, "查无此订单，参数值错误");
         }
 
-        if (!userId.equals(prepayCardOrder.getUserId())) {
-            return Result.failure(506, "当前登录的用户信息和订单的用户信息不一致");
-        }
+//        if (!userId.equals(prepayCardOrder.getUserId())) {
+//            return Result.failure(506, "当前登录的用户信息和订单的用户信息不一致");
+//        }
 
         // 验证订单是否能够付款
         // 订单状态,0-已提交未支付，1-已调用微信支付但未支付，2-已支付但未服务，3-服务中，4-，5-已完成，服务次数已用完，预付金已用完
@@ -176,6 +174,7 @@ public class PayController {
 
     /**
      * 微信付款成功或失败回调接口
+     *
      * <p>
      * @param request 请求内容
      * @param response 响应内容
@@ -195,9 +194,5 @@ public class PayController {
 
         return  payService.refundPrePayCard(prePayVO.getPrepayCardOrderId());
     }
-
-
-
-
 
 }
