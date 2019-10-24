@@ -60,7 +60,7 @@ litemall:
     notify-url: https://kuose.mynatapp.cc/payController/payNotify
     # 商户证书文件路径
     # 请参考“商户证书”一节 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_3
-    key-path: xxxxx
+    key-path: D:\kuose\微信支付\微信支付证书\apiclient_cert.p12
 
   #通知相关配置
   notify:

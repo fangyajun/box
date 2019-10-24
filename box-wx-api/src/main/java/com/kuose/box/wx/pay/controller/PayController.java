@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 
+
 /**
  * @author fangyajun
  * @description
@@ -116,12 +117,12 @@ public class PayController {
         // 验证订单是否能够付款
         // 订单状态,0-待搭配状态，1-已搭配待发货，2-已发货待收货，3-已确认收货待付款，4-，5-已支付待预约, 6-已预约待寄回, 7-寄回中 8-， 9-已完成，10-已关闭
         if (order.getOrderStatus() != 3) {
-            return Result.failure(506, "该订单状态不是待付款状态，无法支付");
+            return Result.failure("该订单状态不是待付款状态，无法支付");
         }
 
         BoxUser user = boxUserService.getById(order.getUserId());
         if (StringUtil.isBlank(user.getWeixinOpenid())) {
-            return Result.failure(506, "未能获取到用户openid，无法支付");
+            return Result.failure("未能获取到用户openid，无法支付");
         }
 
         return payService.prepayOrder(prePayVO.getOrderId(), user.getWeixinOpenid(),  request);
@@ -185,7 +186,7 @@ public class PayController {
         return payService.payNotify(request, response);
     }
 
-    @ApiOperation(value="预付金退款")
+    @ApiOperation(value="预付金退款,传入预付金订单id prepayCardOrderId ")
     @PostMapping("/refundPrePayCard")
     public Result refundPrePayCard(@RequestBody PrePayVO prePayVO, @ApiParam(hidden = true)  @LoginUser Integer userId) {
         if (userId == null) {

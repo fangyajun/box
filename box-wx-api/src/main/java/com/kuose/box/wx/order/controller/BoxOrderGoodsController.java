@@ -8,6 +8,7 @@ import com.kuose.box.db.order.entity.BoxOrderGoods;
 import com.kuose.box.db.order.entity.BoxOrderGoodsComment;
 import com.kuose.box.wx.annotation.LoginUser;
 import com.kuose.box.wx.order.dto.OrderGoodsAppraisementDTO;
+import com.kuose.box.wx.order.dto.OrderGoodsAppraisementsDTO;
 import com.kuose.box.wx.order.service.BoxOrderGoodsCommentService;
 import com.kuose.box.wx.order.service.BoxOrderGoodsService;
 import com.kuose.box.wx.order.service.BoxOrderService;
@@ -91,6 +92,27 @@ public class BoxOrderGoodsController {
         }
 
         boxOrderGoodsService.goodsAppraisement(orderGoodsAppraisementDTO);
+        return Result.success();
+    }
+
+    @ApiOperation(value="批量盒子商品评价")
+    @PostMapping("/goodsAppraisements")
+    public Result goodsAppraisements(@RequestBody OrderGoodsAppraisementsDTO orderGoodsAppraisementDTO, @ApiParam(hidden = true) @LoginUser Integer userId ) {
+//        if (userId == null) {
+//            return Result.failure(501, "请登录");
+//        }
+        if (orderGoodsAppraisementDTO.getOrderGoodsAppraisementDTOList() == null || orderGoodsAppraisementDTO.getOrderGoodsAppraisementDTOList().isEmpty()) {
+            return Result.failure("缺少必传参数");
+        }
+
+        List<OrderGoodsAppraisementDTO> orderGoodsAppraisementDTOList = orderGoodsAppraisementDTO.getOrderGoodsAppraisementDTOList();
+        for (OrderGoodsAppraisementDTO goodsAppraisementDTO : orderGoodsAppraisementDTOList) {
+            if (goodsAppraisementDTO.getOrderGoodsStatus() == null) {
+                return Result.failure(506, "必须对商品做出保留，退货，换货选择");
+            }
+            boxOrderGoodsService.goodsAppraisement(goodsAppraisementDTO);
+        }
+
         return Result.success();
     }
 

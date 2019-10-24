@@ -11,10 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -46,6 +43,23 @@ public class BoxPrepayCardOrderController {
         // 先删除未付款的预付金或服务卡订单，在创建订单
         boxPrepayCardOrderService.remove(new QueryWrapper<BoxPrepayCardOrder>().eq("user_id",prepayCardDTO.getUserId()).in("order_status", 0,1));
         return boxPrepayCardOrderService.creat(prepayCardDTO.getUserId(), prepayCardDTO.getPrepayCardId());
+    }
+
+    @ApiOperation(value="获取用户的预付金订单")
+    @GetMapping("/getPrepayCardOrder")
+    public Result getPrepayCardOrder(Integer loginUserId, @ApiParam(hidden = true) @LoginUser Integer userId) {
+        if (userId == null) {
+            return Result.failure(501, "请登录");
+        }
+
+        if (loginUserId == null) {
+            return Result.failure("缺少必传参数");
+        }
+
+        BoxPrepayCardOrder prepayCardOrder = boxPrepayCardOrderService.getOne(new QueryWrapper<BoxPrepayCardOrder>().eq("deleted", 0).eq("user_id", loginUserId).
+                ne("order_status", 5));
+
+        return Result.success().setData("prepayCardOrder", prepayCardOrder);
     }
 
 }

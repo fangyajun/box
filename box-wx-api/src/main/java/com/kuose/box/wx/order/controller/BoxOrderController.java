@@ -48,7 +48,7 @@ public class BoxOrderController {
     @Autowired
     private ExpressService expressService;
 
-    @ApiOperation(value="创建用户订单，要盒子的时候可以调用")
+    @ApiOperation(value="创建用户订单，要盒子的时候可以调用,返回状态505表示 用户需要去支付预付金订单")
     @PostMapping("/create")
     public Result create(@RequestBody OrderTDO orderTDO, @ApiParam(hidden = true) @LoginUser Integer userId) {
 //        if (userId == null) {
@@ -56,13 +56,13 @@ public class BoxOrderController {
 //        }
 
         if (orderTDO.getAddrId() == null) {
-            return Result.failure(506, "请先选择或填写一个收货地址");
+            return Result.failure("请先选择或填写一个收货地址");
         }
 
         // 判断用户是否有订单在搭配中或者未完成
         QueryWrapper<BoxOrder> orderQueryWrapper = new QueryWrapper<BoxOrder>().eq("deleted", 0).eq("user_id", orderTDO.getUserId()).notIn("order_status", 9,10);
         if (boxOrderService.count(orderQueryWrapper) >= 1) {
-            return Result.failure(506, "您有一个订单在进行中，暂时无法要盒子！");
+            return Result.failure("您有一个订单在进行中，暂时无法要盒子！");
         }
 
         // 2.用户是否已有已付款预付金或者服务卡订单
@@ -79,9 +79,9 @@ public class BoxOrderController {
     @ApiOperation(value="获取进行中的订单")
     @GetMapping("/underwayOrder")
     public Result underwayOrder(Integer useId, @ApiParam(hidden = true) @LoginUser Integer userId) {
-//        if (userId == null) {
-//            return Result.failure(501, "请登录");
-//        }
+        if (userId == null) {
+            return Result.failure(501, "请登录");
+        }
         Result result = Result.success();
 
         // 查询未关闭的订单
@@ -180,7 +180,6 @@ public class BoxOrderController {
         if (order.getOrderStatus() != 0 && order.getOrderStatus() != 1) {
             return Result.failure(506, "订单已发货，无法更改收货地址");
         }
-
 
         order.setAddrId(orderTDO.getAddrId());
 
@@ -305,8 +304,6 @@ public class BoxOrderController {
         if (update == 0) {
             return Result.failure("更新失败");
         }
-
-        // todo 如有预付金就退回预付金
 
         return Result.success();
     }

@@ -93,9 +93,8 @@ public class ExpressService {
 //        String requestData = JSONObject.toJSONString(appointmentExpressInfo);
 
 
-        String requestData= "{'OrderCode': '0126577003123'," +
-                "'ShipperCode':'SF'," +
-                "'MonthCode':'7553045845'" +
+        String requestData= "{'OrderCode': '01265770031234'," +
+                "'ShipperCode':'YTO'," +
                 "'PayType':1," +
                 "'ExpType':1," +
                 "'Cost':1.0," +
@@ -123,7 +122,7 @@ public class ExpressService {
                 "'GoodsWeight':1.0}]" +
                 "}";
 
-        Map<String, String> params = new HashMap<>(10);
+        Map<String, String> params = new HashMap<>();
         params.put("RequestData", URLEncoder.encode(requestData, "UTF-8"));
         params.put("EBusinessID", properties.getAppId());
         params.put("RequestType", "1001");

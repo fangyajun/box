@@ -81,11 +81,11 @@ public class PayService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return Result.failure(506, "内部异常，订单不能支付");
+            return Result.failure("内部异常，订单不能支付");
         }
 
         if (boxOrderService.updateWithOptimisticLocker(order) == 0) {
-            return Result.failure(508, "更新数据已失效");
+            return Result.failure("更新数据已失效");
         }
         return Result.success().setData("result", result);
     }
@@ -125,7 +125,7 @@ public class PayService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return Result.failure(506, "内部异常，订单不能支付");
+            return Result.failure("内部异常，订单不能支付");
         }
 
         return Result.success().setData("result", result);
@@ -188,7 +188,7 @@ public class PayService {
         if (prepayCardOrder != null) {
             // 检查这个订单是否已经处理过
             if (!StringUtil.isBlank(prepayCardOrder.getPayId()) && prepayCardOrder.getPayTime() != null) {
-                    return WxPayNotifyResponse.success("订单已经处理成功!");
+                return WxPayNotifyResponse.success("订单已经处理成功!");
             }
             // 检查支付订单金额
             if (!totalFee.equals(prepayCardOrder.getOrderPrice().toString())) {
@@ -243,15 +243,15 @@ public class PayService {
     public Result refundPrePayCard(Integer prepayCardOrderId) {
         BoxPrepayCardOrder prepayCardOrder = boxPrepayCardOrderService.getById(prepayCardOrderId);
         if (prepayCardOrder == null) {
-            return Result.failure(506, "数据异常，查无此预付金订单");
+            return Result.failure( "数据异常，查无此预付金订单");
         }
 
         if (prepayCardOrder.getRefund() != 1) {
-            return Result.failure(506, "预付款不是可退状态，无法退款");
+            return Result.failure("预付款不是可退状态，无法退款");
         }
 
         if (prepayCardOrder.getRefundPrepayAmounts().compareTo(new BigDecimal(0)) == 0) {
-            return Result.failure(506, "可退金额为0");
+            return Result.failure("可退金额为0");
         }
 
         // 微信退款
@@ -268,15 +268,15 @@ public class PayService {
             wxPayRefundResult = wxPayService.refund(wxPayRefundRequest);
         } catch (WxPayException e) {
             logger.error(e.getMessage(), e);
-            return Result.failure(507, "订单退款失败");
+            return Result.failure("订单退款失败");
         }
         if (!wxPayRefundResult.getReturnCode().equals("SUCCESS")) {
             logger.warn("refund fail: " + wxPayRefundResult.getReturnMsg());
-            return Result.failure(507, "订单退款失败");
+            return Result.failure("订单退款失败");
         }
         if (!wxPayRefundResult.getResultCode().equals("SUCCESS")) {
             logger.warn("refund fail: " + wxPayRefundResult.getReturnMsg());
-            return Result.failure(507, "订单退款失败");
+            return Result.failure("订单退款失败");
         }
 
         // 订单退款成功后的处理逻辑

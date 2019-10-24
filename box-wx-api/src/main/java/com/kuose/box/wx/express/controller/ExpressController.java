@@ -5,6 +5,7 @@ import com.kuose.box.db.order.entity.BoxOrder;
 import com.kuose.box.db.user.entity.BoxUserAddress;
 import com.kuose.box.wx.express.dto.appointmentExpressDTO;
 import com.kuose.box.wx.express.entity.*;
+import com.kuose.box.wx.express.service.ExService;
 import com.kuose.box.wx.express.service.ExpressService;
 import com.kuose.box.wx.order.service.BoxOrderService;
 import com.kuose.box.wx.user.service.BoxUserAddressService;
@@ -35,6 +36,8 @@ public class ExpressController {
     private BoxOrderService boxOrderService;
     @Autowired
     private BoxUserAddressService boxUserAddressService;
+    @Autowired
+    private ExService exService;
 
 
     @ApiOperation(value="获取物流信息详情")
@@ -100,7 +103,10 @@ public class ExpressController {
         appointmentExpressInfo.setStartDate("2019-10-23 13:00:00");
         appointmentExpressDTO.setEndDate("2019-10-23 17:00:00");
 
-        String json = expressService.orderOnlineByJson(appointmentExpressInfo);
+//        String json = expressService.orderOnlineByJson(appointmentExpressInfo);
+        String json = exService.orderOnlineByJson();
+
+        // Todo, 改变订单状态为已预约
 
         return Result.success().setData("json", json);
     }
