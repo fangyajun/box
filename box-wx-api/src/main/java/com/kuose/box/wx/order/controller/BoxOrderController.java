@@ -60,7 +60,7 @@ public class BoxOrderController {
         }
 
         // 判断用户是否有订单在搭配中或者未完成
-        QueryWrapper<BoxOrder> orderQueryWrapper = new QueryWrapper<BoxOrder>().eq("deleted", 0).eq("user_id", orderTDO.getUserId()).notIn("order_status", 9,10);
+        QueryWrapper<BoxOrder> orderQueryWrapper = new QueryWrapper<BoxOrder>().eq("deleted", 0).eq("user_id", orderTDO.getUserId()).notIn("order_status", 8,9,10);
         if (boxOrderService.count(orderQueryWrapper) >= 1) {
             return Result.failure("您有一个订单在进行中，暂时无法要盒子！");
         }
@@ -242,7 +242,7 @@ public class BoxOrderController {
         }
 
         BoxOrder boxOrder = boxOrderService.getById(orderId);
-        if (boxOrder.getOrderStatus() != 3) {
+        if (boxOrder.getOrderStatus() != 3 && boxOrder.getOrderStatus() != 4) {
             return Result.failure(506, "请先确认收货，在进行订单结算");
         }
 

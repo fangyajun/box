@@ -4,19 +4,24 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.kuose.box.admin.goods.service.BoxGoodsSkuService;
 import com.kuose.box.admin.order.dto.OrderDto;
 import com.kuose.box.admin.order.dto.ShipDTO;
+import com.kuose.box.admin.order.service.BoxOrderGoodsService;
 import com.kuose.box.admin.order.service.BoxOrderService;
 import com.kuose.box.admin.prepay.service.BoxPrepayCardOrderService;
 import com.kuose.box.common.config.Result;
+import com.kuose.box.db.goods.entity.BoxGoodsSku;
 import com.kuose.box.db.order.dao.BoxOrderMapper;
 import com.kuose.box.db.order.entity.BoxOrder;
+import com.kuose.box.db.order.entity.BoxOrderGoods;
 import com.kuose.box.db.prepay.entity.BoxPrepayCardOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * <p>
@@ -32,6 +37,10 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
     private BoxOrderMapper boxOrderMapper;
     @Autowired
     private BoxPrepayCardOrderService boxPrepayCardOrderService;
+    @Autowired
+    private BoxOrderGoodsService boxOrderGoodsService;
+    @Autowired
+    private BoxGoodsSkuService boxGoodsSkuService;
 
     @Override
     public IPage<BoxOrder> listOrderPage(Page<BoxOrder> boxOrderPage, OrderDto orderDto) {
@@ -71,6 +80,37 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
         int update = updateWithOptimisticLocker(order);
         if (update == 0) {
             throw new RuntimeException("数据更新已失效");
+        }
+
+        return Result.success();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Result confirmUserBackGoods(Integer orderId) {
+        // 更改订单状态
+        BoxOrder boxOrder = boxOrderMapper.selectById(orderId);
+        if (boxOrder == null) {
+            return Result.failure("数据异常，查无此订单信息");
+        }
+
+        if (boxOrder.getOrderStatus() != 6 && boxOrder.getOrderStatus() != 7) {
+            return Result.failure("订单状态异常，订单状态不是寄回状态");
+        }
+        //  8-确认收到寄回商品，
+        boxOrder.setOrderStatus(8);
+        boxOrderMapper.updateById(boxOrder);
+
+        // 退回的商品库存加1
+        List<BoxOrderGoods> goodsList = boxOrderGoodsService.list(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).
+                eq("deleted", 0).in("order_goods_status", 2, 3));
+        if (goodsList != null && !goodsList.isEmpty()) {
+            for (BoxOrderGoods boxOrderGoods : goodsList) {
+                // 更新对应sku的库存数量
+                BoxGoodsSku goodsSku = boxGoodsSkuService.getById(boxOrderGoods.getSkuId());
+                goodsSku.setNumber(goodsSku.getNumber() + 1);
+                boxGoodsSkuService.updateById(goodsSku);
+            }
         }
 
         return Result.success();

@@ -23,4 +23,6 @@ public interface BoxOrderService extends IService<BoxOrder> {
     int updateWithOptimisticLocker(BoxOrder order);
 
     Result ship(ShipDTO shipDTO);
+
+    Result confirmUserBackGoods(Integer orderId);
 }

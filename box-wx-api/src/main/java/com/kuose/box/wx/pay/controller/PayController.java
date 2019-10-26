@@ -116,8 +116,8 @@ public class PayController {
 
         // 验证订单是否能够付款
         // 订单状态,0-待搭配状态，1-已搭配待发货，2-已发货待收货，3-已确认收货待付款，4-，5-已支付待预约, 6-已预约待寄回, 7-寄回中 8-， 9-已完成，10-已关闭
-        if (order.getOrderStatus() != 3) {
-            return Result.failure("该订单状态不是待付款状态，无法支付");
+        if (order.getOrderStatus() != 4) {
+            return Result.failure("该订单状态不是已结算待支付状态，无法支付");
         }
 
         BoxUser user = boxUserService.getById(order.getUserId());
@@ -190,7 +190,7 @@ public class PayController {
     @PostMapping("/refundPrePayCard")
     public Result refundPrePayCard(@RequestBody PrePayVO prePayVO, @ApiParam(hidden = true)  @LoginUser Integer userId) {
         if (userId == null) {
-            return Result.failure(506, "请登录");
+            return Result.failure(501, "请登录");
         }
 
         return  payService.refundPrePayCard(prePayVO.getPrepayCardOrderId());

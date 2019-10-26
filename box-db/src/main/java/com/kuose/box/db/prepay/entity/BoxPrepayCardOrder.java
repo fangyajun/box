@@ -40,49 +40,49 @@ private static final long serialVersionUID=1L;
     /**
      * 订单编号
      */
-    @ApiModelProperty(value = "订单编号", hidden = true)
+    @ApiModelProperty(value = "订单编号")
     private String orderNo;
 
     /**
      * 订单类别，0：预付金，1：服务卡
      */
-    @ApiModelProperty(value = "订单类别，0：预付金，1：服务卡", hidden = true)
+    @ApiModelProperty(value = "订单类别，0：预付金，1：服务卡")
     private Integer category;
 
     /**
      * 订单状态,0-已提交未支付，1-已调用微信支付但未支付，2-已支付但未服务，3-服务中，4-，5-已完成，服务次数已用完，预付金已用完
      */
-    @ApiModelProperty(value = "订单状态,订单状态,0-已提交未支付，1-已调用微信支付但未支付，2-已支付但未服务，3-服务中，4-，5-已完成，服务次数已用完，预付金已用完", hidden = true)
+    @ApiModelProperty(value = "订单状态,订单状态,0-已提交未支付，1-已调用微信支付但未支付，2-已支付但未服务，3-服务中，4-，5-已完成，服务次数已用完，预付金已用完")
     private Integer orderStatus;
 
     /**
      * 服务次数，-1：表示预付金，-2：0次，0：无限次，1:1次，2:2次，3:3次'
      */
-    @ApiModelProperty(value = "服务次数，-1：表示预付金，-2：0次，0：无限次，1:1次，2:2次，3:3次'", hidden = true)
+    @ApiModelProperty(value = "服务次数，-1：表示预付金，-2：0次，0：无限次，1:1次，2:2次，3:3次'")
     private Integer serviceTimes;
 
     /**
      * 预付金可用的金额
      */
-    @ApiModelProperty(value = "预付金可用的金额", hidden = true)
+    @ApiModelProperty(value = "预付金可用的金额")
     private BigDecimal vailableAmount;
 
     /**
      * 总费用
      */
-    @ApiModelProperty(value = "总费用", hidden = true)
+    @ApiModelProperty(value = "总费用")
     private BigDecimal prepayPrice;
 
     /**
      * 优惠券减免
      */
-    @ApiModelProperty(value = "优惠券减免", hidden = true)
+    @ApiModelProperty(value = "优惠券减免")
     private BigDecimal couponPrice;
 
     /**
      * 订单费用， = prepay_price - coupon_price
      */
-    @ApiModelProperty(value = "订单费用， = prepay_price - coupon_price", hidden = true)
+    @ApiModelProperty(value = "订单费用， = prepay_price - coupon_price")
     private BigDecimal orderPrice;
 
     /**
@@ -101,13 +101,13 @@ private static final long serialVersionUID=1L;
     /**
      * 微信付款编号
      */
-    @ApiModelProperty(value = "微信付款编号", hidden = true)
+    @ApiModelProperty(value = "微信付款编号")
     private String payId;
 
     /**
      * 微信付款时间
      */
-    @ApiModelProperty(value = "微信付款时间", hidden = true)
+    @ApiModelProperty(value = "微信付款时间")
     private Long payTime;
 
     /**

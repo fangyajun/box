@@ -62,5 +62,11 @@ public class BoxPrepayCardOrderController {
         return Result.success().setData("prepayCardOrder", prepayCardOrder);
     }
 
+    @ApiOperation(value="预付金订单注释")
+    @PostMapping("/zhushi")
+    public Result zhushi(@RequestBody BoxPrepayCardOrder boxPrepayCardOrder) {
+        return Result.success();
+    }
+
 }
 

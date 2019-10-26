@@ -3,7 +3,7 @@ package com.kuose.box.wx.express.controller;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.db.order.entity.BoxOrder;
 import com.kuose.box.db.user.entity.BoxUserAddress;
-import com.kuose.box.wx.express.dto.appointmentExpressDTO;
+import com.kuose.box.wx.express.dto.AppointmentExpressDTO;
 import com.kuose.box.wx.express.entity.*;
 import com.kuose.box.wx.express.service.ExService;
 import com.kuose.box.wx.express.service.ExpressService;
@@ -47,11 +47,9 @@ public class ExpressController {
         return Result.success().setData("expressInfo", expressInfo);
     }
 
-
-
     @ApiOperation(value="预约快递")
-    @PostMapping("/getExpressDetail")
-    public Result appointmentExpress(@RequestBody appointmentExpressDTO appointmentExpressDTO) throws Exception {
+    @PostMapping("/appointmentExpress")
+    public Result appointmentExpress(@RequestBody AppointmentExpressDTO appointmentExpressDTO) throws Exception {
         if (appointmentExpressDTO.getOrderId() == null || appointmentExpressDTO == null) {
             return Result.failure("缺少必传参数");
         }
@@ -100,15 +98,16 @@ public class ExpressController {
         commodityList.add(commodity);
 
         appointmentExpressInfo.setCommodity(commodityList);
-        appointmentExpressInfo.setStartDate("2019-10-23 13:00:00");
-        appointmentExpressDTO.setEndDate("2019-10-23 17:00:00");
+//        appointmentExpressInfo.setStartDate("2019-10-23 13:00:00");
+//        appointmentExpressDTO.setEndDate("2019-10-23 17:00:00");
 
 //        String json = expressService.orderOnlineByJson(appointmentExpressInfo);
-        String json = exService.orderOnlineByJson();
+//        String json = exService.orderOnlineByJson();
 
-        // Todo, 改变订单状态为已预约
-
-        return Result.success().setData("json", json);
+        order.setOrderStatus(6);
+        int update = boxOrderService.updateWithOptimisticLocker(order);
+        return Result.success();
+//        return Result.success().setData("json", json);
     }
 
     @GetMapping("/cancel")

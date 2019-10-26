@@ -76,5 +76,15 @@ public class BoxOrderController {
         return Result.success().setData("expressInfo", expressInfo);
     }
 
+    @ApiOperation(value="确认收到用户寄回的商品")
+    @GetMapping("/confirmUserBackGoods")
+    public Result confirmUserBackGoods(Integer orderId) {
+        if (orderId == null) {
+            return Result.failure("缺少必传参数");
+        }
+
+        return boxOrderService.confirmUserBackGoods(orderId);
+    }
+
 }
 
