@@ -26,6 +26,8 @@
         <result column="pay_time" property="payTime" />
         <result column="ship_sn" property="shipSn" />
         <result column="ship_channel" property="shipChannel" />
+        <result column="back_ship_sn" property="backShipSn" />
+        <result column="back_ship_channel" property="backShipChannel" />
         <result column="ship_time" property="shipTime" />
         <result column="expect_time" property="expectTime" />
         <result column="confirm_time" property="confirmTime" />
@@ -39,14 +41,16 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, order_no, order_status, audit_status, addr_id, nic_name, mobile, user_message, coordinator_message, goods_price, refund_prepay_amounts, coupon_price, discount_price,prepay_card_order_id, advance_price, order_price, actual_price, pay_id, pay_time, ship_sn, ship_channel, ship_time, expect_time, confirm_time, comments, coordinator, auditor, add_time, update_time, deleted
+        id, user_id, order_no, order_status, audit_status, addr_id, nic_name, mobile, user_message, coordinator_message, goods_price,
+        refund_prepay_amounts, coupon_price, discount_price,prepay_card_order_id, advance_price, order_price, actual_price, pay_id, pay_time,
+        ship_sn, ship_channel, ship_time,back_ship_sn,back_ship_channel, expect_time, confirm_time, comments, coordinator, auditor, add_time, update_time, deleted
     </sql>
 
 
     <select id="listOrderPage" resultMap="BaseResultMap">
         SELECT id, user_id, order_no, order_status, audit_status, addr_id, nic_name, mobile, user_message, coordinator_message, goods_price, coupon_price,
                 discount_price, prepay_card_order_id, advance_price, order_price, actual_price, refund_prepay_amounts, pay_id, pay_time, ship_sn, ship_channel,
-                ship_time, expect_time, confirm_time, comments, coordinator, auditor, add_time, update_time
+                ship_time,back_ship_sn,back_ship_channel, expect_time, confirm_time, comments, coordinator, auditor, add_time, update_time
         FROM box_order
         <where>
             deleted = 0

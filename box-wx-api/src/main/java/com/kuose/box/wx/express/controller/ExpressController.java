@@ -1,9 +1,12 @@
 package com.kuose.box.wx.express.controller;
 
 import com.kuose.box.common.config.Result;
+import com.kuose.box.common.utils.StringUtil;
+import com.kuose.box.common.utils.date.DateUtil;
 import com.kuose.box.db.order.entity.BoxOrder;
 import com.kuose.box.db.user.entity.BoxUserAddress;
 import com.kuose.box.wx.express.dto.AppointmentExpressDTO;
+import com.kuose.box.wx.express.dto.BackGoodsExpressDTO;
 import com.kuose.box.wx.express.entity.*;
 import com.kuose.box.wx.express.service.ExService;
 import com.kuose.box.wx.express.service.ExpressService;
@@ -59,6 +62,10 @@ public class ExpressController {
             return Result.failure("数据异常，查无此订单数据");
         }
 
+        if (order.getOrderStatus() != 5) {
+            return Result.failure("该订单不是待预约状态，请核对该订单的状态");
+        }
+
         BoxUserAddress userAddress = boxUserAddressService.getById(appointmentExpressDTO.getAddrId());
         if (userAddress == null) {
             return Result.failure("数据异常，查无此地址信息");
@@ -67,6 +74,7 @@ public class ExpressController {
         AppointmentExpressInfo appointmentExpressInfo = new AppointmentExpressInfo();
         appointmentExpressInfo.setShipperCode("YTO");
         appointmentExpressInfo.setOrderCode(order.getOrderNo());
+        appointmentExpressInfo.setIsNotice(0);
         appointmentExpressInfo.setPayType(2);
         appointmentExpressInfo.setExpType("1");
 
@@ -98,16 +106,62 @@ public class ExpressController {
         commodityList.add(commodity);
 
         appointmentExpressInfo.setCommodity(commodityList);
-//        appointmentExpressInfo.setStartDate("2019-10-23 13:00:00");
-//        appointmentExpressDTO.setEndDate("2019-10-23 17:00:00");
 
+        Long startDate = appointmentExpressDTO.getStartDate();
+        Long endDate = appointmentExpressDTO.getEndDate();
+        DateUtil.timestampToStringTime(startDate);
+        appointmentExpressInfo.setStartDate(DateUtil.timestampToStringTime(startDate));
+        appointmentExpressInfo.setEndDate(DateUtil.timestampToStringTime(endDate));
+
+
+//        appointmentExpressInfo.setStartDate("2019-10-29 13:00:00");
+//        appointmentExpressInfo.setEndDate("2019-10-29 17:00:00");
+        ////////////////////////正式上线了把此注释打开/////////////////////////////////
+//
 //        String json = expressService.orderOnlineByJson(appointmentExpressInfo);
-//        String json = exService.orderOnlineByJson();
-
+//        JSONObject jsonObject = JSONObject.parseObject(json);
+//        boolean success = jsonObject.getBooleanValue("Success");
+//        int resultCode = jsonObject.getIntValue("ResultCode");
+//
+//        if (resultCode == 106) {
+//            return Result.failure("该订单已成功预约，请勿重复预约");
+//        }
+//
+//        if (!success && resultCode != 100) {
+//            return Result.failure("预约快递失败，请重新预约");
+//        }
+     //////////////////////////////////////////////////////////////////////
         order.setOrderStatus(6);
-        int update = boxOrderService.updateWithOptimisticLocker(order);
+        boxOrderService.updateWithOptimisticLocker(order);
         return Result.success();
-//        return Result.success().setData("json", json);
+    }
+
+    @ApiOperation(value="寄回商品物流信息填写")
+    @PostMapping("/backGoodsExpress")
+    public Result backGoodsExpress(@RequestBody BackGoodsExpressDTO backGoodsExpressDTO) {
+        if (backGoodsExpressDTO.getOrderId() == null || StringUtil.isBlank(backGoodsExpressDTO.getBackShipSn()) ||
+                StringUtil.isBlank(backGoodsExpressDTO.getBackShipChannel())) {
+            return Result.failure("缺少必传参数");
+        }
+
+        BoxOrder order = boxOrderService.getById(backGoodsExpressDTO.getOrderId());
+        if (order == null) {
+            return Result.failure("数据异常，查无此订单");
+        }
+        if (order.getOrderStatus() !=6 && order.getOrderStatus() != 7) {
+            return Result.failure("订单状态不是预约状态，请核对订单状态");
+        }
+
+        order.setOrderStatus(7);
+        order.setBackShipChannel(backGoodsExpressDTO.getBackShipChannel());
+        order.setBackShipSn(backGoodsExpressDTO.getBackShipSn());
+
+        int update = boxOrderService.updateWithOptimisticLocker(order);
+        if (update == 0) {
+            return Result.failure("更新数据异常");
+        }
+
+        return Result.success();
     }
 
     @GetMapping("/cancel")

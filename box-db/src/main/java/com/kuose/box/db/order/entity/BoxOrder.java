@@ -152,6 +152,18 @@ private static final long serialVersionUID=1L;
     private String shipChannel;
 
     /**
+     * 发货编号
+     */
+    @ApiModelProperty(value="退回商品发货编号")
+    private String backShipSn;
+
+    /**
+     * 发货快递公司
+     */
+    @ApiModelProperty(value="退回商品发货快递公司编号")
+    private String backShipChannel;
+
+    /**
      * 发货开始时间
      */
     @ApiModelProperty(value="发货开始时间")

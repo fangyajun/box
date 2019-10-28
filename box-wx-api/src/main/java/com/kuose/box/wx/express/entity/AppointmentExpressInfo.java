@@ -26,11 +26,16 @@ public class AppointmentExpressInfo {
     /**
      *邮费支付方式:1-现付，2-到付，3-月结，4-第三方支付
      */
-    private Integer PayType;
+    private Integer PayType = 2;
+
+    /**
+     *发货方式：0-上门揽件，1-网点自寄
+     */
+    private Integer IsNotice = 0;
     /**
      *快递类型：1-标准快件
      */
-    private String ExpType;
+    private String ExpType = "1";
     /**
      *寄件者
      */
