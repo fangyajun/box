@@ -1,4 +1,4 @@
-//package com.kuose.box.wx.common.notify.config.system;
+package com.kuose.box.wx.common.notify.config.system;//package com.kuose.box.wx.common.notify.config.system;
 //
 //import org.linlinjava.litemall.core.util.SystemInfoPrinter;
 //import org.linlinjava.litemall.db.service.LitemallSystemConfigService;

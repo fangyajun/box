@@ -16,6 +16,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface BoxOrderMapper extends BaseMapper<BoxOrder> {
 
-    IPage<BoxOrder> listOrderPage(Page<BoxOrder> boxOrderPage, @Param("orderNo")String orderNo, @Param("minExpectTime")Long minExpectTime, @Param("maxExpectTime")Long maxExpectTime,
-                                  @Param("mobile")String mobile, @Param("orderStatus")Integer orderStatus, @Param("auditStatus")Integer auditStatus);
+    IPage<BoxOrder> listOrderPage(Page<BoxOrder> boxOrderPage, @Param("orderNo") String orderNo, @Param("minExpectTime") Long minExpectTime, @Param("maxExpectTime") Long maxExpectTime,
+                                  @Param("mobile") String mobile, @Param("orderStatus") Integer orderStatus, @Param("auditStatus") Integer auditStatus);
 }

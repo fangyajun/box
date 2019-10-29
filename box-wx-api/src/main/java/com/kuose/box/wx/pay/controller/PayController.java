@@ -102,12 +102,12 @@ public class PayController {
 //            return Result.failure(501, "请登录");
 //        }
         if (prePayVO.getOrderId() == null) {
-            return Result.failure(506, "参数不对");
+            return Result.failure( "参数不对");
         }
 
         BoxOrder order = boxOrderService.getById(prePayVO.getOrderId());
         if (order == null) {
-            return Result.failure(506, "查无此订单，参数值错误");
+            return Result.failure( "查无此订单，参数值错误");
         }
 
 //        if (!userId.equals(order.getUserId())) {
@@ -146,12 +146,12 @@ public class PayController {
 //            return Result.failure(501, "请登录");
 //        }
         if (prePayVO.getOrderId() == null) {
-            return Result.failure(506, "参数不对");
+            return Result.failure( "参数不对");
         }
 
         BoxPrepayCardOrder prepayCardOrder = boxPrepayCardOrderService.getById(prePayVO.getOrderId());
         if (prepayCardOrder == null) {
-            return Result.failure(506, "查无此订单，参数值错误");
+            return Result.failure("查无此订单，参数值错误");
         }
 
 //        if (!userId.equals(prepayCardOrder.getUserId())) {
@@ -161,12 +161,12 @@ public class PayController {
         // 验证订单是否能够付款
         // 订单状态,0-已提交未支付，1-已调用微信支付但未支付，2-已支付但未服务，3-服务中，4-，5-已完成，服务次数已用完，预付金已用完
         if (prepayCardOrder.getOrderStatus() != 0 && prepayCardOrder.getOrderStatus() != 1) {
-            return Result.failure(506, "该订单状态不是待付款状态，无法支付");
+            return Result.failure("该订单状态不是待付款状态，无法支付");
         }
 
         BoxUser user = boxUserService.getById(prepayCardOrder.getUserId());
         if (StringUtil.isBlank(user.getWeixinOpenid())) {
-            return Result.failure(506, "未能获取到用户openid，无法支付");
+            return Result.failure("未能获取到用户openid，无法支付");
         }
 
         return payService.prepayCardOrder(prePayVO.getOrderId(), user.getWeixinOpenid(),  request);
@@ -192,8 +192,18 @@ public class PayController {
         if (userId == null) {
             return Result.failure(501, "请登录");
         }
-
         return  payService.refundPrePayCard(prePayVO.getPrepayCardOrderId());
+    }
+
+    /**
+     * 被管理系统 调用，退回用户预付金
+     * @param prepayCardOrderId
+     * @return
+     */
+    @ApiOperation(value="被管理系统调用，退回用户预付金", hidden = true)
+    @PostMapping("/refundPrePayMoney")
+    public Result refundPrePayMoney(Integer prepayCardOrderId) {
+        return  payService.refundPrePayCard(prepayCardOrderId);
     }
 
 }

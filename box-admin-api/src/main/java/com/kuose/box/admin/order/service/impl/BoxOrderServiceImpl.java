@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
+ *
  * <p>
  * 订单表 服务实现类
  * </p>
@@ -87,19 +88,21 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result confirmUserBackGoods(Integer orderId) {
+    public void confirmUserBackGoods(Integer orderId) {
         // 更改订单状态
         BoxOrder boxOrder = boxOrderMapper.selectById(orderId);
-        if (boxOrder == null) {
-            return Result.failure("数据异常，查无此订单信息");
-        }
 
-        if (boxOrder.getOrderStatus() != 6 && boxOrder.getOrderStatus() != 7) {
-            return Result.failure("订单状态异常，订单状态不是寄回状态");
-        }
         //  8-确认收到寄回商品，
         boxOrder.setOrderStatus(8);
         boxOrderMapper.updateById(boxOrder);
+
+        // 预付金设置为可退状态
+        BoxPrepayCardOrder prepayCardOrder = boxPrepayCardOrderService.getById(boxOrder.getPrepayCardOrderId());
+        if (prepayCardOrder.getRefundPrepayAmounts().compareTo(new BigDecimal(0)) == 1) {
+            // 0：不可退，1：可退， 2:已退
+            prepayCardOrder.setRefund(1);
+        }
+        boxPrepayCardOrderService.updateById(prepayCardOrder);
 
         // 退回的商品库存加1
         List<BoxOrderGoods> goodsList = boxOrderGoodsService.list(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).
@@ -112,7 +115,5 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
                 boxGoodsSkuService.updateById(goodsSku);
             }
         }
-
-        return Result.success();
     }
 }

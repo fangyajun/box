@@ -217,18 +217,18 @@ public class PayService {
                 return WxPayNotifyResponse.fail(prepayCardOrder.getOrderNo() + " : 支付金额不符合 totalFee=" + totalFee);
             }
 
-            // 更新预付金订单可退款金额
+            // 盒子订单还需另外支付，表示预付金已扣完，
             BoxPrepayCardOrder cardOrder = boxPrepayCardOrderService.getById(boxOrder.getPrepayCardOrderId());
+            // 0：不可退，1：可退, 2:已退
+            cardOrder.setRefund(0);
+            // 5-已完成，服务次数已用完，预付金已用完
+            cardOrder.setOrderStatus(5);
             cardOrder.setRefundPrepayAmounts(boxOrder.getRefundPrepayAmounts());
             boxPrepayCardOrderService.updateById(cardOrder);
 
             boxOrder.setPayId(payId);
             boxOrder.setPayTime(System.currentTimeMillis());
             boxOrder.setOrderStatus(5);
-
-
-
-
             int update = boxOrderService.updateWithOptimisticLocker(boxOrder);
             if (update == 0) {
                 return WxPayNotifyResponse.fail("更新数据已失效");
@@ -280,19 +280,12 @@ public class PayService {
         }
 
         // 订单退款成功后的处理逻辑
-        prepayCardOrder.setRefund(2);
-        prepayCardOrder.setOrderStatus(5);
-        int update = boxPrepayCardOrderService.updateWithOptimisticLocker(prepayCardOrder);
-        if (update == 0) {
-            // 如果更新失败，重新更新
-            BoxPrepayCardOrder boxPrepayCardOrder = new BoxPrepayCardOrder();
-            boxPrepayCardOrder.setId(prepayCardOrder.getId());
-            boxPrepayCardOrder.setOrderStatus(5);
-            boxPrepayCardOrder.setRefund(2);
+        BoxPrepayCardOrder boxPrepayCardOrder = new BoxPrepayCardOrder();
+        boxPrepayCardOrder.setId(prepayCardOrder.getId());
+        boxPrepayCardOrder.setOrderStatus(5);
+        boxPrepayCardOrder.setRefund(2);
 
-            boxPrepayCardOrderService.updateById(boxPrepayCardOrder);
-        }
-
+        boxPrepayCardOrderService.updateById(boxPrepayCardOrder);
         return Result.success();
     }
 }

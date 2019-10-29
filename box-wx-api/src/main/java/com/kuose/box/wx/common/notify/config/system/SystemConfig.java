@@ -1,4 +1,4 @@
-//package com.kuose.box.wx.common.notify.config.system;
+package com.kuose.box.wx.common.notify.config.system;//package com.kuose.box.wx.common.notify.config.system;
 //
 //import java.math.BigDecimal;
 //import java.util.HashMap;
