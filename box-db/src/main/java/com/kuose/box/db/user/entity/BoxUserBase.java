@@ -178,9 +178,9 @@ private static final long serialVersionUID=1L;
     private Integer frequency;
 
     /**
-     * 创建时间
+     * 用户设定的收盒时间
      */
-    @ApiModelProperty(value="用户设定的收盒实际", hidden = true)
+    @ApiModelProperty(value="用户设定的收盒时间")
     private Long expectTime;
 
     /**

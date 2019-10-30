@@ -64,17 +64,17 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
     public Result create(Integer userId, Integer addrId, Integer prepayCardOrderId) {
         BoxUserAddress userAddress = boxUserAddressService.getById(addrId);
         if (userAddress == null) {
-            return Result.failure(506, "数据异常,查无此收货地址");
+            return Result.failure("数据异常,查无此收货地址");
         }
 
         BoxUser boxUser = boxUserService.getById(userId);
         if (boxUser == null) {
-            return Result.failure(506, "数据异常,查无此用户信息");
+            return Result.failure( "数据异常,查无此用户信息");
         }
 
         BoxUserBase userBase = boxUserBaseService.getOne(new QueryWrapper<BoxUserBase>().eq("deleted", 0).eq("user_id", userId));
-        if (userBase == null) {
-            return Result.failure(506, "请先设置您期望的收货时间");
+        if (userBase == null || userBase.getExpectTime() == null) {
+            return Result.failure("请先设置您期望的收货时间");
         }
 
         BoxPrepayCardOrder prepayCardOrder = boxPrepayCardOrderService.getById(prepayCardOrderId);
@@ -171,7 +171,7 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
         // 实付费用 = 0
         // 可退的预付金 = 预付金 - 订单费用
         if (boxOrder.getOrderPrice().compareTo(boxOrder.getAdvancePrice()) == -1 || boxOrder.getOrderPrice().compareTo(boxOrder.getAdvancePrice()) == 0) {
-            boxOrder.setOrderPrice(new BigDecimal("0"));
+            boxOrder.setActualPrice(new BigDecimal("0"));
             boxOrder.setRefundPrepayAmounts(boxOrder.getAdvancePrice().subtract(boxOrder.getOrderPrice()));
         }
 
@@ -219,7 +219,9 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
             }
         }
 
-        if (deleteWithOptimisticLocker(order) == 0) {
+        // 取消订单设置订单状态为10
+        order.setOrderStatus(10);
+        if (updateWithOptimisticLocker(order) == 0) {
             throw new RuntimeException("取消订单异常");
         }
 

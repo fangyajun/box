@@ -192,6 +192,7 @@ public class PayController {
         if (userId == null) {
             return Result.failure(501, "请登录");
         }
+
         return  payService.refundPrePayCard(prePayVO.getPrepayCardOrderId());
     }
 
@@ -200,8 +201,8 @@ public class PayController {
      * @param prepayCardOrderId
      * @return
      */
-    @ApiOperation(value="被管理系统调用，退回用户预付金", hidden = true)
-    @PostMapping("/refundPrePayMoney")
+    @ApiOperation(value="被管理系统调用，退回用户预付金")
+    @GetMapping("/refundPrePayMoney")
     public Result refundPrePayMoney(Integer prepayCardOrderId) {
         return  payService.refundPrePayCard(prepayCardOrderId);
     }

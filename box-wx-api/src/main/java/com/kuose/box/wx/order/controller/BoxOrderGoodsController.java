@@ -44,9 +44,9 @@ public class BoxOrderGoodsController {
     @ApiOperation(value="盒子商品列表")
     @GetMapping("/boxDetail")
     public Result boxDetail(Integer orderId, @ApiParam(hidden = true) @LoginUser Integer userId) {
-//        if (userId == null) {
-//            return Result.failure(501, "请登录");
-//        }
+        if (userId == null) {
+            return Result.failure(501, "请登录");
+        }
         if (orderId == null) {
             return Result.failure("缺少必传参数");
         }
@@ -81,9 +81,9 @@ public class BoxOrderGoodsController {
     @ApiOperation(value="盒子商品评价")
     @PostMapping("/goodsAppraisement")
     public Result goodsAppraisement(@RequestBody OrderGoodsAppraisementDTO orderGoodsAppraisementDTO, @ApiParam(hidden = true) @LoginUser Integer userId ) {
-//        if (userId == null) {
-//            return Result.failure(501, "请登录");
-//        }
+        if (userId == null) {
+            return Result.failure(501, "请登录");
+        }
         if (orderGoodsAppraisementDTO.getOrderGoodsId() == null ) {
             return Result.failure("缺少必传参数");
         }
@@ -98,9 +98,9 @@ public class BoxOrderGoodsController {
     @ApiOperation(value="批量盒子商品评价")
     @PostMapping("/goodsAppraisements")
     public Result goodsAppraisements(@RequestBody OrderGoodsAppraisementsDTO orderGoodsAppraisementDTO, @ApiParam(hidden = true) @LoginUser Integer userId ) {
-//        if (userId == null) {
-//            return Result.failure(501, "请登录");
-//        }
+        if (userId == null) {
+            return Result.failure(501, "请登录");
+        }
         if (orderGoodsAppraisementDTO.getOrderGoodsAppraisementDTOList() == null || orderGoodsAppraisementDTO.getOrderGoodsAppraisementDTOList().isEmpty()) {
             return Result.failure("缺少必传参数");
         }

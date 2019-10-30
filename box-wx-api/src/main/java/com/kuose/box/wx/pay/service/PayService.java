@@ -254,6 +254,13 @@ public class PayService {
             return Result.failure("可退金额为0");
         }
 
+        // 查看是否有订单在发货前
+        BoxOrder order = boxOrderService.getOne(new QueryWrapper<BoxOrder>().eq("deleted", 0).
+                eq("prepay_card_order_id", prepayCardOrderId).in("order_status", 0, 1));
+        if (order != null) {
+            return Result.failure("请先取消订单，在退预付金");
+        }
+
         // 微信退款
         WxPayRefundRequest wxPayRefundRequest = new WxPayRefundRequest();
         wxPayRefundRequest.setOutTradeNo(prepayCardOrder.getOrderNo());

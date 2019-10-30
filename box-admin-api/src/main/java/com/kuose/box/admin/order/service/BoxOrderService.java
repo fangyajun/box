@@ -25,4 +25,6 @@ public interface BoxOrderService extends IService<BoxOrder> {
     Result ship(ShipDTO shipDTO);
 
     void confirmUserBackGoods(Integer orderId);
+
+    Result refundPrePayMoney(Integer orderId);
 }

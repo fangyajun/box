@@ -127,7 +127,7 @@
                 and bgs.color_name like CONCAT('%',#{colorName},'%')
             </if>
             <if test="colorCode != null">
-                and bgs.color_code = #{year,jdbcType=VARCHAR}
+                and bgs.color_code = #{colorCode,jdbcType=VARCHAR}
             </if>
             <if test="sizeCode != null">
                 and bgs.size_code = #{sizeCode,jdbcType=VARCHAR}
@@ -213,11 +213,12 @@
         ) bg
         LEFT JOIN box_goods_sku bgs ON bg.id = bgs.goods_id
         <where>
+            1 = 1
             <if test="colorName != null">
                 and bgs.color_name like CONCAT('%',#{colorName},'%')
             </if>
             <if test="colorCode != null">
-                and bgs.color_code = #{year,jdbcType=VARCHAR}
+                and bgs.color_code = #{colorCode,jdbcType=VARCHAR}
             </if>
             <if test="sizeCode != null">
                 and bgs.size_code = #{sizeCode,jdbcType=VARCHAR}
@@ -230,7 +231,7 @@
             </if>
             /*衣服的尺寸，和价格区间过滤*/
             <if test="topSize != null">
-                and(
+                and (
 
                    (bg.category_code in ('A','C','D','H','J','L','M','O','P','Q','U','V','W')   -- 上装
                     <if test="topSize != null and topSize != '' ">

@@ -1,5 +1,6 @@
 package com.kuose.box.admin.order.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -17,8 +18,13 @@ import com.kuose.box.db.order.entity.BoxOrder;
 import com.kuose.box.db.order.entity.BoxOrderGoods;
 import com.kuose.box.db.prepay.entity.BoxPrepayCardOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -42,6 +48,8 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
     private BoxOrderGoodsService boxOrderGoodsService;
     @Autowired
     private BoxGoodsSkuService boxGoodsSkuService;
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
     public IPage<BoxOrder> listOrderPage(Page<BoxOrder> boxOrderPage, OrderDto orderDto) {
@@ -115,5 +123,29 @@ public class BoxOrderServiceImpl extends ServiceImpl<BoxOrderMapper, BoxOrder> i
                 boxGoodsSkuService.updateById(goodsSku);
             }
         }
+    }
+
+    @Override
+    public Result refundPrePayMoney(Integer orderId) {
+        BoxOrder boxOrder = boxOrderMapper.selectById(orderId);
+        BoxPrepayCardOrder prepayCardOrder = boxPrepayCardOrderService.getById(boxOrder.getPrepayCardOrderId());
+        if (prepayCardOrder.getRefund() == 1 && prepayCardOrder.getRefundPrepayAmounts().compareTo(new BigDecimal(0)) == 1) {
+            // 退回预付金
+            String refundPrePayMoneyUrl = "https://kuose.mynatapp.cc/payController/refundPrePayMoney?prepayCardOrderId=" + boxOrder.getPrepayCardOrderId();
+            HttpHeaders requestHeaders = new HttpHeaders();
+            HttpEntity<String> httpEntity = new HttpEntity<>(null, requestHeaders);
+            ResponseEntity<JSONObject> exchange = restTemplate.exchange(refundPrePayMoneyUrl, HttpMethod.GET, httpEntity, JSONObject.class);
+            JSONObject jsonResult = exchange.getBody();
+            int status = jsonResult.getIntValue("status");
+            if (status != 1) {
+                return Result.failure(jsonResult.getString("info"));
+            }
+        }
+
+        // 修改订单状态为已完成
+        boxOrder.setOrderStatus(9);
+        boxOrderMapper.updateById(boxOrder);
+
+        return Result.success();
     }
 }

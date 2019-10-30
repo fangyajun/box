@@ -51,9 +51,9 @@ public class BoxOrderController {
     @ApiOperation(value="创建用户订单，要盒子的时候可以调用,返回状态505表示 用户需要去支付预付金订单")
     @PostMapping("/create")
     public Result create(@RequestBody OrderTDO orderTDO, @ApiParam(hidden = true) @LoginUser Integer userId) {
-//        if (userId == null) {
-//            return Result.failure(501, "请登录");
-//        }
+        if (userId == null) {
+            return Result.failure(501, "请登录");
+        }
 
         if (orderTDO.getAddrId() == null) {
             return Result.failure("请先选择或填写一个收货地址");
@@ -86,7 +86,7 @@ public class BoxOrderController {
 
         // 查询未关闭的订单
         BoxOrder order = boxOrderService.getOne(new QueryWrapper<BoxOrder>().eq("user_id", useId).eq("deleted", 0).
-                notIn("order_status", 9,10));
+                notIn("order_status", 8,9,10));
         if (order != null) {
             // 订单是已发货状态，且物流信息不能为空，查询物流信息
             if (order.getOrderStatus() != 0 && order.getOrderStatus() != 1) {
@@ -252,7 +252,7 @@ public class BoxOrderController {
     @ApiOperation(value="订单是否有商品需要寄回, 返回结果，0：否，1：是,有商品寄回")
     @GetMapping("/isToBackGoods")
     public Result isToBackGoods(Integer orderId, @ApiParam(hidden = true) @LoginUser Integer userId) {
-        //        if (userId == null) {
+//        if (userId == null) {
 //            return Result.failure(501, "请登录");
 //        }
         if (orderId == null) {
