@@ -32,7 +32,7 @@ public class BoxUserAddressController {
     @ApiOperation(value="新增收货地址")
     @PostMapping("/add")
     public Result add(@RequestBody BoxUserAddress boxUserAddress) {
-        if (boxUserAddress.getId() == null) {
+        if (boxUserAddress.getUserId() == null) {
             return Result.failure("用户id不能为空");
         }
         if (StringUtil.isBlank(boxUserAddress.getName()) || StringUtil.isBlank(boxUserAddress.getPhone()) || StringUtil.isBlank(boxUserAddress.getAddressDetail())) {
@@ -54,16 +54,16 @@ public class BoxUserAddressController {
         }
         boxUserAddress.setUpdateTime(System.currentTimeMillis());
 
-        boxUserAddressService.save(boxUserAddress);
+        boxUserAddressService.updateById(boxUserAddress);
         return Result.success();
     }
 
     @ApiOperation(value="收货地址列表")
     @GetMapping("/list")
     public Result list(Integer userId) {
-//        if (userId == null) {
-//            return Result.failure(501, "请登录");
-//        }
+        if (userId == null) {
+            return Result.failure(501, "请登录");
+        }
 
         List<BoxUserAddress> userAddressList = boxUserAddressService.list(new QueryWrapper<BoxUserAddress>().
                 eq("deleted", 0).eq("user_id", userId).orderByDesc("is_default"));
@@ -81,7 +81,6 @@ public class BoxUserAddressController {
         boxUserAddressService.updateById(boxUserAddress);
         return Result.success();
     }
-
 
 }
 

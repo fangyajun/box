@@ -82,7 +82,7 @@ public class BoxGoodsAttributeLabelController {
     @ApiOperation(value="同步属性标签,从数据源同步属性")
     @GetMapping("/syncAttributeSource")
     public Result syncAttributeSource () {
-        // String listAllAttibutesUrl = "http://localhost:10303/attributeController/listAllAttibutes";
+//         String listAllAttibutesUrl = "http://localhost:10303/attributeController/listAllAttibutes";
         String listAllAttibutesUrl = "http://192.168.5.177:10303/ripreportProductinformation/listAllAttibutes";
         HttpHeaders requestHeaders = new HttpHeaders();
         HttpEntity<String> httpEntity = new HttpEntity<>(null, requestHeaders);

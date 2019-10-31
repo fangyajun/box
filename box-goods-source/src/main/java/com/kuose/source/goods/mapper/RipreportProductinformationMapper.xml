@@ -180,7 +180,7 @@
        LEFT JOIN ripreport_Attribute ra on ragt.attributeId = ra.autoid AND ra.flag = 0
        LEFT JOIN ripreport_AttributeRelation ar ON ar.attributeId = ra.autoid AND ar.flag = 0
        LEFT JOIN ripreport_AttributeValue av ON av.autoid = ar.attributeValueId AND av.flag = 0
-       WHERE ag.attributeGroupName in ('产品指数','流行元素','风格','面料版型') and attributeValueName is not null and attributeName is not null
+       WHERE ag.attributeGroupName in ('产品指数','流行元素','风格','面料版型','盒子推荐') and attributeValueName is not null and attributeName is not null
     </select>
 
 
