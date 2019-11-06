@@ -32,7 +32,7 @@ public class BoxSurveyUserAnswerController {
     private BoxSurveyUserAnswerService boxSurveyUserAnswerService;
 
     @ApiOperation(value="新增用户问券答案")
-    @PostMapping("/add") //
+    @PostMapping("/add")
     public Result add(@RequestBody BoxSurveyUserAnswer boxSurveyUserAnswer, @ApiParam(hidden = true) @LoginUser Integer userId) {
 //        if (userId == null) {
 //            return Result.failure(501, "请登录");

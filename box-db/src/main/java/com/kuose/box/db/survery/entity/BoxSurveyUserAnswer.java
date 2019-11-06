@@ -31,7 +31,7 @@ private static final long serialVersionUID=1L;
     /**
      * 用户id
      */
-    @ApiModelProperty(value = "用户id", example = "10")
+    @ApiModelProperty(value = "用户id")
     private Integer userId;
 
     /**
@@ -64,7 +64,7 @@ private static final long serialVersionUID=1L;
     /**
      * 选项内容,填空填写
      */
-    @ApiModelProperty(value = "选项内容,填空填写", example = "50kg")
+    @ApiModelProperty(value = "选项内容", example = "50kg")
     private String optionContent;
 
     /**

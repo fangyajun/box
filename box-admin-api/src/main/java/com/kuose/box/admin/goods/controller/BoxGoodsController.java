@@ -86,15 +86,10 @@ public class BoxGoodsController {
     public Result syncGoodsAttribute() {
         // 获取所有商品数据
         List<BoxGoods> goodsList = boxGoodsService.list(new QueryWrapper<BoxGoods>().eq("deleted", 0));
-        int i = 0;
         for (BoxGoods goods : goodsList) {
-
-
-            System.out.println("开始同部第"+  i++ +"商品");
             if (goods.getSourceGoodsId() == null) {
                 continue;
             }
-
 //             String listGoodsAttibutesUrl = "http://localhost:10303/attributeController/getGoodsAttibutes?id=" + goods.getSourceGoodsId();
             String listGoodsAttibutesUrl = "http://192.168.5.177:10303/ripreportProductinformation/getGoodsAttibutes?id=" + goods.getSourceGoodsId();
             HttpHeaders requestHeaders = new HttpHeaders();
@@ -198,6 +193,7 @@ public class BoxGoodsController {
                     boxGoodsAttribute.setParentNode(attribute);
                 }
             }
+
         }
 
         List<BoxGoodsSku> goodsSkuList = boxGoodsSkuService.list(new QueryWrapper<BoxGoodsSku>().eq("goods_id", id).eq("deleted", 0));
@@ -217,6 +213,7 @@ public class BoxGoodsController {
         Result result = boxGoodsService.update(goodsAllinone);
         return result;
     }
+
 
     @ApiOperation(value="商品列表（包含SKU信息）")
     @GetMapping("/listGoodsAndSku")
