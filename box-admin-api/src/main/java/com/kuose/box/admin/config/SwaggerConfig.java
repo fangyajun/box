@@ -44,6 +44,7 @@ public class SwaggerConfig
                         "com.kuose.box.admin.match.controller"+splitor+
                         "com.kuose.box.admin.user.controller"+splitor+
                         "com.kuose.box.admin.prepay.controller"+splitor+
+                        "com.kuose.box.admin.recommend.controller"+splitor+
                          "com.kuose.box.admin.generalize.controller"))
                 // 扫描所有 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())

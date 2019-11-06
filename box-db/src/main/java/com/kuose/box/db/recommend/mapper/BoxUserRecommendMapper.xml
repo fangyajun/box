@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuose.box.db.recommend.dao.BoxUserRecommendMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kuose.box.db.recommend.entity.BoxUserRecommend">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="recommend_status" property="recommendStatus" />
+        <result column="recommend_number" property="recommendNumber" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, recommend_status, recommend_number, create_time, update_time, deleted
+    </sql>
+
+    <select id="listUserRecommendPage" resultMap="BaseResultMap">
+        SELECT id, user_id, recommend_status, recommend_number, create_time, update_time, deleted
+        FROM box_user_recommend
+        <where>
+            deleted = 0
+            <if test="recommendStatus != null">
+                and recommend_status = #{recommendStatus,jdbcType=INTEGER}
+            </if>
+
+        </where>
+    </select>
+
+</mapper>
