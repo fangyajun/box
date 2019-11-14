@@ -55,9 +55,13 @@ public class BoxUserRecommendController {
 
         IPage<BoxUserRecommend> boxUserRecommendIPage = boxUserRecommendService.listUserRecommendPage(boxUserRecommendPage, boxUserRecommendDTO);
         List<BoxUserRecommend> records = boxUserRecommendIPage.getRecords();
-        for (BoxUserRecommend record : records) {
-            BoxUser boxUser = boxUserService.getById(record.getUserId());
-            record.setBoxUser(boxUser);
+        for (BoxUserRecommend boxUserRecommend : records) {
+            int count = boxRecommendService.count(new QueryWrapper<BoxRecommend>().
+                    eq("user_id", boxUserRecommend.getUserId()).eq("deleted", 0).eq("audit_status", 1));
+            BoxUser boxUser = boxUserService.getById(boxUserRecommend.getUserId());
+
+            boxUserRecommend.setBoxUser(boxUser);
+            boxUserRecommend.setRecommendNumber(count);
         }
         boxUserRecommendIPage.setRecords(records);
 
@@ -83,6 +87,7 @@ public class BoxUserRecommendController {
 
         return Result.success().setData("boxRecommendList", boxRecommendList);
     }
+
 
 }
 

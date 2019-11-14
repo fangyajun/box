@@ -11,6 +11,7 @@
         <result column="brand" property="brand" />
         <result column="category_code" property="categoryCode" />
         <result column="img" property="img" />
+        <result column="oos_img" property="oosImg" />
         <result column="tmall_url" property="tmallUrl" />
         <result column="is_on_sale" property="isOnSale" />
         <result column="quarter" property="quarter" />
@@ -29,11 +30,11 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, goods_no, `name`, brand, category_code, img, tmall_url, is_on_sale, quarter, `year`, features_style_nos, match_style_nos, counter_price, tag price, retail_price, remark, register_date, create_time, update_time, deleted
+        id, goods_no, `name`, brand, category_code, img, oos_img, tmall_url, is_on_sale, quarter, `year`, features_style_nos, match_style_nos, counter_price, tag price, retail_price, remark, register_date, create_time, update_time, deleted
     </sql>
 
     <select id="listGoodsPage" resultMap="BaseResultMap">
-        SELECT bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
+        SELECT bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.oos_img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
         FROM box_goods bg
         left JOIN box_goods_attribute bga ON bg.id = bga.goods_id
         <where>
@@ -67,7 +68,7 @@
             </if>
 
         </where>
-        GROUP BY bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
+        GROUP BY bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.oos_img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
         order by add_time desc
     </select>
 
@@ -78,6 +79,7 @@
         <result column="brand" property="brand" />
         <result column="category_code" property="categoryCode" />
         <result column="img" property="img" />
+        <result column="oos_img" property="oosImg" />
         <result column="tmall_url" property="tmallUrl" />
         <result column="quarter" property="quarter" />
         <result column="year" property="year" />
@@ -86,7 +88,7 @@
     </resultMap>
 
     <select id="listGoodsAndSku" parameterType="com.kuose.box.db.goods.dto.GoodsSkuVo" resultMap="goodsMatchSkuResultMap">
-        SELECT bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price,GROUP_CONCAT(bgs.id) AS sku_ids
+        SELECT bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.oos_img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price,GROUP_CONCAT(bgs.id) AS sku_ids
         FROM box_goods bg
         left JOIN box_goods_attribute bga ON bg.id = bga.goods_id
         left JOIN box_goods_sku bgs ON bg.id = bgs.goods_id
@@ -133,7 +135,7 @@
                 and bgs.size_code = #{sizeCode,jdbcType=VARCHAR}
             </if>
         </where>
-        GROUP BY bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
+        GROUP BY bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.oos_img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
         order by bg.year desc
     </select>
 
@@ -144,6 +146,7 @@
         <result column="brand" property="brand" />
         <result column="category_code" property="categoryCode" />
         <result column="img" property="img" />
+        <result column="oos_img" property="oosImg" />
         <result column="tmall_url" property="tmallUrl" />
         <result column="quarter" property="quarter" />
         <result column="year" property="year" />
@@ -153,9 +156,9 @@
     </resultMap>
 
     <select id="listMatchGoods" parameterType="com.kuose.box.db.goods.dto.GoodsSkuVo" resultMap="goodsMatchSkuResultMap" >
-        select bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price,GROUP_CONCAT(bgs.id) AS sku_ids
+        select bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.oos_img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price,GROUP_CONCAT(bgs.id) AS sku_ids
         from (
-        SELECT bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
+        SELECT bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.oos_img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
         FROM box_goods bg
         LEFT JOIN box_goods_attribute bga ON bg.id = bga.goods_id
         <where>
@@ -209,7 +212,7 @@
                 </foreach>
             </if>
         </where>
-        GROUP BY bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
+        GROUP BY bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.oos_img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
         ) bg
         LEFT JOIN box_goods_sku bgs ON bg.id = bgs.goods_id
         <where>
@@ -278,7 +281,7 @@
                 )
             </if>
         </where>
-        GROUP BY bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
+        GROUP BY bg.id,bg.goods_no,bg.name,bg.brand,bg.category_code,bg.img,bg.oos_img,bg.tmall_url,bg.quarter,bg.year,bg.retail_price
         order by bg.year desc
     </select>
 </mapper>

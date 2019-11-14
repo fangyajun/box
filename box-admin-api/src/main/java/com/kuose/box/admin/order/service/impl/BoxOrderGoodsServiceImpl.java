@@ -7,6 +7,7 @@ import com.kuose.box.admin.goods.service.BoxGoodsSkuService;
 import com.kuose.box.admin.order.dto.OrderGoodsDto;
 import com.kuose.box.admin.order.service.BoxOrderGoodsService;
 import com.kuose.box.common.config.Result;
+import com.kuose.box.common.utils.StringUtil;
 import com.kuose.box.db.goods.entity.BoxGoods;
 import com.kuose.box.db.goods.entity.BoxGoodsSku;
 import com.kuose.box.db.order.dao.BoxOrderGoodsMapper;
@@ -40,9 +41,6 @@ public class BoxOrderGoodsServiceImpl extends ServiceImpl<BoxOrderGoodsMapper, B
     public Result save(OrderGoodsDto orderGoodsDto) {
         Integer orderId = orderGoodsDto.getOrderId();
         Integer[] skuIds = orderGoodsDto.getSkuIds();
-        //
-
-
 
         // 先删除
         List<BoxOrderGoods> goodsList = boxOrderGoodsMapper.selectList(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("deleted", 0));
@@ -75,7 +73,12 @@ public class BoxOrderGoodsServiceImpl extends ServiceImpl<BoxOrderGoodsMapper, B
             boxOrderGoods.setPrice(goodsSku.getRetailPrice());
             boxOrderGoods.setColorName(goodsSku.getColorName());
             boxOrderGoods.setSizeName(goodsSku.getSizeName());
-            boxOrderGoods.setPicUrl(goods.getImg());
+            if (!StringUtil.isBlank(goods.getOosImg())) {
+                boxOrderGoods.setPicUrl(goods.getOosImg());
+            } else {
+                boxOrderGoods.setPicUrl(goods.getImg());
+            }
+
             // 默认保留'盒子商品状态，1：保留，2：退货，3：换货',
             boxOrderGoods.setOrderGoodsStatus(1);
             boxOrderGoods.setComment(0);
@@ -90,4 +93,18 @@ public class BoxOrderGoodsServiceImpl extends ServiceImpl<BoxOrderGoodsMapper, B
         }
         return Result.success();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

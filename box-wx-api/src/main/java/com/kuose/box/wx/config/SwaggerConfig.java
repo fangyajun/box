@@ -38,6 +38,7 @@ public class SwaggerConfig {
                         "com.kuose.box.wx.express.controller" +splitor+
                         "com.kuose.box.wx.pay.controller" +splitor+
                         "com.kuose.box.wx.recommend.controller" +splitor+
+                        "com.kuose.box.wx.test" +splitor+
                         "com.kuose.box.wx.survey.controller"
                 ))
                 .paths(PathSelectors.any())

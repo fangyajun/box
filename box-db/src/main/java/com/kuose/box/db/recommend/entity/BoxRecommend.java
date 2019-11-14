@@ -53,6 +53,12 @@ private static final long serialVersionUID=1L;
     private Integer auditStatus;
 
     /**
+     * 评价状态，0：未评价，1：已评价
+     */
+    @ApiModelProperty(value="评价状态，0：未评价，1：已评价")
+    private Integer commentStatus;
+
+    /**
      * 排序，数字越大，排序越靠前
      */
     @ApiModelProperty(value="排序，数字越大，排序越靠前")

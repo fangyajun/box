@@ -9,6 +9,7 @@
         <result column="recommend_message" property="recommendMessage" />
         <result column="coordinator" property="coordinator" />
         <result column="audit_status" property="auditStatus" />
+        <result column="comment_status" property="commentStatus" />
         <result column="sort" property="sort" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
@@ -17,7 +18,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, recommend_message, coordinator, audit_status, sort, create_time, update_time, deleted
+        id, user_id, recommend_message, coordinator, audit_status, comment_status, sort, create_time, update_time, deleted
     </sql>
 
 </mapper>

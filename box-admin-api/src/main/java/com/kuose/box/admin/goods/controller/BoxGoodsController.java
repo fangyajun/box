@@ -70,6 +70,66 @@ public class BoxGoodsController {
         return result;
     }
 
+    @ApiOperation(value="同步商品，从数据源同步商品,只更新添加的数据，不更新修改的数据")
+    @GetMapping("/syncGoods")
+    public Result syncGoods(String year) {
+        // 从数据源获取所有商品
+//        String listGoodsAttibutesUrl = "http://localhost:10303/ripreportProductinformation/listGoods?year=" + year;
+        String listGoodsAttibutesUrl = "http://192.168.5.177:10303/ripreportProductinformation/listGoods?year=" + year;
+        HttpHeaders requestHeaders = new HttpHeaders();
+        HttpEntity<String> httpEntity = new HttpEntity<>(null, requestHeaders);
+
+        ResponseEntity<JSONObject> exchange = restTemplate.exchange(listGoodsAttibutesUrl, HttpMethod.GET, httpEntity, JSONObject.class);
+        JSONObject jsonResult = exchange.getBody();
+        JSONObject data = jsonResult.getJSONObject("data");
+        JSONArray jsonArray = data.getJSONArray("goodsList");
+        if (jsonArray == null || jsonArray.size() == 0) {
+            return Result.failure("商品数据源暂无数据");
+        }
+        List<BoxGoods> boxGoodsList = jsonArray.toJavaList(BoxGoods.class);
+        int i = 1;
+        for (BoxGoods boxGoods : boxGoodsList) {
+            System.out.println("-------------------同步商品数据" + i++);
+            // 查询此商品是否已经添加
+            int count = boxGoodsService.count(new QueryWrapper<BoxGoods>().eq("deleted", 0).eq("goods_no", boxGoods.getGoodsNo()));
+            if (count > 0) {
+                continue;
+            }
+            // 获取商品的sku 信息
+            List<BoxGoodsSku> goodsSku = getGoodsSku(boxGoods.getGoodsNo());
+            // 程序跑到这，表示需要添加
+            GoodsAllinone goodsAllinone = new GoodsAllinone();
+            goodsAllinone.setBoxGoods(boxGoods);
+            if (goodsSku != null && goodsSku.size() >0) {
+                BoxGoodsSku[] boxGoodsSkus = goodsSku.toArray(new BoxGoodsSku[goodsSku.size()]);
+                goodsAllinone.setBoxGoodsSkus(boxGoodsSkus);
+            }
+
+            boxGoodsService.save(goodsAllinone);
+        }
+
+        return Result.success();
+    }
+
+    private List<BoxGoodsSku> getGoodsSku(String productno) {
+//        String listGoodsAttibutesUrl = "http://localhost:10303/ripreportProductinformation/getGoods?productno=" + productno;
+        String listGoodsAttibutesUrl = "http://192.168.5.177:10303/ripreportProductinformation/getGoods?productno=" + productno;
+        HttpHeaders requestHeaders = new HttpHeaders();
+        HttpEntity<String> httpEntity = new HttpEntity<>(null, requestHeaders);
+
+        ResponseEntity<JSONObject> exchange = restTemplate.exchange(listGoodsAttibutesUrl, HttpMethod.GET, httpEntity, JSONObject.class);
+        JSONObject jsonResult = exchange.getBody();
+        JSONObject data = jsonResult.getJSONObject("data");
+        JSONArray jsonArray = data.getJSONArray("goodsSkuList");
+        if (jsonArray == null || jsonArray.size() == 0) {
+            return null;
+        }
+        List<BoxGoodsSku> boxGoodsSkus = jsonArray.toJavaList(BoxGoodsSku.class);
+        return boxGoodsSkus;
+    }
+
+
+
     @ApiOperation(value="删除商品")
     @PostMapping("/delete")
     public Result delete(@RequestBody BoxGoods boxGoods) {
@@ -86,10 +146,12 @@ public class BoxGoodsController {
     public Result syncGoodsAttribute() {
         // 获取所有商品数据
         List<BoxGoods> goodsList = boxGoodsService.list(new QueryWrapper<BoxGoods>().eq("deleted", 0));
+        int i = 1;
         for (BoxGoods goods : goodsList) {
             if (goods.getSourceGoodsId() == null) {
                 continue;
             }
+            System.out.println("-------------------同步商品属性数据" + i++);
 //             String listGoodsAttibutesUrl = "http://localhost:10303/attributeController/getGoodsAttibutes?id=" + goods.getSourceGoodsId();
             String listGoodsAttibutesUrl = "http://192.168.5.177:10303/ripreportProductinformation/getGoodsAttibutes?id=" + goods.getSourceGoodsId();
             HttpHeaders requestHeaders = new HttpHeaders();
@@ -105,6 +167,7 @@ public class BoxGoodsController {
 
             List<AttributeSource> attributeSourceList = jsonArray.toJavaList(AttributeSource.class);
             for (AttributeSource attributeSource : attributeSourceList) {
+
                 String attributeGroupname = attributeSource.getAttributeGroupName();
                 String attributeGroupType = attributeSource.getAttributeGroupType();
                 String attributeName = attributeSource.getAttributeName();

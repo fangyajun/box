@@ -60,6 +60,12 @@ private static final long serialVersionUID=1L;
     private String img;
 
     /**
+     * 商品图片，对象存储上的
+     */
+    @ApiModelProperty(value="商品图片，对象存储上的")
+    private String oosImg;
+
+    /**
      * 商品天猫链接
      */
     @ApiModelProperty(value="商品天猫链接")

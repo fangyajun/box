@@ -4,9 +4,11 @@ package com.kuose.box.admin.recommend.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuose.box.admin.recommend.service.BoxRecommendGoodsService;
 import com.kuose.box.admin.recommend.service.BoxRecommendService;
+import com.kuose.box.admin.recommend.service.BoxUserRecommendService;
 import com.kuose.box.common.config.Result;
 import com.kuose.box.db.recommend.entity.BoxRecommend;
 import com.kuose.box.db.recommend.entity.BoxRecommendGoods;
+import com.kuose.box.db.recommend.entity.BoxUserRecommend;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +36,10 @@ public class BoxRecommendController {
     private BoxRecommendService boxRecommendService;
     @Autowired
     private BoxRecommendGoodsService boxRecommendGoodsService;
+    @Autowired
+    private BoxUserRecommendService boxUserRecommendService;
 
-    @ApiOperation(value="新增用户推荐搭配单，传用户id, 一个用户可以用多个搭配单")
+    @ApiOperation(value="新增用户推荐搭配单，传用户id, 一个用户可以有多个搭配单")
     @PostMapping("/add")
     public Result add(@RequestBody BoxRecommend boxRecommend) {
         if (boxRecommend.getUserId() == null) {
@@ -43,6 +47,7 @@ public class BoxRecommendController {
         }
 
         boxRecommend.setAuditStatus(0);
+        boxRecommend.setCommentStatus(0);
         boxRecommend.setCreateTime(System.currentTimeMillis());
         boxRecommend.setUpdateTime(System.currentTimeMillis());
 
@@ -99,7 +104,15 @@ public class BoxRecommendController {
         recommend.setUpdateTime(System.currentTimeMillis());
         boxRecommendService.updateById(recommend);
 
+        if (boxRecommend.getAuditStatus() == 1) {
+            // 修改用户推荐表推荐状态为已推荐
+            BoxUserRecommend boxUserRecommend = boxUserRecommendService.getOne(new QueryWrapper<BoxUserRecommend>().eq("user_id", recommend.getUserId()).eq("deleted", 0));
+            boxUserRecommend.setRecommendStatus(2);
+            boxUserRecommendService.updateById(boxUserRecommend);
+        }
+
         return Result.success();
+
     }
 
     @ApiOperation(value="取消审核,只需要传id")
@@ -123,8 +136,6 @@ public class BoxRecommendController {
         boxRecommendService.updateById(recommend);
         return Result.success();
     }
-
-
 
 }
 

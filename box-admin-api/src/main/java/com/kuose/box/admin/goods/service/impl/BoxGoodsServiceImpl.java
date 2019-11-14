@@ -11,6 +11,7 @@ import com.kuose.box.admin.goods.service.BoxGoodsService;
 import com.kuose.box.admin.goods.service.BoxGoodsSkuService;
 import com.kuose.box.admin.match.dto.GoodsMatchParameter;
 import com.kuose.box.common.config.Result;
+import com.kuose.box.common.utils.StringUtil;
 import com.kuose.box.db.goods.dao.BoxGoodsMapper;
 import com.kuose.box.db.goods.dto.GoodsAllinone;
 import com.kuose.box.db.goods.dto.GoodsQueryParameter;
@@ -84,6 +85,9 @@ public class BoxGoodsServiceImpl extends ServiceImpl<BoxGoodsMapper, BoxGoods> i
                 goodsSkus.setGoodsId(boxGoods.getId());
                 goodsSkus.setAddTime(System.currentTimeMillis());
                 goodsSkus.setUpdateTime(System.currentTimeMillis());
+                if (StringUtil.isBlank(goodsSkus.getSkuCode())) {
+                    continue;
+                }
 
                 if (boxGoodsSkuService.count(new QueryWrapper<BoxGoodsSku>().eq("sku_code", goodsSkus.getSkuCode()).
                         eq("deleted", 0)) >= 1) {
