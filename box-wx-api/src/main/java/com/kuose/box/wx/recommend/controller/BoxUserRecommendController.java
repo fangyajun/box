@@ -3,15 +3,9 @@ package com.kuose.box.wx.recommend.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuose.box.common.config.Result;
-import com.kuose.box.db.recommend.entity.BoxRecommend;
-import com.kuose.box.db.recommend.entity.BoxRecommendComment;
-import com.kuose.box.db.recommend.entity.BoxRecommendGoods;
-import com.kuose.box.db.recommend.entity.BoxUserRecommend;
+import com.kuose.box.db.recommend.entity.*;
 import com.kuose.box.wx.annotation.LoginUser;
-import com.kuose.box.wx.recommend.service.BoxRecommendCommentService;
-import com.kuose.box.wx.recommend.service.BoxRecommendGoodsService;
-import com.kuose.box.wx.recommend.service.BoxRecommendService;
-import com.kuose.box.wx.recommend.service.BoxUserRecommendService;
+import com.kuose.box.wx.recommend.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -41,6 +35,8 @@ public class BoxUserRecommendController {
     private BoxRecommendGoodsService boxRecommendGoodsService;
     @Autowired
     private BoxRecommendCommentService boxRecommendCommentService;
+    @Autowired
+    private BoxRecommendGoodsCommentService boxRecommendGoodsCommentService;
 
     @ApiOperation(value="创建需要推荐搭配方案的用户，新增只需要传用户id,用户答完问券可以调用此接口")
     @PostMapping("/add")
@@ -129,6 +125,56 @@ public class BoxUserRecommendController {
         boxRecommendComment.setCreateTime(System.currentTimeMillis());
         boxRecommendCommentService.save(boxRecommendComment);
         return Result.success();
+    }
+
+
+    @ApiOperation(value="推荐商品评价")
+    @PostMapping("/recommentGoodsComment")
+    public Result recommentGoodsComment(@RequestBody BoxRecommendGoodsComment boxRecommendGoodsComment) {
+        if (boxRecommendGoodsComment.getUserId() == null || boxRecommendGoodsComment.getBoxRecommendGoodsId() == null) {
+            return Result.failure("缺少必传参数");
+        }
+
+        BoxRecommendGoodsComment selectRecommendGoodsComment = boxRecommendGoodsCommentService.getOne(new QueryWrapper<BoxRecommendGoodsComment>().
+                eq("deleted", 0).eq("box_recommend_goods_id", boxRecommendGoodsComment.getBoxRecommendGoodsId()));
+
+        BoxRecommendGoods recommendGoods = boxRecommendGoodsService.getById(boxRecommendGoodsComment.getBoxRecommendGoodsId());
+        if (recommendGoods == null) {
+            return Result.failure("数据异常，未能查到推荐单商品");
+        }
+
+        if (selectRecommendGoodsComment == null) {
+            BoxRecommendGoodsComment recommendGoodsComment = new BoxRecommendGoodsComment();
+
+            recommendGoodsComment.setSkuId(recommendGoods.getSkuId());
+            recommendGoodsComment.setUserId(boxRecommendGoodsComment.getUserId());
+            recommendGoodsComment.setSize(boxRecommendGoodsComment.getSize());
+            recommendGoodsComment.setStyle(boxRecommendGoodsComment.getStyle());
+            recommendGoodsComment.setMatch(boxRecommendGoodsComment.getMatch());
+            recommendGoodsComment.setQuality(boxRecommendGoodsComment.getQuality());
+            recommendGoodsComment.setPrice(boxRecommendGoodsComment.getPrice());
+            recommendGoodsComment.setContent(boxRecommendGoodsComment.getContent());
+            recommendGoodsComment.setStar(boxRecommendGoodsComment.getStar());
+            recommendGoodsComment.setAddTime(System.currentTimeMillis());
+            recommendGoodsComment.setUpdateTime(System.currentTimeMillis());
+
+            boxRecommendGoodsCommentService.save(recommendGoodsComment);
+        } else {
+            selectRecommendGoodsComment.setSize(boxRecommendGoodsComment.getSize());
+            selectRecommendGoodsComment.setStyle(boxRecommendGoodsComment.getStyle());
+            selectRecommendGoodsComment.setMatch(boxRecommendGoodsComment.getMatch());
+            selectRecommendGoodsComment.setQuality(boxRecommendGoodsComment.getQuality());
+            selectRecommendGoodsComment.setPrice(boxRecommendGoodsComment.getPrice());
+            selectRecommendGoodsComment.setContent(boxRecommendGoodsComment.getContent());
+            selectRecommendGoodsComment.setStar(boxRecommendGoodsComment.getStar());
+            selectRecommendGoodsComment.setUpdateTime(System.currentTimeMillis());
+
+            boxRecommendGoodsCommentService.updateById(selectRecommendGoodsComment);
+        }
+
+        return Result.success();
+
+
     }
 
 }
