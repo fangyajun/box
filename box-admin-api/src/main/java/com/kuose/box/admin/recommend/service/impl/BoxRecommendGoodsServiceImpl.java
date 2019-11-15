@@ -7,7 +7,6 @@ import com.kuose.box.admin.goods.service.BoxGoodsSkuService;
 import com.kuose.box.admin.recommend.dto.RecommendGoodsDTO;
 import com.kuose.box.admin.recommend.service.BoxRecommendGoodsService;
 import com.kuose.box.common.config.Result;
-import com.kuose.box.common.utils.StringUtil;
 import com.kuose.box.db.goods.entity.BoxGoods;
 import com.kuose.box.db.goods.entity.BoxGoodsSku;
 import com.kuose.box.db.recommend.dao.BoxRecommendGoodsMapper;
@@ -63,12 +62,7 @@ public class BoxRecommendGoodsServiceImpl extends ServiceImpl<BoxRecommendGoodsM
             boxRecommendGoods.setColorName(goodsSku.getColorName());
             boxRecommendGoods.setSizeName(goodsSku.getSizeName());
             boxRecommendGoods.setTmallUrl(goods.getTmallUrl());
-            if (!StringUtil.isBlank(goods.getOosImg())) {
-                boxRecommendGoods.setPicUrl(goods.getOosImg());
-            } else {
-                boxRecommendGoods.setPicUrl(goods.getImg());
-            }
-
+            boxRecommendGoods.setPicUrl(goods.getOosImg());
             boxRecommendGoods.setCreateTime(System.currentTimeMillis());
             boxRecommendGoods.setUpdateTime(System.currentTimeMillis());
 

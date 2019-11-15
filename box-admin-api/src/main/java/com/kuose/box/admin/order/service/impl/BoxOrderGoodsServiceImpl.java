@@ -7,7 +7,6 @@ import com.kuose.box.admin.goods.service.BoxGoodsSkuService;
 import com.kuose.box.admin.order.dto.OrderGoodsDto;
 import com.kuose.box.admin.order.service.BoxOrderGoodsService;
 import com.kuose.box.common.config.Result;
-import com.kuose.box.common.utils.StringUtil;
 import com.kuose.box.db.goods.entity.BoxGoods;
 import com.kuose.box.db.goods.entity.BoxGoodsSku;
 import com.kuose.box.db.order.dao.BoxOrderGoodsMapper;
@@ -73,11 +72,7 @@ public class BoxOrderGoodsServiceImpl extends ServiceImpl<BoxOrderGoodsMapper, B
             boxOrderGoods.setPrice(goodsSku.getRetailPrice());
             boxOrderGoods.setColorName(goodsSku.getColorName());
             boxOrderGoods.setSizeName(goodsSku.getSizeName());
-            if (!StringUtil.isBlank(goods.getOosImg())) {
-                boxOrderGoods.setPicUrl(goods.getOosImg());
-            } else {
-                boxOrderGoods.setPicUrl(goods.getImg());
-            }
+            boxOrderGoods.setPicUrl(goods.getOosImg());
 
             // 默认保留'盒子商品状态，1：保留，2：退货，3：换货',
             boxOrderGoods.setOrderGoodsStatus(1);
@@ -93,18 +88,4 @@ public class BoxOrderGoodsServiceImpl extends ServiceImpl<BoxOrderGoodsMapper, B
         }
         return Result.success();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

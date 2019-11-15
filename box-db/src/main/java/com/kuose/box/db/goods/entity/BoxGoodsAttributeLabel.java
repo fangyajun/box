@@ -18,7 +18,8 @@ import java.util.List;
  * @since 2019-08-23
  */
 @Data
-public class BoxGoodsAttributeLabel extends Model<BoxGoodsAttributeLabel> {
+public class
+BoxGoodsAttributeLabel extends Model<BoxGoodsAttributeLabel> {
 
 private static final long serialVersionUID=1L;
 
