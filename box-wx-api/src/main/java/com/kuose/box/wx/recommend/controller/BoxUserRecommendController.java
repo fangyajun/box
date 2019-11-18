@@ -68,7 +68,7 @@ public class BoxUserRecommendController {
         return Result.success();
     }
 
-    @ApiOperation(value="用户推荐搭配详情,状态 0,1 都表示搭配中")
+    @ApiOperation(value="用户推荐搭配详情,状态(对象中) 0,1 都表示搭配中")
     @GetMapping("/detail")
     public Result detail(Integer userId) {
         if (userId == null) {
@@ -82,6 +82,8 @@ public class BoxUserRecommendController {
 
         if (userRecommend.getRecommendStatus() == 0 || userRecommend.getRecommendStatus() == 1) {
             //todo 在搭配中，推荐猜你喜欢的衣服
+
+
         }
 
         List<BoxRecommend> boxRecommendList = boxRecommendService.list(new QueryWrapper<BoxRecommend>().eq("user_id", userId).
@@ -173,8 +175,6 @@ public class BoxUserRecommendController {
         }
 
         return Result.success();
-
-
     }
 
 }

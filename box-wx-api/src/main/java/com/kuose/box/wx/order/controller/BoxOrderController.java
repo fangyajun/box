@@ -104,9 +104,9 @@ public class BoxOrderController {
     @ApiOperation(value="用户订单列表")
     @GetMapping("/list")
     public Result list(Integer useId, Integer orderStatus, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10")  Integer limit, @ApiParam(hidden = true)@LoginUser Integer userId) {
-//        if (userId == null) {
-//            return Result.failure(501, "请登录");
-//        }
+        if (userId == null) {
+            return Result.failure(501, "请登录");
+        }
         Page<BoxOrder> boxOrderPage = new Page<>();
         boxOrderPage.setSize(limit);
         boxOrderPage.setCurrent(page);
@@ -124,9 +124,9 @@ public class BoxOrderController {
     @ApiOperation(value="用户订单详情")
     @GetMapping("/detail")
     public Result detail(Integer orderId, @ApiParam(hidden = true) @LoginUser Integer userId) {
-//        if (userId == null) {
-//            return Result.failure(501, "请登录");
-//        }
+        if (userId == null) {
+            return Result.failure(501, "请登录");
+        }
 
         Result result = Result.success();
 
@@ -140,9 +140,9 @@ public class BoxOrderController {
             return Result.failure(506, "订单不存在");
         }
 
-//        if (!boxOrder.getUserId().equals(userId)) {
-//            return Result.failure(506, "不是当前用户的订单");
-//        }
+        if (!boxOrder.getUserId().equals(userId)) {
+            return Result.failure(506, "不是当前用户的订单");
+        }
 
         // 订单是已发货状态，且物流信息不能为空，查询物流信息
         if (boxOrder.getOrderStatus() != 0 && boxOrder.getOrderStatus() != 1) {
@@ -164,9 +164,9 @@ public class BoxOrderController {
     @ApiOperation(value="修改订单的收货地址")
     @PostMapping("/updateOrderAddr")
     public Result updateOrderAddr(@RequestBody OrderTDO orderTDO, @ApiParam(hidden = true) @LoginUser Integer userId) {
-//        if (userId == null) {
-//            return Result.failure(501, "请登录");
-//        }
+        if (userId == null) {
+            return Result.failure(501, "请登录");
+        }
 
         if (orderTDO.getOrderId() == null || orderTDO.getAddrId() == null) {
             return Result.failure("参数订单id必传");
@@ -192,18 +192,18 @@ public class BoxOrderController {
     @ApiOperation(value="用户取消订单")
     @PostMapping("/cancel")
     public Result cancel(@RequestBody CancelOrderTDO cancelOrderTDO, @ApiParam(hidden = true) @LoginUser Integer userId) {
-//        if (userId == null) {
-//            return Result.failure(501, "请登录");
-//        }
+        if (userId == null) {
+            return Result.failure(501, "请登录");
+        }
         return boxOrderService.cancel(cancelOrderTDO.getOrderId());
     }
 
     @ApiOperation(value="用户确认收货")
     @PostMapping("/confirm")
     public Result confirm(@RequestBody OrderTDO orderTDO, @ApiParam(hidden = true) @LoginUser Integer userId) {
-//        if (userId == null) {
-//            return Result.failure(501, "请登录");
-//        }
+        if (userId == null) {
+            return Result.failure(501, "请登录");
+        }
         if (orderTDO.getOrderId() == null) {
             return Result.failure("缺少必传参数");
         }
