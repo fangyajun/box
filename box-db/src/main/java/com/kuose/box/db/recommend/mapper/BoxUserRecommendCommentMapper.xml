@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuose.box.db.recommend.dao.BoxUserRecommendCommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kuose.box.db.recommend.entity.BoxUserRecommendComment">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="box_user_recommend_id" property="boxUserRecommendId" />
+        <result column="key1" property="key1" />
+        <result column="value1" property="value1" />
+        <result column="key2" property="key2" />
+        <result column="value2" property="value2" />
+        <result column="key3" property="key3" />
+        <result column="value3" property="value3" />
+        <result column="key4" property="key4" />
+        <result column="value4" property="value4" />
+        <result column="key5" property="key5" />
+        <result column="value5" property="value5" />
+        <result column="key6" property="key6" />
+        <result column="value6" property="value6" />
+        <result column="key7" property="key7" />
+        <result column="value7" property="value7" />
+        <result column="key8" property="key8" />
+        <result column="value8" property="value8" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, box_user_recommend_id, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, key6, value6, key7, value7, key8, value8, create_time, update_time, deleted
+    </sql>
+
+</mapper>

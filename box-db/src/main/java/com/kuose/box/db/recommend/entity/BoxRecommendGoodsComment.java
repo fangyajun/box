@@ -1,6 +1,7 @@
 package com.kuose.box.db.recommend.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModelProperty;
@@ -63,6 +64,7 @@ private static final long serialVersionUID=1L;
      * 合适度评价，0:默认，未评价，1：不合适，2：一般，3：合适，4：很合适
      */
     @ApiModelProperty(value="合适度评价，0:默认，未评价，1：不合适，2：一般，3：合适，4：很合适")
+    @TableField("`match`")
     private Integer match;
 
     /**

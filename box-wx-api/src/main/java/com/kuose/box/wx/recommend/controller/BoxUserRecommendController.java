@@ -37,6 +37,8 @@ public class BoxUserRecommendController {
     private BoxRecommendCommentService boxRecommendCommentService;
     @Autowired
     private BoxRecommendGoodsCommentService boxRecommendGoodsCommentService;
+    @Autowired
+    private BoxUserRecommendCommentService boxUserRecommendCommentService;
 
     @ApiOperation(value="创建需要推荐搭配方案的用户，新增只需要传用户id,用户答完问券可以调用此接口")
     @PostMapping("/add")
@@ -82,8 +84,6 @@ public class BoxUserRecommendController {
 
         if (userRecommend.getRecommendStatus() == 0 || userRecommend.getRecommendStatus() == 1) {
             //todo 在搭配中，推荐猜你喜欢的衣服
-
-
         }
 
         List<BoxRecommend> boxRecommendList = boxRecommendService.list(new QueryWrapper<BoxRecommend>().eq("user_id", userId).
@@ -126,6 +126,29 @@ public class BoxUserRecommendController {
         boxRecommendComment.setUpdateTime(System.currentTimeMillis());
         boxRecommendComment.setCreateTime(System.currentTimeMillis());
         boxRecommendCommentService.save(boxRecommendComment);
+        return Result.success();
+    }
+
+    @ApiOperation(value="对一次搭配评价")
+    @PostMapping("/recommendComment")
+    public Result recommendComment (@RequestBody BoxUserRecommendComment boxUserRecommendComment) {
+        if (boxUserRecommendComment.getBoxUserRecommendId() == null) {
+            return Result.failure("缺少必传参数");
+        }
+
+        BoxUserRecommendComment selectUserRecommendComment = boxUserRecommendCommentService.getOne(new QueryWrapper<BoxUserRecommendComment>().
+                eq("deleted", 0).eq("box_user_recommend_id", boxUserRecommendComment.getBoxUserRecommendId()));
+
+        if (selectUserRecommendComment != null) {
+            boxUserRecommendComment.setId(selectUserRecommendComment.getId());
+            boxUserRecommendComment.setUpdateTime(System.currentTimeMillis());
+            boxUserRecommendCommentService.updateById(boxUserRecommendComment);
+            return Result.success();
+        }
+
+        boxUserRecommendComment.setUpdateTime(System.currentTimeMillis());
+        boxUserRecommendComment.setCreateTime(System.currentTimeMillis());
+        boxUserRecommendCommentService.save(boxUserRecommendComment);
         return Result.success();
     }
 

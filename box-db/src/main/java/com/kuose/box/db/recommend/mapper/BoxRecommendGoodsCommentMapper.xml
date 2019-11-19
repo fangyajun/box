@@ -23,7 +23,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, box_recommend_goods_id, goods_id, sku_id, size, style, match, quality, price, content, star, add_time, update_time, deleted
+        id, user_id, box_recommend_goods_id, goods_id, sku_id, `size`, style, `match`, quality, price, content, star, add_time, update_time, deleted
     </sql>
 
 </mapper>
