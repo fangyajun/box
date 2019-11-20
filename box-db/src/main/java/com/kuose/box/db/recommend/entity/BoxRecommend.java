@@ -35,6 +35,12 @@ private static final long serialVersionUID=1L;
     private Integer userId;
 
     /**
+     * 用户推荐表的id
+     */
+    @ApiModelProperty(value="用户推荐表的id")
+    private Integer userRecommendId;
+
+    /**
      * 推荐留言
      */
     @ApiModelProperty(value="推荐留言")

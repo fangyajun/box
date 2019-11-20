@@ -8,6 +8,8 @@ import com.kuose.box.db.user.entity.BoxUser;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户推荐表
@@ -34,9 +36,9 @@ private static final long serialVersionUID=1L;
     private Integer userId;
 
     /**
-     * 推荐状态,0-未推荐，1-推荐中，2-已推荐
+     * 推荐状态,0-未推荐，1-推荐中，2-已推荐， 3-已完成（评价完变成此状态）
      */
-    @ApiModelProperty(value="推荐状态,0-未推荐，1-推荐中，2-已推荐")
+    @ApiModelProperty(value="推荐状态,0-未推荐，1-推荐中，2-已推荐， 3-已完成（评价完变成此状态）")
     private Integer recommendStatus;
 
     /**
@@ -65,5 +67,8 @@ private static final long serialVersionUID=1L;
 
     @TableField(exist = false)
     private BoxUser boxUser;
+
+    @TableField(exist = false)
+    private List<BoxRecommend> boxRecommendList;
 
 }

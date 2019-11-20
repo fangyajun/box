@@ -42,7 +42,7 @@ public class BoxRecommendController {
     @ApiOperation(value="新增用户推荐搭配单，传用户id, 一个用户可以有多个搭配单")
     @PostMapping("/add")
     public Result add(@RequestBody BoxRecommend boxRecommend) {
-        if (boxRecommend.getUserId() == null) {
+        if (boxRecommend.getUserId() == null || boxRecommend.getUserRecommendId() == null) {
             return Result.failure("缺少必传参数");
         }
 

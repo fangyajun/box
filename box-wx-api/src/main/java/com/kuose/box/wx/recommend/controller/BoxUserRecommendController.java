@@ -52,13 +52,10 @@ public class BoxUserRecommendController {
         }
 
         BoxUserRecommend userRecommend = boxUserRecommendService.getOne(new QueryWrapper<BoxUserRecommend>().
-                eq("deleted", 0).eq("user_id", boxUserRecommend.getUserId()));
-        if (userRecommend != null) {
-            if ( userRecommend.getRecommendStatus() == 0 || userRecommend.getRecommendStatus() == 1) {
-                return Result.failure("您的搭配方案正在搭配中，请您耐心等候！");
-            }
+                eq("deleted", 0).eq("user_id", boxUserRecommend.getUserId()).in("recommend_status", 0,1));
 
-            return Result.failure("已给您搭配推荐商品！请点击我的推荐查看");
+        if (userRecommend != null) {
+            return Result.failure("您的搭配方案正在搭配中，请您耐心等候！");
         }
 
         // 没有搭配，新增
@@ -70,35 +67,62 @@ public class BoxUserRecommendController {
         return Result.success();
     }
 
-    @ApiOperation(value="用户推荐搭配详情,状态(对象中) 0,1 都表示搭配中")
+    @ApiOperation(value="获取搭配中的搭配 或 已经搭配但好没有评价的搭配, (0,1 都表示搭配中,2-表示已搭配但未评价)")
     @GetMapping("/detail")
     public Result detail(Integer userId) {
+
         if (userId == null) {
             return Result.failure("缺少必传参数");
         }
+        BoxUserRecommend userRecommend = boxUserRecommendService.getOne(new QueryWrapper<BoxUserRecommend>().
+                eq("deleted", 0).eq("user_id", userId).in("recommend_status", 0,1,2));
 
-        BoxUserRecommend userRecommend = boxUserRecommendService.getOne(new QueryWrapper<BoxUserRecommend>().eq("deleted", 0).eq("user_id", userId));
-        if (userRecommend == null) {
-            return Result.failure("没有您的推荐搭配信息，您可以答完题在推荐搭配");
-        }
+        List<BoxRecommend> boxRecommendList = null;
+        if (userRecommend != null && userRecommend.getRecommendStatus() == 2) {
+            boxRecommendList = boxRecommendService.list(new QueryWrapper<BoxRecommend>().eq("user_recommend_id", userRecommend.getId()).
+                    eq("deleted", 0).eq("audit_status", 1).orderByDesc("sort"));
+            if (boxRecommendList != null && !boxRecommendList.isEmpty()) {
+                for (BoxRecommend boxRecommend : boxRecommendList) {
+                    List<BoxRecommendGoods> recommendGoodsList = boxRecommendGoodsService.list(new QueryWrapper<BoxRecommendGoods>().
+                            eq("box_recommend_id", boxRecommend.getId()).eq("deleted", 0));
 
-        if (userRecommend.getRecommendStatus() == 0 || userRecommend.getRecommendStatus() == 1) {
-            //todo 在搭配中，推荐猜你喜欢的衣服
-        }
-
-        List<BoxRecommend> boxRecommendList = boxRecommendService.list(new QueryWrapper<BoxRecommend>().eq("user_id", userId).
-                eq("deleted", 0).eq("audit_status", 1).orderByDesc("sort"));
-        if (boxRecommendList != null && !boxRecommendList.isEmpty()) {
-            for (BoxRecommend boxRecommend : boxRecommendList) {
-                List<BoxRecommendGoods> recommendGoodsList = boxRecommendGoodsService.list(new QueryWrapper<BoxRecommendGoods>().
-                        eq("box_recommend_id", boxRecommend.getId()).eq("deleted", 0));
-
-                boxRecommend.setBoxRecommendGoodsList(recommendGoodsList);
+                    boxRecommend.setBoxRecommendGoodsList(recommendGoodsList);
+                }
             }
         }
-
         return Result.success().setData("userRecommend", userRecommend).setData("boxRecommendList", boxRecommendList);
     }
+
+
+
+    @ApiOperation(value="获取用户的历史搭配单")
+    @GetMapping("/list")
+    public Result list(Integer userId) {
+        if (userId == null) {
+            return Result.failure("缺少必传参数");
+        }
+        List<BoxUserRecommend> userRecommendList = boxUserRecommendService.list(new QueryWrapper<BoxUserRecommend>().
+                eq("deleted", 0).eq("user_id", userId).eq("recommend_status", 3).orderByDesc("create_time"));
+
+        if (userRecommendList != null && !userRecommendList.isEmpty()) {
+            for (BoxUserRecommend boxUserRecommend : userRecommendList) {
+                List<BoxRecommend> boxRecommendList = boxRecommendService.list(new QueryWrapper<BoxRecommend>().eq("user_recommend_id", boxUserRecommend.getId()).
+                        eq("deleted", 0).eq("audit_status", 1).orderByDesc("sort"));
+                if (boxRecommendList != null && !boxRecommendList.isEmpty()) {
+                    for (BoxRecommend boxRecommend : boxRecommendList) {
+                        List<BoxRecommendGoods> recommendGoodsList = boxRecommendGoodsService.list(new QueryWrapper<BoxRecommendGoods>().
+                                eq("box_recommend_id", boxRecommend.getId()).eq("deleted", 0));
+
+                        boxRecommend.setBoxRecommendGoodsList(recommendGoodsList);
+                    }
+                }
+                boxUserRecommend.setBoxRecommendList(boxRecommendList);
+            }
+        }
+        return Result.success().setData("userRecommendList", userRecommendList);
+    }
+
+
 
     @ApiOperation(value="搭配单评价")
     @PostMapping("/comment")
@@ -145,6 +169,12 @@ public class BoxUserRecommendController {
             boxUserRecommendCommentService.updateById(boxUserRecommendComment);
             return Result.success();
         }
+
+        // 改变搭配状态为已完成
+        BoxUserRecommend userRecommend = boxUserRecommendService.getById(boxUserRecommendComment.getBoxUserRecommendId());
+        userRecommend.setRecommendStatus(3);
+        userRecommend.setUpdateTime(System.currentTimeMillis());
+        boxUserRecommendService.updateById(userRecommend);
 
         boxUserRecommendComment.setUpdateTime(System.currentTimeMillis());
         boxUserRecommendComment.setCreateTime(System.currentTimeMillis());

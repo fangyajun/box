@@ -68,14 +68,14 @@ public class BoxUserRecommendController {
         return Result.success().setData("boxUserRecommendIPage", boxUserRecommendIPage);
     }
 
-    @ApiOperation(value="用户推荐搭配详情")
+    @ApiOperation(value="用户推荐搭配详情,传入参数为boxRecommend对象的id")
     @GetMapping("/detail")
-    public Result detail(Integer userId) {
-        if (userId == null) {
+    public Result detail(Integer userRecommendId) {
+        if (userRecommendId == null) {
             return Result.failure("缺少必传参数");
         }
 
-        List<BoxRecommend> boxRecommendList = boxRecommendService.list(new QueryWrapper<BoxRecommend>().eq("user_id", userId).eq("deleted", 0));
+        List<BoxRecommend> boxRecommendList = boxRecommendService.list(new QueryWrapper<BoxRecommend>().eq("user_recommend_id", userRecommendId).eq("deleted", 0));
         if (boxRecommendList != null && !boxRecommendList.isEmpty()) {
             for (BoxRecommend boxRecommend : boxRecommendList) {
                 List<BoxRecommendGoods> recommendGoodsList = boxRecommendGoodsService.list(new QueryWrapper<BoxRecommendGoods>().

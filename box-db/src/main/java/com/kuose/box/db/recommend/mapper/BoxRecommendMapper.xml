@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.kuose.box.db.recommend.entity.BoxRecommend">
         <id column="id" property="id" />
         <result column="user_id" property="userId" />
+        <result column="user_recommend_id" property="userRecommendId" />
         <result column="recommend_message" property="recommendMessage" />
         <result column="coordinator" property="coordinator" />
         <result column="audit_status" property="auditStatus" />
@@ -18,7 +19,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, recommend_message, coordinator, audit_status, comment_status, sort, create_time, update_time, deleted
+        id, user_id, user_recommend_id, recommend_message, coordinator, audit_status, comment_status, sort, create_time, update_time, deleted
     </sql>
 
 </mapper>
