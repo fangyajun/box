@@ -40,6 +40,11 @@ private static final long serialVersionUID=1L;
     @ApiModelProperty(value = "问题id", example = "1")
     private Integer questionId;
 
+    /**
+     * 问题信息
+     */
+    @ApiModelProperty(value = "问题信息，前端自定义传入")
+    private String questionInfo;
 
     /**
      * 选项id数组，

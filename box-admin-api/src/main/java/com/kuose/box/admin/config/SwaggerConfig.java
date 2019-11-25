@@ -42,6 +42,7 @@ public class SwaggerConfig
                         "com.kuose.box.admin.goods.controller"+splitor+
                         "com.kuose.box.admin.order.controller"+splitor+
                         "com.kuose.box.admin.match.controller"+splitor+
+                        "com.kuose.box.admin.algorithm.controller"+splitor+
                         "com.kuose.box.admin.user.controller"+splitor+
                         "com.kuose.box.admin.prepay.controller"+splitor+
                         "com.kuose.box.admin.recommend.controller"+splitor+

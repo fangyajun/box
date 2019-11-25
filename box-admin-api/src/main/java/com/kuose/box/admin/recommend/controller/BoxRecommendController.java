@@ -112,7 +112,6 @@ public class BoxRecommendController {
         }
 
         return Result.success();
-
     }
 
     @ApiOperation(value="取消审核,只需要传id")

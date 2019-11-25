@@ -7,6 +7,7 @@
         <id column="id" property="id" />
         <result column="user_id" property="userId" />
         <result column="question_id" property="questionId" />
+        <result column="question_info" property="questionInfo" />
         <result column="option_ids" jdbcType="VARCHAR" property="optionIds" typeHandler="com.kuose.box.db.mybatis.JsonIntegerArrayTypeHandler" />
         <result column="label_code" property="labelCode" />
         <result column="option_values" jdbcType="VARCHAR" property="optionValues" typeHandler="com.kuose.box.db.mybatis.JsonStringArrayTypeHandler" />
@@ -17,7 +18,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, question_id, option_ids, label_code, option_values , option_content, create_time, update_time
+        id, user_id, question_id, question_info, option_ids, label_code, option_values , option_content, create_time, update_time
     </sql>
 
     <select id="getQuestionShort" parameterType="java.lang.Integer" resultType="java.util.Map">
