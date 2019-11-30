@@ -9,6 +9,7 @@ import com.kuose.box.db.goods.dto.GoodsSkuVo;
 import com.kuose.box.db.goods.entity.BoxGoods;
 import com.kuose.box.db.user.entity.BoxUserBase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
  * @since 2019/9/10
  */
 @Service
+
 public class GoodsMatchService {
     @Autowired
     private BoxGoodsService boxGoodsService;

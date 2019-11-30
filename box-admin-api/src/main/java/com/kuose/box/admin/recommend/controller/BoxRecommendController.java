@@ -52,7 +52,7 @@ public class BoxRecommendController {
         boxRecommend.setUpdateTime(System.currentTimeMillis());
 
         boxRecommendService.save(boxRecommend);
-        return Result.success();
+        return Result.success().setData("boxRecommend", boxRecommend);
     }
 
     @ApiOperation(value="搭配单排序")
@@ -106,7 +106,7 @@ public class BoxRecommendController {
 
         if (boxRecommend.getAuditStatus() == 1) {
             // 修改用户推荐表推荐状态为已推荐
-            BoxUserRecommend boxUserRecommend = boxUserRecommendService.getOne(new QueryWrapper<BoxUserRecommend>().eq("user_id", recommend.getUserId()).eq("deleted", 0));
+            BoxUserRecommend boxUserRecommend = boxUserRecommendService.getById(recommend.getUserRecommendId());
             boxUserRecommend.setRecommendStatus(2);
             boxUserRecommendService.updateById(boxUserRecommend);
         }

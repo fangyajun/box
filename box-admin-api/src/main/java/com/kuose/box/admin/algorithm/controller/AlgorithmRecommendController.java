@@ -55,7 +55,7 @@ public class AlgorithmRecommendController {
 
     @ApiOperation(value="算法推荐，注意，返回结果分页信息total表示总的页数")
     @GetMapping("/algorithmRecommendGoods")
-    public Result algorithmRecommendGoods(String phone, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public Result algorithmRecommendGoods(@RequestParam(defaultValue = "13018073079") String phone, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         String url = "http://192.168.5.194:9002/kuose_rec/userid/"+phone+"/page/"+ page +"/psize/"+ limit;
         HttpHeaders requestHeaders = new HttpHeaders();
         HttpEntity<String> httpEntity = new HttpEntity<>(null, requestHeaders);

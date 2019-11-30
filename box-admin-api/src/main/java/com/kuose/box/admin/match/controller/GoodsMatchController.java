@@ -11,6 +11,7 @@ import com.kuose.box.common.config.Result;
 import com.kuose.box.db.goods.dto.GoodsQueryParameter;
 import com.kuose.box.db.goods.dto.GoodsSkuVo;
 import com.kuose.box.db.goods.entity.BoxGoods;
+import com.kuose.box.db.goods.entity.BoxGoodsSku;
 import com.kuose.box.db.user.entity.BoxUserBase;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author fangyajun
@@ -66,7 +69,6 @@ public class GoodsMatchController {
 
         IPage<GoodsSkuVo> boxGoodsIPage = boxGoodsService.listGoodsAndSku(boxGoodsPage, goodsQueryParameter);
         List<GoodsSkuVo> records = boxGoodsIPage.getRecords();
-
         // 过滤标记商品
         if (records != null && records.size() >= 1) {
             List<GoodsSkuVo> goodsFilter = goodsFilter(records, userId);
@@ -75,35 +77,26 @@ public class GoodsMatchController {
 
         return Result.success().setData("boxGoodsIPage", boxGoodsIPage);
     }
-
+    /**
+     * 过滤掉没有sku的商品
+      */
     private List<GoodsSkuVo>  goodsFilter(List<GoodsSkuVo> goodsSkuVoList, Integer userId) {
-        BoxUserBase userBase = boxUserBaseService.getOne(new QueryWrapper<BoxUserBase>().eq("user_id", userId).eq("deleted", 0));
-        if (userBase == null) {
-            return goodsSkuVoList;
-        }
-        String topSize = userBase.getTopSize();
-        String dressSize = userBase.getDressSize();
-        String bottomsSize = userBase.getBottomsSize();
-        String jeansSize = userBase.getJeansSize();
-        String sneakerSize = userBase.getSneakerSize();
 
-        String topPrice = userBase.getTopPrice();
-        String dressPrice = userBase.getDressPrice();
-        String bottomsPrice = userBase.getBottomsPrice();
-        String accessoryPrice = userBase.getAccessoryPrice();
-        String overcoatPrice = userBase.getOvercoatPrice();
-        String sneakerPrice = userBase.getSneakerPrice();
+       if (goodsSkuVoList == null || goodsSkuVoList.isEmpty()) {
+           return goodsSkuVoList;
+       }
 
-        String[] avoidColor = userBase.getAvoidColor();
-        String[] avoidCategory = userBase.getAvoidCategory();
+        Iterator<GoodsSkuVo> goodsSkuVoIterator = goodsSkuVoList.iterator();
+       while (goodsSkuVoIterator.hasNext()) {
+           Map<String,Object> map = (Map<String, Object>) goodsSkuVoIterator.next();
+           List<BoxGoodsSku> boxGoodsSkuList = (List<BoxGoodsSku>) map.get("boxGoodsSkuList");
 
-        for (GoodsSkuVo goodsSkuVo : goodsSkuVoList) {
-        }
+           if (boxGoodsSkuList == null || boxGoodsSkuList.isEmpty()) {
+               goodsSkuVoIterator.remove();
+           }
+       }
 
         return goodsSkuVoList;
     }
-
-
-
 
 }

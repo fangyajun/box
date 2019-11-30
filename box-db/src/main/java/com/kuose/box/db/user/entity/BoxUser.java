@@ -98,6 +98,18 @@ private static final long serialVersionUID=1L;
     private Integer status;
 
     /**
+     * 全身照，多张用逗号隔离
+     */
+    @ApiModelProperty(value="全身照，多张用逗号隔离")
+    private String fullSizePic;
+
+    /**
+     * 用户需求爱好的补充说明
+     */
+    @ApiModelProperty(value="用户需求爱好的补充说明，可以传入json如：{我需要:宴会,最好是:连衣裙...}")
+    private String supplementHobby;
+
+    /**
      * 创建时间 
      */
     @ApiModelProperty(value="创建时间", hidden = true)

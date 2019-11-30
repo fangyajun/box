@@ -202,6 +202,8 @@ public class BoxUserRecommendController {
             BoxRecommendGoodsComment recommendGoodsComment = new BoxRecommendGoodsComment();
 
             recommendGoodsComment.setSkuId(recommendGoods.getSkuId());
+            recommendGoodsComment.setBoxRecommendGoodsId(recommendGoods.getId());
+            recommendGoodsComment.setGoodsId(recommendGoods.getGoodsId());
             recommendGoodsComment.setUserId(boxRecommendGoodsComment.getUserId());
             recommendGoodsComment.setSize(boxRecommendGoodsComment.getSize());
             recommendGoodsComment.setStyle(boxRecommendGoodsComment.getStyle());

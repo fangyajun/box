@@ -17,6 +17,8 @@
         <result column="weixin_openid" property="weixinOpenid" />
         <result column="session_key" property="sessionKey" />
         <result column="status" property="status" />
+        <result column="full_size_pic" property="fullSizePic" />
+        <result column="supplement_hobby" property="supplementHobby" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="deleted" property="deleted" />
@@ -24,10 +26,10 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, username, password, gender, birthday, last_login_time, last_login_ip, nickname, mobile, userpic, weixin_openid, session_key, status, create_time, update_time, deleted
+        id, username, password, gender, birthday, last_login_time, last_login_ip, nickname, mobile, userpic, weixin_openid, session_key, status,full_size_pic,supplement_hobby, create_time, update_time, deleted
     </sql>
     <select id="listUser"  resultMap="BaseResultMap">
-        SELECT id, gender, birthday, last_login_time, last_login_ip, nickname, mobile, userpic, weixin_openid, session_key, status, create_time, update_time
+        SELECT id, gender, birthday, last_login_time, last_login_ip, nickname, mobile, userpic, weixin_openid, session_key, status,full_size_pic,supplement_hobby, create_time, update_time
         FROM box_user
         <where>
               deleted = 0

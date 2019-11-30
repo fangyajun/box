@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class BoxUserRecommendDTO {
 
-    @ApiModelProperty(value="推荐状态,0-未推荐，1-推荐中，2-已推荐")
+    @ApiModelProperty(value="推荐状态,0-未推荐，1-推荐中，2-已推荐， 3-已完成（评价完变成此状态）")
     private Integer recommendStatus;
 
 }

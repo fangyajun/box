@@ -47,11 +47,12 @@ public class BoxRecommendGoodsServiceImpl extends ServiceImpl<BoxRecommendGoodsM
         }
 
         // 添加
+        BoxRecommendGoods boxRecommendGoods= null;
         for (Integer skuId : skuIds) {
             BoxGoodsSku goodsSku = boxGoodsSkuService.getById(skuId);
             BoxGoods goods = boxGoodsService.getById(goodsSku.getGoodsId());
 
-            BoxRecommendGoods boxRecommendGoods = new BoxRecommendGoods();
+            boxRecommendGoods = new BoxRecommendGoods();
             boxRecommendGoods.setBoxRecommendId(boxRecommendId);
             boxRecommendGoods.setGoodsId(goodsSku.getGoodsId());
             boxRecommendGoods.setSkuId(skuId);
@@ -69,6 +70,6 @@ public class BoxRecommendGoodsServiceImpl extends ServiceImpl<BoxRecommendGoodsM
             boxRecommendGoodsMapper.insert(boxRecommendGoods);
         }
 
-        return Result.success();
+        return Result.success().setData("boxRecommendGoods", boxRecommendGoods);
     }
 }

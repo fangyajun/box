@@ -5,14 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kuose.box.admin.recommend.dto.BoxUserRecommendDTO;
-import com.kuose.box.admin.recommend.service.BoxRecommendGoodsService;
-import com.kuose.box.admin.recommend.service.BoxRecommendService;
-import com.kuose.box.admin.recommend.service.BoxUserRecommendService;
+import com.kuose.box.admin.recommend.service.*;
 import com.kuose.box.admin.user.service.BoxUserService;
 import com.kuose.box.common.config.Result;
-import com.kuose.box.db.recommend.entity.BoxRecommend;
-import com.kuose.box.db.recommend.entity.BoxRecommendGoods;
-import com.kuose.box.db.recommend.entity.BoxUserRecommend;
+import com.kuose.box.db.recommend.entity.*;
 import com.kuose.box.db.user.entity.BoxUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,6 +41,10 @@ public class BoxUserRecommendController {
     private BoxRecommendService boxRecommendService;
     @Autowired
     private BoxRecommendGoodsService boxRecommendGoodsService;
+    @Autowired
+    private BoxUserRecommendCommentService boxUserRecommendCommentService;
+    @Autowired
+    private BoxRecommendGoodsCommentService boxRecommendGoodsCommentService;
 
     @ApiOperation(value="推荐搭配用户列表")
     @GetMapping("/list")
@@ -74,6 +74,12 @@ public class BoxUserRecommendController {
         if (userRecommendId == null) {
             return Result.failure("缺少必传参数");
         }
+        BoxUserRecommend userRecommend = boxUserRecommendService.getById(userRecommendId);
+        if (userRecommend == null) {
+            return Result.failure("参数错误，未能查到用户推荐搭配信息");
+        }
+
+        BoxUser user = boxUserService.getById(userRecommend.getUserId());
 
         List<BoxRecommend> boxRecommendList = boxRecommendService.list(new QueryWrapper<BoxRecommend>().eq("user_recommend_id", userRecommendId).eq("deleted", 0));
         if (boxRecommendList != null && !boxRecommendList.isEmpty()) {
@@ -85,9 +91,34 @@ public class BoxUserRecommendController {
             }
         }
 
-        return Result.success().setData("boxRecommendList", boxRecommendList);
+        return Result.success().setData("boxRecommendList", boxRecommendList).setData("user", user);
     }
 
 
+
+    @ApiOperation(value="获取评价信息，或一次搭配的评价信息")
+    @GetMapping("/getRecommentCommet")
+    public Result getRecommentCommet(Integer userRecommendId) {
+        if (userRecommendId == null) {
+            return Result.failure("缺少必传参数");
+        }
+
+        BoxUserRecommendComment userRecommendComment = boxUserRecommendCommentService.getOne(new QueryWrapper<BoxUserRecommendComment>().
+                eq("box_user_recommend_id", userRecommendId));
+
+        return Result.success().setData("userRecommendComment", userRecommendComment);
+    }
+
+    @ApiOperation(value="获取搭配具体商品的评价信息")
+    @GetMapping("/getRecommentGoodsComment")
+    public Result getRecommentGoodsComment(Integer recommentGoodsId) {
+        if (recommentGoodsId == null) {
+            return Result.failure("缺少必传参数");
+        }
+        BoxRecommendGoodsComment recommendGoodsComment = boxRecommendGoodsCommentService.getOne(new QueryWrapper<BoxRecommendGoodsComment>().
+                eq("deleted", 0).eq("box_recommend_goods_id", recommentGoodsId));
+
+        return Result.success().setData("recommendGoodsComment", recommendGoodsComment);
+    }
 }
 
