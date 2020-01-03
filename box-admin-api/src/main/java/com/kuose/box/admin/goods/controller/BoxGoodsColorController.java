@@ -102,11 +102,5 @@ public class BoxGoodsColorController {
 
         return Result.success().setData("color", color);
     }
-
-
-
-
-
-
 }
 

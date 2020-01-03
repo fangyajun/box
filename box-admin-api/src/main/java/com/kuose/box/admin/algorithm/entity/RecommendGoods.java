@@ -22,8 +22,14 @@ public class RecommendGoods {
     @ApiModelProperty(value="商品名称")
     private String goodsName;
 
+    @ApiModelProperty(value="商品类别")
+    private String categoryCode;
+
     @ApiModelProperty(value="商品编号")
     private String goodsNo;
+
+    @ApiModelProperty(value="季节")
+    private String quarter;
 
     @ApiModelProperty(value="sku编号")
     private String skuNo;
@@ -42,6 +48,9 @@ public class RecommendGoods {
 
     @ApiModelProperty(value="商品货品图片或者商品图片")
     private String picUrl;
+
+    @ApiModelProperty(value="不是精修图")
+    private String oldPicUrl;
 
     @ApiModelProperty(value="sku图片，暂时和商品图片一致，没有颜色图片")
     private String skuUrl;

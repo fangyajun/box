@@ -76,6 +76,7 @@ public class PayController {
             order.setOrderStatus(5);
             int update = boxOrderService.updateWithOptimisticLocker(order);
             if (update == 0) {
+
                 return Result.failure(507, "更新数据异常，请重试");
             }
             // 不需要支付金额
@@ -107,7 +108,7 @@ public class PayController {
 
         BoxOrder order = boxOrderService.getById(prePayVO.getOrderId());
         if (order == null) {
-            return Result.failure( "查无此订单，参数值错误");
+            return Result.failure("查无此订单，参数值错误");
         }
 
 //        if (!userId.equals(order.getUserId())) {

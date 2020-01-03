@@ -138,7 +138,7 @@ public class BoxGoodsAttributeLabelController {
                 secondAttributeLabel.setUpdateTime(System.currentTimeMillis());
                 secondAttributeLabel.setAddTime(System.currentTimeMillis());
 
-               boxGoodsAttributeLabelService.save(secondAttributeLabel);
+                boxGoodsAttributeLabelService.save(secondAttributeLabel);
            }
 
            // 第三个节点（叶子节点）

@@ -86,6 +86,9 @@ public class BoxOrderGoodsController {
 
         List<BoxOrderGoods> boxOrderGoodsList = boxOrderGoodsService.list(new QueryWrapper<BoxOrderGoods>().eq("order_id", orderId).eq("deleted", 0));
         BoxOrder boxOrder = boxOrderService.getById(orderId);
+        if (boxOrder == null) {
+            return Result.failure("数据异常无此订单");
+        }
         if (boxOrder.getOrderStatus() != 0 && boxOrder.getOrderStatus() != 1) {
             if (!StringUtil.isBlank(boxOrder.getShipChannel()) && !StringUtil.isBlank(boxOrder.getShipSn())) {
                 ExpressInfo expressInfo = expressService.getExpressDetail(boxOrder.getShipChannel(), boxOrder.getShipSn());

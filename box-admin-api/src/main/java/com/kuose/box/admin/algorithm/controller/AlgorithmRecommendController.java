@@ -45,7 +45,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/boxGoodsAttributeLabel")
 public class AlgorithmRecommendController {
-
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
@@ -105,6 +104,8 @@ public class AlgorithmRecommendController {
             recommendGoods.setGoodsId(goods.getId());
             recommendGoods.setSkuId(goodsSku.getId());
             recommendGoods.setGoodsName(goods.getName());
+            recommendGoods.setCategoryCode(goods.getCategoryCode());
+            recommendGoods.setQuarter(goods.getQuarter());
             recommendGoods.setGoodsNo(goods.getGoodsNo());
             recommendGoods.setSkuNo(goodsSku.getSkuCode());
             recommendGoods.setPrice(goodsSku.getRetailPrice());
@@ -112,6 +113,7 @@ public class AlgorithmRecommendController {
             recommendGoods.setSizeName(goodsSku.getSizeName());
             recommendGoods.setPicUrl(goods.getOosImg());
             recommendGoods.setSkuUrl(goods.getOosImg());
+            recommendGoods.setOldPicUrl(goods.getImg());
             recommendGoods.setTmallUrl(goods.getTmallUrl());
 
             recommendGoodsList.add(recommendGoods);

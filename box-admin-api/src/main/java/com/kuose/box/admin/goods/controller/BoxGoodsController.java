@@ -278,6 +278,7 @@ public class BoxGoodsController {
     }
 
 
+
     @ApiOperation(value="商品列表（包含SKU信息）")
     @GetMapping("/listGoodsAndSku")
     public Result listGoodsAndSku(GoodsQueryParameter goodsQueryParameter, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
