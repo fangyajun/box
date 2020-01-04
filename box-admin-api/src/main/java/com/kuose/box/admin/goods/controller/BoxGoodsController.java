@@ -74,7 +74,7 @@ public class BoxGoodsController {
     @GetMapping("/syncGoods")
     public Result syncGoods(String year) {
         // 从数据源获取所有商品
-//        String listGoodsAttibutesUrl = "http://localhost:10303/ripreportProductinformation/listGoods?year=" + year;
+        // String listGoodsAttibutesUrl = "http://localhost:10303/ripreportProductinformation/listGoods?year=" + year;
         String listGoodsAttibutesUrl = "http://192.168.5.177:10303/ripreportProductinformation/listGoods?year=" + year;
         HttpHeaders requestHeaders = new HttpHeaders();
         HttpEntity<String> httpEntity = new HttpEntity<>(null, requestHeaders);
@@ -100,7 +100,7 @@ public class BoxGoodsController {
             // 程序跑到这，表示需要添加
             GoodsAllinone goodsAllinone = new GoodsAllinone();
             goodsAllinone.setBoxGoods(boxGoods);
-            if (goodsSku != null && goodsSku.size() >0) {
+            if (goodsSku != null && goodsSku.size() > 0) {
                 BoxGoodsSku[] boxGoodsSkus = goodsSku.toArray(new BoxGoodsSku[goodsSku.size()]);
                 goodsAllinone.setBoxGoodsSkus(boxGoodsSkus);
             }
@@ -112,7 +112,7 @@ public class BoxGoodsController {
     }
 
     private List<BoxGoodsSku> getGoodsSku(String productno) {
-//        String listGoodsAttibutesUrl = "http://localhost:10303/ripreportProductinformation/getGoods?productno=" + productno;
+        // String listGoodsAttibutesUrl = "http://localhost:10303/ripreportProductinformation/getGoods?productno=" + productno;
         String listGoodsAttibutesUrl = "http://192.168.5.177:10303/ripreportProductinformation/getGoods?productno=" + productno;
         HttpHeaders requestHeaders = new HttpHeaders();
         HttpEntity<String> httpEntity = new HttpEntity<>(null, requestHeaders);
@@ -127,8 +127,6 @@ public class BoxGoodsController {
         List<BoxGoodsSku> boxGoodsSkus = jsonArray.toJavaList(BoxGoodsSku.class);
         return boxGoodsSkus;
     }
-
-
 
     @ApiOperation(value="删除商品")
     @PostMapping("/delete")
@@ -152,7 +150,7 @@ public class BoxGoodsController {
                 continue;
             }
             System.out.println("-------------------同步商品属性数据" + i++);
-//             String listGoodsAttibutesUrl = "http://localhost:10303/attributeController/getGoodsAttibutes?id=" + goods.getSourceGoodsId();
+            // String listGoodsAttibutesUrl = "http://localhost:10303/attributeController/getGoodsAttibutes?id=" + goods.getSourceGoodsId();
             String listGoodsAttibutesUrl = "http://192.168.5.177:10303/ripreportProductinformation/getGoodsAttibutes?id=" + goods.getSourceGoodsId();
             HttpHeaders requestHeaders = new HttpHeaders();
             HttpEntity<String> httpEntity = new HttpEntity<>(null, requestHeaders);
@@ -167,7 +165,6 @@ public class BoxGoodsController {
 
             List<AttributeSource> attributeSourceList = jsonArray.toJavaList(AttributeSource.class);
             for (AttributeSource attributeSource : attributeSourceList) {
-
                 String attributeGroupname = attributeSource.getAttributeGroupName();
                 String attributeGroupType = attributeSource.getAttributeGroupType();
                 String attributeName = attributeSource.getAttributeName();
